@@ -53,10 +53,24 @@ def e(v):
     return int(round(v * EMU))
 
 WARN = []
+SHRUNK = []
 
 # ---------------------------------------------------------------- text model
+TR = {}          # source paragraph -> translation (empty = original language)
+SEEN = []        # every source string that went through T(), in order
+LANG = "ru-RU"
+
+
+def T(s):
+    """Translate one paragraph-level string (exact match), remembering what was asked for."""
+    if s and re.search("[А-Яа-яЁё]", s) and s not in SEEN:
+        SEEN.append(s)
+    return TR.get(s, s)
+
+
 def parse_runs(s):
     """'**bold** normal' -> [(text, bold)]"""
+    s = T(s)
     out = []
     for i, part in enumerate(re.split(r"\*\*", s)):
         if part:
@@ -231,10 +245,10 @@ class Slide:
                 rcol = p.get("bcolor", pcol) if b else pcol
                 it = ' i="1"' if p.get("i") else ""
                 f = p.get("font", font)
-                runs += ('<a:r><a:rPr lang="ru-RU" sz="%d" b="%d"%s dirty="0"><a:solidFill><a:srgbClr val="%s"/></a:solidFill>'
+                runs += ('<a:r><a:rPr lang="%s" sz="%d" b="%d"%s dirty="0"><a:solidFill><a:srgbClr val="%s"/></a:solidFill>'
                          '<a:latin typeface="%s"/><a:cs typeface="%s"/></a:rPr><a:t>%s</a:t></a:r>') % (
-                    int(psz * 100), 1 if rb else 0, it, rcol, f, f, escape(t))
-            end = '<a:endParaRPr lang="ru-RU" sz="%d" dirty="0"><a:latin typeface="%s"/></a:endParaRPr>' % (int(psz * 100), font)
+                    LANG, int(psz * 100), 1 if rb else 0, it, rcol, f, f, escape(t))
+            end = '<a:endParaRPr lang="%s" sz="%d" dirty="0"><a:latin typeface="%s"/></a:endParaRPr>' % (LANG, int(psz * 100), font)
             out.append("<a:p>%s%s%s</a:p>" % (ppr, runs, end))
         return "".join(out), paras
 
@@ -262,6 +276,15 @@ class Slide:
                 e(l), e(t), e(r), e(b), anchor, pxml)
             if check:
                 need = text_height(paras, w, sz, bold, lnsp, spc_after, (l + r, t + b))
+                sz0 = sz
+                while need > h + 0.02 and sz > sz0 * 0.8:
+                    sz -= 0.5
+                    pxml, paras = self._paras(text, sz, color, bold, align, lnsp, spc_after, bullet, font)
+                    need = text_height(paras, w, sz, bold, lnsp, spc_after, (l + r, t + b))
+                if sz != sz0:
+                    SHRUNK.append("slide %s: %.1f -> %.1f pt: %s" % (self.deck.cur_no, sz0, sz, str(text)[:50]))
+                    body = ('<p:txBody><a:bodyPr wrap="square" lIns="%d" tIns="%d" rIns="%d" bIns="%d" anchor="%s" rtlCol="0"><a:noAutofit/></a:bodyPr><a:lstStyle/>%s</p:txBody>') % (
+                        e(l), e(t), e(r), e(b), anchor, pxml)
                 if need > h + 0.02:
                     WARN.append("slide %s: text overflow %.2f > %.2f in: %s" % (self.deck.cur_no, need, h, str(text)[:60]))
         else:
@@ -479,14 +502,14 @@ class Deck:
         self.existing = len(re.findall(r'<p:sldId ', pres))
 
     def new(self, bg="light", notes="", replace=None, transition="fade"):
-        s = Slide(self, bg=bg, notes=notes, transition=transition)
+        s = Slide(self, bg=bg, notes=T(notes) if notes else notes, transition=transition)
         no = replace if replace else self.existing + len([x for x in self.slides if not x[2]]) + 1
         self.cur_no = no
         self.slides.append((no, s, bool(replace)))
         return s
 
     def _notes_xml(self, text, no):
-        paras = "".join('<a:p><a:r><a:rPr lang="ru-RU" dirty="0"/><a:t>%s</a:t></a:r></a:p>' % escape(t) for t in text.split("\n"))
+        paras = "".join('<a:p><a:r><a:rPr lang="%s" dirty="0"/><a:t>%s</a:t></a:r></a:p>' % (LANG, escape(t)) for t in text.split("\n"))
         return ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
                 '<p:notes xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main">'
                 '<p:cSld><p:spTree><p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/><a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr>'

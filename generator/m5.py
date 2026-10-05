@@ -50,7 +50,7 @@ def build(d):
     for k, t in enumerate(skills):
         a = math.radians(k * 360 / len(skills))
         px, py = cx + rx * math.sin(a), cy - ry * math.cos(a)
-        one = _font(11, True).getlength(t) / 720 + 0.3
+        one = _font(11, True).getlength(T(t)) / 720 + 0.3
         if one <= 1.95 or k == 0:
             w, h = one, 0.44
         else:

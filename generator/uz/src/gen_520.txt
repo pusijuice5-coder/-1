@@ -1,0 +1,180 @@
+520|Sprint 2
+521|Sprint 3
+522|Sprint 4
+523|Sprint 5
+524|Sprint 6
+525|Har sprintda — **PO Sync:** umumiy bog'liqliklarga ega jamoalarni sinxronlash
+526|Chorak oxirida — choraklik sharh (demo) va rejalashtirish
+527|Bitta sprint = 10 ish kuni
+528|1-kun
+529|2-kun
+530|3-kun
+531|4-kun
+532|5-kun
+533|6-kun
+534|7-kun
+535|8-kun
+536|9-kun
+537|10-kun
+538|**Sprintni rejalashtirish** — 4 soatgacha
+539|**Kundalik Scrum** — har kuni, 15 daqiqa
+540|**Beklogni dolzarblashtirish** — zarurat bo'yicha, sprint vaqtining ≈10 foizi
+541|**Sprint sharhi va retrospektiva** — har biri 2 soatgacha
+542|1 oygacha, etalon — 2 hafta
+543|Sprint maqsadi o'zgarmaydi
+544|O'zgarishlar — faqat maqsad doirasida
+545|Ish hajmini aniqlashtirish mumkin
+546|Mahsulot beklogi — mahsulot maqsadiga erishish uchun bajarilishi kerak bo'lgan barcha ishlarning tartiblangan ro'yxati. Yuqorida — eng ustuvor elementlar: ular batafsil ishlab chiqilgan va yaqin sprintlarga tayyor. Pastga tushgan sari vazifalar yirikroq va kamroq batafsil tavsiflanadi. Elementlarni istalgan vaqtda qo'shish mumkin, ustuvorliklar qayta ko'rib chiqiladi, keraksizlari esa o'chiriladi. Beklogda odatda to'rt turdagi elementlar bo'ladi: foydalanuvchi hikoyalari va gipotezalar, texnik hikoyalar, nuqsonlar va texnik qarz. Beklogni Mahsulot egasi boshqaradi, lekin uni butun jamoa to'ldirishi mumkin.
+547|Mahsulot maqsadiga erishish uchun bajarilishi kerak bo'lgan barcha ishlarning tartiblangan ro'yxati. Tartib — mijoz va biznes uchun qiymat hamda bajarish murakkabligiga ko'ra.
+548|batafsillik
+549|Yaqin sprintlar — batafsil ishlab chiqilgan
+550|Keyingi sprintlar
+551|Hozircha past ustuvorlik — yirik tavsiflangan
+552|Beklog elementlarining 4 turi
+553|MIJOZGA KO'RINADI
+554|MIJOZGA KO'RINMAYDI
+555|QIYMAT O'SISHI
+556|BARQARORLIK O'SISHI
+557|Foydalanuvchi hikoyalari va gipotezalar
+558|mijoz uchun qimmatli funksiyalar
+559|Texnik hikoyalar
+560|arxitektura, infratuzilma, platformalar
+561|Nuqsonlar (baglar)
+562|mijozga xalaqit beradi — tuzatish kerak
+563|Texnik qarz
+564|refaktoring, avtomatlashtirish, hujjatlar
+565|Elementlarni istalgan vaqtda qo'shish, ustuvorliklarni qayta ko'rib chiqish, ortiqchasini o'chirish mumkin.
+566|**Beklogni Mahsulot egasi boshqaradi**, uni butun jamoa to'ldirishi mumkin.
+567|Beklogning asosiy elementi — foydalanuvchi hikoyasi. U foydalanuvchi uchun qimmatli funksiyani quyidagi formatda tavsiflaydi: falon rol sifatida men falon qiymatni olish uchun falon harakatni qilishni istayman. Yaxshi hikoya INVEST mezonlari bo'yicha tekshiriladi: u mustaqil, muhokama qilinadigan, qimmatli, baholanadigan, kichik va tekshiriladigan bo'ladi. Hikoya texnik topshiriq emas, balki suhbatga taklif: tafsilotlarni jamoa Mahsulot egasi bilan birga aniqlashtiradi.
+568|Foydalanuvchi hikoyasi va INVEST mezonlari
+569|HIKOYA FORMATI
+570|[Rol] sifatida men [qiymat] uchun [harakat]ni istayman
+571|MISOL
+572|Mobil ilova mijozi sifatida men to'lovni kechiktirmaslik uchun kredit bo'yicha keyingi to'lov sanasini bosh ekranda ko'rishni istayman.
+573|**Hikoya — spetsifikatsiya emas, muhokamaga taklif:** tafsilotlarni jamoa PO bilan birga aniqlashtiradi. Katta hikoyalar bitta sprintga sig'adigan qismlarga bo'linadi.
+574|Mustaqil
+575|Boshqalaridan alohida bajarish va tekshirish mumkin
+576|Muhokama qilinadigan
+577|Tafsilotlar jamoa va PO muloqotida aniqlashtiriladi
+578|Qimmatli
+579|Foydalanuvchining muammosi yoki ehtiyojini hal qiladi
+580|Baholanadigan
+581|Jamoa murakkablik va hajmni baholay oladi
+582|Kichik
+583|Bitta sprintga sig'adi
+584|Tekshiriladigan
+585|Qabul qilish mezonlari bor — qachon «tayyor» ekani tushunarli
+586|Butun jamoa sifatni bir xil tushunishi uchun uchta vosita qo'llaniladi. Definition of Ready — kirish filtri: agar vazifa nima uchun kerakligi tushunarli bo'lsa, tavsifi, qabul qilish mezonlari va bahosi bo'lsa, u sprintga olishga tayyor. Qabul qilish mezonlari muayyan hikoya aynan nimani qila olishi kerakligini tavsiflaydi — ular har bir vazifa uchun alohida. Definition of Done — barcha vazifalar uchun yagona «tayyor» standarti: qabul qilish mezonlari bajarilgan, revyu va testlardan o'tgan, hujjatlar yangilangan, natija Mahsulot egasi tomonidan qabul qilingan.
+587|Sifat mezonlari: DoR, qabul qilish mezonlari, DoD
+588|Vazifa tushunarli va uni sprintga olish mumkin
+589|Sprintni rejalashtirishda tekshiriladi
+590|vazifa nima uchun kerakligi tushunarli
+591|tavsif va qabul qilish mezonlari bor
+592|baho bor
+593|jamoa vazifani PO bilan muhokama qilgan
+594|Muayyan hikoya aynan nimani qila olishi kerak
+595|Har bir hikoya uchun alohida
+596|MISOL: HISOBLAR O'RTASIDA O'TKAZMA
+597|ro'yxatda — faqat faol hisoblar
+598|summa balansdan oshmasa, tugma faol
+599|nosozlikda pul yechilmaydi
+600|Jamoaning barcha vazifalari uchun yagona «tayyor» standarti
+601|Barcha vazifalarga bir xilda qo'llaniladi
+602|qabul qilish mezonlari bajarilgan
+603|revyu va testlar o'tkazilgan
+604|hujjatlar yangilangan
+605|Mahsulot egasi tomonidan qabul qilingan
+606|SPRINTGA KIRISH
+607|VAZIFA MAZMUNI
+608|ISHDAN CHIQISH
+609|Birinchi navbatda nima qilishni qanday hal qilish kerak? Asosiy formula: ustuvorlik qiymatning mehnat sarfiga nisbatiga teng. Qiymatni Mahsulot egasi baholaydi — foyda, xarajatlar, mijozlar mamnunligi, konversiya va obro' orqali. Mehnat sarfini jamoa baholaydi — noaniqlik, murakkablik va xavflarni hisobga olgan holda. Aniqroq baholash uchun RICE modeli qo'llaniladi: qamrov, ta'sir va ishonch ko'paytmasi sa'y-harakatga bo'linadi. Misolda anketani soddalashtirish 200 ball oladi, yangi investitsiya bo'limi esa atigi 3 ball: sa'y-harakat katta, ishonch past. Model yordam beradi, qarorni esa inson qabul qiladi.
+610|Ustuvorliklarni qanday belgilash kerak
+611|Ustuvorlik =
+612|Mehnat sarfi
+613|**Qiymatni Mahsulot egasi baholaydi**
+614|foyda · xarajatlar · NPS/CSI · konversiya · obro'
+615|**Mehnat sarfini jamoa baholaydi**
+616|noaniqlik · murakkablik · xavflar
+617|RICE modeli
+618|**R — Reach:** qamrov, nechta mijozga ta'sir qiladi
+619|**I — Impact:** metrikaga ta'sir
+620|**C — Confidence:** baholarga ishonch
+621|**E — Effort:** amalga oshirish uchun sa'y-harakat
+622|Gipoteza (shartli misol)
+623|Ariza anketasini soddalashtirish
+624|Yangi investitsiya bo'limi
+625|Baholar — 1 dan 10 gacha shkalada. C = 1 — «foydalanuvchilarda tekshirilmagan rahbariyat topshirig'i». Model inson o'rniga qaror qabul qilmaydi, lekin beklogga xolisroq qarashga yordam beradi.
+626|**Nima uchun:** mahsulot maqsadiga tezroq erishish, o'zgarishlarga moslashish, muhim narsaga e'tibor qaratish va manfaatdor tomonlar uchun shaffof bo'lish uchun.
+627|Har bir Scrum tadbirining aniq maqsadi, ishtirokchilari va natijasi bor. Rejalashtirishda jamoa sprint maqsadini belgilaydi va vazifalarni tanlaydi. Kundalik Scrum o'n besh daqiqadan oshmaydi — bu rahbarga hisobot emas, balki taraqqiyotni solishtirish. Beklogni dolzarblashtirish — keyingi sprintlar uchun vazifalarni tayyorlashning doimiy jarayoni. Sprint sharhida jamoa natijani foydalanuvchilar va manfaatdor tomonlarga ko'rsatadi va qayta aloqa yig'adi. Retrospektivada esa keyingi sprint uchun bir-ikkita yaxshilanishni tanlaydi. Jamoalar uchun batafsil yo'riqnomalar, jumladan Jira'da ishlash bo'yicha, Agile Cookbook'da bor.
+628|Scrum tadbirlari: nima uchun, kim, natija nima
+629|4 soatgacha · boshida
+630|NIMA UCHUN
+631|Sprint maqsadini belgilash va beklogdan vazifalarni tanlash
+632|KIM
+633|PO, Scrum-master, jamoa
+634|NATIJA
+635|Sprint maqsadi, beklogi va rejasi
+636|Kundalik Scrum
+637|15 daqiqa · har kuni
+638|Maqsad sari taraqqiyotni solishtirish va keyingi 24 soatni rejalashtirish
+639|Jamoa, Scrum-master, PO
+640|Kun rejasi, ko'rinadigan to'siqlar
+641|Beklogni dolzarblashtirish
+642|vaqtning ≈10 foizi · doimiy
+643|Yaqin vazifalarni aniqlashtirish, qismlarga bo'lish va baholash
+644|PO, jamoa, Scrum-master, ekspertlar
+645|Rejalashtirishga tayyor vazifalar (DoR)
+646|Sprint sharhi (demo)
+647|2 soatgacha · oxirida
+648|Inkrementni ko'rsatish va qayta aloqa olish
+649|Jamoa, foydalanuvchilar, manfaatdor tomonlar
+650|Yangilangan mahsulot beklogi
+651|Retrospektiva
+652|Jarayonlar, vositalar va o'zaro hamkorlikni yaxshilash
+653|Keyingi sprint uchun 1–2 ta yaxshilanish
+654|Vaqt ikki haftalik sprint uchun ko'rsatilgan. Jira'da ishlash bo'yicha bosqichma-bosqich yo'riqnomalar — bankning Agile Cookbook'ida.
+655|Scrum — moslashuvchan ishlashning yagona usuli emas. Kanban doskadagi vazifalar oqimini vizuallashtirish va bajarilayotgan vazifalar sonini cheklashga asoslanadi. Unda qat'iy sprintlar yo'q: vazifalar uzluksiz oqimda boradi, o'zgarishlarni esa limit imkon bersa, istalgan vaqtda kiritish mumkin. Scrum noaniqlik sharoitida mahsulotni rivojlantirish uchun, Kanban esa bir xil turdagi vazifalar oqimi uchun, masalan, operatsion bo'linmalarda mosroq. Bank agile-jamoalari uchun bazaviy freymvork — Scrum.
+656|Scrum va Kanban
+657|Ritm
+658|Belgilangan uzunlikdagi sprintlar
+659|Vazifalarning uzluksiz oqimi
+660|Rollar
+661|PO, Scrum-master, ishlab chiquvchilar
+662|Maxsus rollar shart emas
+663|O'zgarishlar
+664|Beklog orqali; sprint maqsadi o'zgarmaydi
+665|Istalgan vaqtda, agar WIP limiti imkon bersa
+666|Asosiy metrika
+667|Sprint maqsadiga erishish
+668|Vazifaning o'tish vaqti (lead time)
+669|Mos keladi
+670|Yuqori noaniqlikda mahsulotni rivojlantirishga
+671|Bir xil turdagi vazifalar oqimiga: operatsiyalar, qo'llab-quvvatlash
+672|Kanban-doska
+673|ish oqimini vizuallashtiramiz
+674|Bajarish kerak
+675|Tarifni o'zgartirish arizasi
+676|Filiallar uchun hisobot
+677|Kontakt-markaz uchun skript
+678|Ishda · limit 3
+679|Mijoz eslatmasini yangilash
+680|Mijoz murojaatiga javob
+681|Yangi xodimlarni o'qitish
+682|Tayyor
+683|Shartnomani tekshirish
+684|Xat shabloni
+685|«Ishda» limiti (WIP) joriy ish tugamaguncha yangisini boshlashga yo'l qo'ymaydi.
+686|**Bank agile-jamoalarining bazaviy freymvorki — Scrum.** Kanban Run-bo'linmalarda va shaxsiy ish uchun qulay.
+687|O'zingizni tekshiring. Sprint o'rtasi. Qo'shni bo'linma rahbari jamoa a'zosidan hisobotga zudlik bilan yangi maydon qo'shishni so'raydi. Qanday yo'l tutish to'g'ri? To'g'ri javob: D. 
+688|Sprint o'rtasi. Qo'shni bo'linma rahbari jamoa a'zosidan hisobotga zudlik bilan yangi maydon qo'shishni so'raydi.
+689|**Qanday yo'l tutish to'g'ri?**
+690|Qanday yo'l tutish to'g'ri?
+691|Vazifani darhol olish — rahbarga rad javobini berish odat emas
+692|Sprintni to'xtatib, shu vazifa bilan yangisini boshlash
+693|Rad etish: Agile'da ish o'rtasida yangi vazifalar qabul qilinmaydi
+694|So'rovni Mahsulot egasiga yetkazish: u beklogda qiymat va ustuvorlikni baholaydi
+695|To'g'ri javob — D. So'rovni Mahsulot egasiga yetkazish kerak: u qiymatni baholaydi va vazifani beklogga kerakli ustuvorlik bilan qo'yadi. Vazifani beklogni chetlab o'tib olish mumkin emas — bu fokusni buzadi va sprint maqsadini barbod qilishi mumkin. Sprintni bekor qilish esa sprint maqsadi o'z ma'nosini yo'qotgandagina PO qabul qiladigan favqulodda chora.
+696|Beklogni chetlab o'tib ishlash jamoa fokusini buzadi va sprint maqsadini barbod qilishi mumkin.
+697|Sprintni bekor qilish — vazifa qo'shish usuli emas, sprint maqsadi ma'nosini yo'qotgandagi favqulodda chora.
+698|Agile o'zgarishlarni qo'llab-quvvatlaydi — lekin tartibsiz emas, beklog va ustuvorlashtirish orqali.
+699|Ustuvorliklar — PO zonasi. Agar so'rov haqiqatan muhimroq bo'lsa, u yaqin sprintga kiradi.

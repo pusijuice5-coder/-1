@@ -1,0 +1,120 @@
+700|To'rtinchi modul yakunlari. Scrum — ikki haftalik sprintlar ritmidagi uchta rol, uchta artefakt va beshta tadbir. Mahsulot beklogi — ishlarning yagona tartiblangan ro'yxati, undagi ustuvorliklarni Mahsulot egasi belgilaydi. DoR, qabul qilish mezonlari va DoD esa sifat haqida umumiy tushuncha beradi. Yakuniy modulga o'tamiz — madaniyat va Agile'ni o'z ishingizda qanday qo'llash haqida.
+701|4-moduldan asosiy xulosalar
+702|Scrum — bu 3 ta rol, 3 ta artefakt va 5 ta tadbir. Ritm — ikki haftalik sprintlar, sprint maqsadi o'zgarmaydi.
+703|Mahsulot beklogi — ishlarning yagona tartiblangan ro'yxati. Ustuvorliklarni PO qiymat va mehnat sarfi nisbatiga ko'ra belgilaydi.
+704|DoR, qabul qilish mezonlari va DoD jamoaga sifat haqida umumiy tushuncha beradi.
+705|Keyingisi: 5-modul. Agile-madaniyat va men
+706|Yakuniy modul — madaniyat va siz haqingizda. Har qanday amaliyot faqat ishonch poydevorida ishlaydi. Psixologik xavfsizlik, qayta aloqa va agile-jamoa a'zosi bo'lmasangiz ham Agile'ni o'z ishingizda qanday qo'llash haqida gaplashamiz.
+707|5-modul
+708|Agile-madaniyat va men
+709|1. Ishonch va jamoaviy mas'uliyat
+710|2. Psixologik xavfsizlik va qayta aloqa
+711|3. Ishingizdagi agile-amaliyotlar
+712|4. Agile-jamoalar bilan qanday ishlash kerak
+713|Agile-madaniyat jamoaviy mas'uliyat, ochiqlik va ishonchga tayanadi. Bir kishining g'oyasini butun jamoa rivojlantiradi, natija uchun esa jamoa birgalikda javob beradi. Ishonchni formula bilan ifodalash mumkin: ochiqlik, professionallik va ishonchlilik yig'indisi shaxsiy manfaatga bo'linadi. Inson o'z foydasini umumiy maqsaddan qanchalik ustun qo'ysa, unga ishonch shunchalik past bo'ladi. O'ngda — Agile'da ayniqsa muhim bo'lgan soft skills: o'zini o'zi tashkil etish va qayta aloqadan tortib empatiya va xatolarni tan olish qobiliyatigacha.
+714|Agile-madaniyat: ishonch va mas'uliyat
+715|Bir kishining g'oyasini butun jamoa rivojlantiradi
+716|Natija uchun jamoaviy mas'uliyat — butun jamoaga yagona baho
+717|Ochiq muhit: kross-funksionallik, makon va texnologiyalar
+718|ISHONCH FORMULASI
+719|Ishonch =
+720|Ochiqlik + Professionallik + Ishonchlilik
+721|Shaxsiy manfaat
+722|Inson o'z foydasini umumiy maqsaddan qanchalik ustun qo'ysa, unga ishonch shunchalik past bo'ladi — hatto yuqori professionallikda ham.
+723|Doimiy takomillashish
+724|Natijaga fokus
+725|Jamoaviy mas'uliyat
+726|Psixologik xavfsizlik
+727|Qayta aloqa
+728|Empatiya
+729|Hamkorlik
+730|Xatolarni tan olish
+731|O'zini o'zi tashkil etish
+732|Psixologik xavfsizlik — bu savol bergani, g'oya aytgani yoki xatosini tan olgani uchun hech kim jazolanmasligi va masxara qilinmasligiga ishonch. Usiz muammolar haqida oxirigacha jim turiladi. Uni oddiy narsalar yaratadi: aybdorni qidirish o'rniga — jarayonda nimani yaxshilash kerakligi haqidagi savol. Madaniyatning ikkinchi tayanchi — qayta aloqa. Uni SBI modeli bo'yicha berish qulay: vaziyat, xulq-atvor, ta'sir. Bu qachon bo'lganini, inson aniq nima qilganini va bu nimaga olib kelganini tasvirlang. Shunda qayta aloqa aniq va foydali bo'ladi.
+733|Psixologik xavfsizlik va qayta aloqa
+734|Savol bergani, g'oya aytgani yoki xatosini tan olgani uchun hech kim jazolanmasligi va masxara qilinmasligiga ishonch.
+735|**Nima uchun muhim:** usiz muammolar haqida oxirigacha jim turiladi — va ular haqida tuzatish qimmatga tushganda bilib qolinadi.
+736|O'RNIGA
+737|YAXSHIROQ
+738|«Kim aybdor?»
+739|«Jarayonda nimani yaxshilaymiz?»
+740|«Bu mening masalam emas»
+741|«Keling, birga hal qilamiz»
+742|«Ahmoqona savol bermang»
+743|«Yaxshi savol, rahmat»
+744|SBI modeli bo'yicha qayta aloqa
+745|**Vaziyat** (Situation) — qachon va qayerda bo'lgan
+746|**Xulq-atvor** (Behavior) — inson aniq nima qildi — baholarsiz, faktlar
+747|**Ta'sir** (Impact) — bu jamoa, mijoz, natija uchun nimaga olib keldi
+748|MISOLLAR
+749|«Kechagi sharhda (S) siz prototipni real xizmat ko'rsatish ssenariysida ko'rsatdingiz (B) — manfaatdor tomonlar qiymatni darhol tushunib, aniq izohlar berishdi (I)»
+750|«Rejalashtirishda (S) siz hamkasblarning gapini bir necha marta bo'ldingiz (B) — ba'zi g'oyalar aytilmay qoldi va biz xavfni hisobga olmadik (I)»
+751|Agile-amaliyotlar har qanday ishda, hatto agile-jamoadan tashqarida ham foydali. Mijozdan boshlang: u kimligini va uning qanday muammosini hal qilayotganingizni tushuning. Natijani erta ko'rsating — ikki kundan keyingi qoralama bir oydan keyingi mukammal hujjatdan yaxshiroq. Ishingizni oddiy doskada vizuallashtiring. So'rov qanchalik baland ovozda aytilganiga emas, qiymatiga ko'ra ustuvorlashtiring. Muntazam ravishda qayta aloqa yig'ing. Ikki haftada bir marta mini-retrospektiva o'tkazing: nima chiqdi, nima xalaqit berdi, nimani o'zgartiramiz.
+752|Ishingizda Agile — hatto agile-jamoadan tashqarida ham
+753|Mijozdan boshlang
+754|Mijozingiz kim — tashqi yoki ichki? Uning qaysi muammosini hal qilyapsiz?
+755|Natijani erta ko'rsating
+756|Ikki kundagi qoralama bir oydagi mukammal hujjatdan foydaliroq.
+757|Ishni vizuallashtiring
+758|«Bajarish kerak — Ishda — Tayyor» degan oddiy doska yuklama va tor joylarni ko'rinadigan qiladi.
+759|Qiymatga ko'ra ustuvorlashtiring
+760|«Kim balandroq so'rayapti?» emas, «eng katta samarani nima beradi?» deb so'rang.
+761|Qayta aloqa yig'ing
+762|Hamkasblar va mijozlardan nima ishlayotgani va nima ishlamayotganini muntazam so'rang.
+763|Mini-retro o'tkazing
+764|Ikki haftada bir: nima chiqdi, nima xalaqit berdi, nimani o'zgartiramiz.
+765|Agile-jamoa a'zosi bo'lmasangiz ham, ular bilan albatta ishlaysiz — mijoz, ekspert yoki buyurtmachi sifatida. Sprint sharhlariga keling va aniq qayta aloqa bering. Barcha so'rovlarni jamoa a'zolariga to'g'ridan to'g'ri emas, Mahsulot egasiga yetkazing. Muammo va ehtiyojni tasvirlang, yechimni jamoa o'zi taklif qiladi. Ekspert sifatida doim aloqada bo'ling. PO’ni chetlab o'tib vazifa qo'yish, sprint maqsadini yo'l-yo'lakay o'zgartirishni talab qilish va yakuniy topshirishni kutishdan qoching.
+766|Agile-jamoalar bilan qanday ishlash kerak
+767|Jamoa uchun siz mijoz, ekspert yoki buyurtmachi bo'lishingiz mumkin
+768|QILING
+769|Sprint sharhiga keling va aniq qayta aloqa bering
+770|So'rovlarni Mahsulot egasiga yetkazing — ustuvorliklarni u boshqaradi
+771|Tayyor yechimni emas, muammo va ehtiyojni tasvirlang
+772|Ekspert sifatida doim aloqada bo'ling: xavflar, huquq, komplayens, filiallar ishi
+773|QOCHING
+774|PO’ni chetlab o'tib, jamoa a'zolariga to'g'ridan to'g'ri vazifa qo'yishdan
+775|Sprint maqsadini «yo'l-yo'lakay» o'zgartirishni talab qilishdan
+776|Natija namoyishi o'rniga batafsil hisobotlar so'rashdan
+777|Mahsulotni ilk bor ko'rish uchun yakuniy topshirishni kutishdan
+778|YECHIM O'RNIGA EHTIYOJ
+779|«Bosh ekranga ko'chirma tugmasini qo'shing» emas, balki **«Filialdagi mijozlar ko'chirmani qidirishga 10 daqiqa sarflaydi — bu vaqtni qisqartirmoqchimiz»**.
+780|O'zingizni tekshiring. Siz filial xodimisiz. Sizni sprint sharhiga taklif qilishdi, u yerda jamoa omonat rasmiylashtirishning yangi ekranini ko'rsatmoqda. Siz qadamlardan biri mijozlarga noqulay bo'lishini ko'ryapsiz. Nima qilgan ma'qul? To'g'ri javob: B. 
+781|Siz filial xodimisiz. Sizni sprint sharhiga taklif qilishdi, u yerda jamoa omonat rasmiylashtirishning yangi ekranini ko'rsatmoqda. Siz qadamlardan biri mijozlarga noqulay bo'lishini ko'ryapsiz.
+782|**Nima qilgan ma'qul?**
+783|Nima qilgan ma'qul?
+784|Jim turish — bu sizning jamoangiz ham, mas'uliyatingiz ham emas
+785|Mijoz vaziyatini va qadam nega noqulayligini tasvirlab, sharhda to'g'ridan to'g'ri aytish
+786|Uchrashuvdan keyin jamoa rahbariga shikoyat yozish
+787|Uchrashuvdan keyin ishlab chiquvchidan ekranni jimgina qayta qilishni so'rash
+788|To'g'ri javob — B. Sprint sharhi aynan mijozlarni biladiganlarni eshitish uchun mavjud. Mijoz vaziyatini aniq tasvirlang — Mahsulot egasi buni beklogda hisobga oladi. Jim turish, shikoyat qilish yoki chetlab o'tib kelishish — jamoani qimmatli ma'lumotdan mahrum qilish yoki shaffoflikni buzish demakdir.
+789|Sprint sharhi aynan foydalanuvchilar va manfaatdor tomonlardan qayta aloqa olish uchun kerak.
+790|Mijozlar bilan ishlaydiganlarning aniq qayta aloqasi — demodagi eng qimmatli narsa. PO uni beklogda hisobga oladi.
+791|Qayta aloqa eskalatsiya orqali emas, ochiq va to'g'ridan to'g'ri bo'lishi kerak.
+792|O'zgarishlar — beklog va PO orqali, aks holda jamoaning shaffofligi va fokusi yo'qoladi.
+793|Beshinchi modul yakunlari. Ishonch va psixologik xavfsizlik — barcha amaliyotlarning poydevori. Qayta aloqa aniq bo'lishi kerak: vaziyat, xulq-atvor, ta'sir. Moslashuvchan amaliyotlar esa har qanday ishda foydali. Kurs yakunlari va yakuniy test qoldi.
+794|5-moduldan asosiy xulosalar
+795|Ishonch va psixologik xavfsizlik — barcha agile-amaliyotlar ishlaydigan poydevor.
+796|Qayta aloqa aniq va o'z vaqtida bo'lishi kerak: vaziyat — xulq-atvor — ta'sir.
+797|Agile har qanday ishda foydali: markazda mijoz, qisqa qadamlar, ishning ko'rinishi va muntazam yaxshilanishlar.
+798|Keyingisi: kurs yakunlari va yakuniy test
+799|Demak, eslab qolish kerak bo'lgan asosiy narsa: Agile — bu mijozga haqiqatan kerak bo'lgan narsani tezroq qilish. Buning uchun qadriyat va tamoyillarga asoslangan fikrlash tarzi, umumiy maqsad va tushunarli rollarga ega jamoalar, ma'lumotlarga asoslangan mahsulot yondashuvi, Scrumning qisqa sikllari hamda ishonch va qayta aloqa madaniyati kerak.
+800|KURS YAKUNLARI
+801|Agile — bu mijozga kerak bo'lgan narsani **tezroq** qilish
+802|Fikrlash tarzi: 4 qadriyat va 12 tamoyil
+803|Umumiy maqsad va tushunarli rollarga ega jamoalar
+804|Mahsulot, gipotezalar va ma'lumotlarga asoslangan qarorlar
+805|Scrum: qisqa sikllar, shaffoflik, doimiy yaxshilanishlar
+806|Ishonch va qayta aloqa madaniyati — har qanday ishda
+807|Ushbu slaydda kursning asosiy atamalari jamlangan. Unga istalgan vaqtda, jumladan yakuniy test oldidan qaytishingiz mumkin.
+808|Atamalar lug'ati
+809|Agile-manifestning 4 qadriyati va 12 tamoyiliga asoslangan falsafa
+810|qisqa iteratsiyalar bilan qiymat yaratish uchun yengil freymvork
+811|ish oqimini boshqarish: vizuallashtirish va ishdagi vazifalar limiti
+812|doimiy uzunlikdagi davr (odatda 2 hafta) — Scrum tadbirlari konteyneri
+813|sprintning qiymat keltiradigan tayyor va tekshirilgan natijasi
+814|mahsulot maqsadi uchun kerak bo'lgan hamma narsaning tartiblangan ro'yxati
+815|vazifa tugallangan deb hisoblanadigan yagona mezonlar
+816|Mahsulot egasi (PO)
+817|mahsulot qiymati va beklog ustuvorliklari uchun javob beradi
+818|Scrum-master (SM)
+819|jarayon samaradorligi va jamoa rivoji uchun javob beradi

@@ -1,0 +1,170 @@
+170|«T-shaped» mutaxassis
+171|Keng dunyoqarash: qo'shni kompetensiyalar
+172|Chuqur ekspertiza
+173|Masalan, UX-dizayn va testlash asoslarini tushunadigan biznes-tahlilchi. Kichik jamoada qo'shni vazifani ham o'z zimmasiga ola bilish muhim.
+174|Agile-jamoa hamma joyda ham kerak emas. U foydalanuvchilardan tezkor qayta aloqa kerak bo'lganda, noaniqlik yuqori bo'lib, talablarni oldindan qayd etib bo'lmaganda, natija uchun turli yo'nalishdagi mutaxassislar kerak bo'lganda va muhit rejalashtirish siklidan tezroq o'zgarganda o'zini oqlaydi. Agar jarayon barqaror va reglamentlangan bo'lsa, jarayonli yondashuvning o'zi yetarli — u yerda Lean va Kanban vositalari yordam beradi.
+175|Agile-jamoa qachon kerak
+176|Tezkor qayta aloqa kerak
+177|Bozor real foydalanuvchilardan muntazam fikr-mulohazalarni talab qiladi
+178|Yuqori noaniqlik
+179|Talablarni boshida qayd etib bo'lmaydi — qiymat eksperimentlar orqali izlanadi
+180|Kross-funksionallik kerak
+181|Natija uchun turli yo'nalishdagi mutaxassislar har kuni birga ishlaydi
+182|Muhit tez o'zgaradi
+183|Sharoit va ustuvorliklar standart rejalashtirish siklidan tezroq o'zgaradi
+184|Jarayonli yondashuv yetarli, agar:
+185|natija va qadamlar oldindan ma'lum bo'lsa
+186|jarayon barqaror va reglamentlangan bo'lsa
+187|asosiysi — ishonchlilik va bajarish tezligi bo'lsa
+188|Masalan, filialdagi standart operatsiyalar. Bu yerda Lean va Kanban yordam beradi.
+189|Bankda yangi agile-jamoa olti qadamda ishga tushiriladi: mahsulot yoki xizmatni aniqlash, mahsulot maqsadlarini belgilash, jamoa tarkibini yig'ish, yillik va choraklik maqsadlarni tasdiqlash, ishga tushirish — kick-off — o'tkazish va Scrum bo'yicha ishni yo'lga qo'yish.
+190|Agile-jamoa qanday ishga tushiriladi
+191|Mahsulot yoki xizmatni aniqlash
+192|Mahsulot maqsadlarini belgilash
+193|Jamoa tarkibini yig'ish
+194|Yillik va choraklik maqsadlarni tasdiqlash
+195|Ishga tushirishni o'tkazish (kick-off)
+196|Scrum bo'yicha ishni yo'lga qo'yish
+197|Bankning mahsulot modelida beshta asosiy rol bor. Mahsulot egasi jamoa nima va nima uchun qilishiga javob beradi: beklogni shakllantiradi, ustuvorliklarni belgilaydi, mahsulot metrikalari uchun javobgar. Scrum-master jarayon uchun javob beradi: Scrum bo'yicha ishni tashkil etadi, to'siqlarni bartaraf etishga yordam beradi va agile-madaniyatni rivojlantiradi. Jamoa a'zolari ishni qanday bajarish, sifat va muddatlar uchun javob beradi. Kompetensiyalar yetakchisi xodimlarning ekspertizasini rivojlantiradi, lekin ularning jamoadagi ishiga rahbarlik qilmaydi. Biriktirilgan ekspertlar esa — masalan, risk-menejerlar va yuristlar — ularning ekspertizasi kerak bo'lganda jalb qilinadi.
+198|Asosiy rollar
+199|Mahsulot egasi
+200|«NIMA» qilishimiz va nima uchun ekaniga javob beradi
+201|Beklogni shakllantiradi va ustuvorlashtiradi
+202|Metrikalar va P&L uchun javob beradi; har bir mahsulotga bitta
+203|Scrum-master
+204|Jamoaning ish jarayoni uchun javob beradi
+205|Tadbirlarni fasilitatsiya qiladi, to'siqlarni bartaraf etadi
+206|Agile-madaniyatni rivojlantiradi, o'qitadi, kouching qiladi
+207|Jamoa a'zosi
+208|«QANDAY» qilishimiz va sifat uchun javob beradi
+209|Mahsulot inkrementini yaratadi
+210|Jamoa muddatlari va maqsadlari uchun javob beradi
+211|Kompetensiyalar yetakchisi
+212|Xodimlarning ekspertizasini rivojlantiradi, ishga qabul qilish va kompetensiyalarni baholashda qatnashadi. Jamoa a'zosining ishiga rahbarlik qilmaydi.
+213|Biriktirilgan ekspert
+214|Risk-menejer, yurist, marketolog va boshqa mutaxassislar ularning ekspertizasi kerak bo'lganda jamoaga jalb qilinadi.
+215|Mas'uliyatni taqsimlashning asosiy qoidasi: Mahsulot egasi nima va nima uchun qilishni belgilaydi, jamoa esa buni qanday qilishni hal qiladi va sifat uchun javob beradi. Har bir rol uchun nomaqbul xulq-atvor ham tavsiflangan. Mahsulot egasi vazifalarni aynan qanday bajarishni ko'rsatmaydi va «xo'jayin» rolini o'ynamaydi. Scrum-master vazifalarni taqsimlamaydi va uchrashuv uchun uchrashuv o'tkazmaydi. Jamoa a'zosi mas'uliyatni faqat o'z vazifalari bilan cheklamaydi va muqobil taklif qilmasdan yechimlarni rad etmaydi.
+216|«Nima» va «qanday»: mas'uliyat sohalari
+217|«NIMA» va nima uchun
+218|Jamoa
+219|«QANDAY» va sifat
+220|Mijoz uchun qiymat
+221|QILADI
+222|Maqsad va ustuvorliklarni belgilaydi
+223|Sprint natijasini qabul qiladi
+224|QOCHADI
+225|«Aynan qanday qilish»ni ko'rsatishdan
+226|Mikromenejment va «xo'jayin» o'yinidan
+227|Jarayonni yaxshilashga yordam beradi
+228|To'siqlarni bartaraf etadi, fasilitatsiya qiladi
+229|Odamlarga vazifa taqsimlashdan
+230|«Kargo-kult»dan — uchrashuv uchun uchrashuvdan
+231|Vazifani qanday bajarishni o'zi hal qiladi
+232|Muammolar haqida ochiq gapiradi
+233|«Bu mening vazifam emas» pozitsiyasidan
+234|Muqobilsiz yechimlarni rad etishdan
+235|O'zingizni tekshiring. Kundalik uchrashuvda Mahsulot egasi vazifalarni jamoa a'zolari o'rtasida o'zi taqsimlaydi va ularni aynan qanday bajarishni batafsil tushuntiradi. Bu yerda nima noto'g'ri? To'g'ri javob: C. 
+236|Kundalik uchrashuvda Mahsulot egasi vazifalarni jamoa a'zolari o'rtasida o'zi taqsimlaydi va ularni aynan qanday bajarishni batafsil tushuntiradi.
+237|**Bu yerda nima noto'g'ri?**
+238|Bu yerda nima noto'g'ri?
+239|Hammasi to'g'ri: PO natija uchun javob beradi, demak, vazifalarni ham boshqaradi
+240|Vazifalarni Scrum-master taqsimlashi kerak
+241|PO «nima» va ustuvorliklar uchun javob beradi, «qanday» qilishni esa jamoa hal qiladi
+242|Vazifalarni kompetensiyalar yetakchisi taqsimlashi kerak
+243|To'g'ri javob — C. Mahsulot egasi jamoa nima qilishi va qaysi tartibda qilishi uchun javob beradi, buni qanday qilish uchun esa jamoaning o'zi javobgar. Vazifalarni na Scrum-master, na kompetensiyalar yetakchisi taqsimlashi kerak: jamoa o'zini o'zi tashkil etadi.
+244|Natija uchun javobgarlik mikromenejmentni anglatmaydi — bu PO uchun nomaqbul xulq-atvor.
+245|Odamlarni vazifalarga tayinlash Scrum-master uchun ham nomaqbul xulq-atvor.
+246|PO maqsad va ustuvorliklarni belgilaydi, jamoa esa o'zini o'zi tashkil etib, yechim usulini o'zi tanlaydi.
+247|Kompetensiyalar yetakchisi ekspertizani rivojlantiradi, lekin jamoadagi ishga rahbarlik qilmaydi.
+248|Ikkinchi modulga yakun yasaymiz. Rivojlanish kross-funksional jamoalarga o'tadi, joriy faoliyat esa bo'linmalarda qoladi. Jamoa natija uchun o'zi javob beradi va har bir rolning o'z mas'uliyat sohasi bor. Agile-jamoa esa hamma joyda emas, noaniqlik yuqori bo'lgan joyda kerak. Keyingi mavzu — mahsulot yondashuvi.
+249|2-moduldan asosiy xulosalar
+250|Change-faoliyat kross-funksional jamoalarga o'tadi, Run esa bo'linmalarda qoladi va ular bilan yaqin hamkorlik qiladi.
+251|4–10 kishilik jamoa natija uchun o'zi javob beradi: PO — «nima» uchun, a'zolar — «qanday» uchun, Scrum-master — jarayon uchun.
+252|Agile-jamoa noaniqlik yuqori va tezkor qayta aloqa muhim bo'lgan joyda kerak.
+253|Keyingisi: 3-modul. Mahsulot yondashuvi
+254|Uchinchi modul — mahsulot yondashuvi haqida. Mahsulot nima ekanini, u loyihadan nimasi bilan farq qilishini, g'oyalarni gipotezalar va MVP orqali qanday tekshirishni hamda muvaffaqiyatni metrikalar yordamida qanday o'lchashni ko'rib chiqamiz.
+255|3-modul
+256|Mahsulot yondashuvi
+257|1. Mahsulot nima va uning mijozi kim
+258|2. Loyiha va mahsulot: farqi nimada
+259|3. Gipotezalar, MVP va hayotiy sikl
+260|4. Mahsulot vizyoni va Lean Canvas
+261|5. Metrikalar va metrikalar daraxti
+262|Mahsulot — bu mijoz ehtiyojini qondiradigan va bankka biznes maqsadlariga erishishga yordam beradigan qiymat. Mijozlar tashqi bo'lishi mumkin — masalan, mobil ilovada karta rasmiylashtirayotgan inson — va ichki, ya'ni o'zimizning xodimlar. Hatto shu kurs ham ichki mijoz uchun mahsulot. Mahsulot ehtiyojga qanchalik aniq javob bersa, mijoz bilan aloqa shunchalik mustahkam va bank uchun foyda shunchalik katta bo'ladi.
+263|Mahsulot — bu…
+264|…ichki yoki tashqi mijoz ehtiyojlarini qondirish va bankning biznes maqsadlariga erishishga qaratilgan qiymat. Mahsulot tovar, servis yoki xizmat bo'lishi mumkin.
+265|Tashqi mijozlar
+266|Mijoz mobil ilovada karta rasmiylashtiradi
+267|Tadbirkor onlayn hisob raqam ochadi
+268|Ichki mijozlar
+269|Filial xodimi xizmat ko'rsatish tizimida ishlaydi
+270|Siz bu kursni LMSda o'tyapsiz — bu ham ichki mijoz uchun mahsulot
+271|Mijoz
+272|va uning
+273|ehtiyoji
+274|Mahsulot mijoz ehtiyojiga qanchalik aniq «tushsa», u bilan aloqa shunchalik mustahkam va bank uchun foyda shunchalik katta bo'ladi.
+275|Mahsulot loyihadan nimasi bilan farq qiladi? Loyihaning maqsadi — oldindan belgilangan yechimni muddat, byudjet va funksionallik doirasida amalga oshirish. Loyiha vaqt bilan cheklangan, uning samarasi esa oxirida baholanadi. Mahsulotning maqsadi — mijoz ehtiyojini qondirish. Mahsulot kerak ekan, rivojlanadi, uning samaradorligi esa doimiy baholanadi. Loyihaviy yondashuv noma'lumlar kam bo'lganda, mahsulot yondashuvi esa ular ko'p bo'lganda yaxshi.
+276|Loyiha va mahsulot: farqi nimada
+277|LOYIHA
+278|MAHSULOT
+279|Yechimni «muddat — byudjet — funksionallik» doirasida amalga oshirish
+280|MAQSAD
+281|Mijoz ehtiyojini qondirish — tashqi yoki ichki
+282|Ish hajmi
+283|FOKUS
+284|Qiymat
+285|Vaqt bilan cheklangan
+286|YASHASH MUDDATI
+287|Kerak ekan, rivojlanadi
+288|Biznesdan kelgan so'rov
+289|ASOS
+290|Mijoz va bozor ehtiyoji
+291|Loyiha tugaganidan keyin
+292|SAMARANI BAHOLASH
+293|Doimiy, rivojlanish jarayonida
+294|O'zgaruvchi va noma'lumlar kam
+295|QACHON SAMARALI
+296|O'zgaruvchi va noma'lumlar ko'p
+297|Bankda mahsulot ustidagi ish uch fazaga birlashtirilgan yetti bosqichdan o'tadi. Startdan oldin mas'ul shaxs tayinlanadi, maqsadlar belgilanadi, byudjet ajratiladi va jamoa yig'iladi. So'ng iterativ sikl boshlanadi: gipotezalarni tekshirish, ishlab chiqish, testlash va keng joriy etish — va bu har bir iteratsiyada takrorlanadi. Nazorat bosqichida samara baholanadi va mahsulotni rivojlantirish yoki yopish to'g'risida qaror qabul qilinadi. Asosiy fokus — gipotezalarni tekshirish: bu keraksiz narsani qilish xavfini kamaytiradi va eng qimmatli narsani tezroq chiqarishga yordam beradi.
+298|Mahsulot ishlab chiqarish jarayoni
+299|STARTDAN OLDIN
+300|MAHSULOT USTIDA ISH
+301|NATIJANI NAZORAT QILISH
+302|Mahsulotni rasmiylashtirish
+303|Mas'ul shaxsni tayinlash, maqsadlarni belgilash, byudjet ajratish
+304|Ishni tashkil etish
+305|Jamoani shakllantirish va o'qitish, vositalar bilan ta'minlash
+306|Gipotezalarni tekshirish
+307|Mijoz ehtiyojlarini o'rganish, g'oyalarni qiymatiga ko'ra ustuvorlashtirish
+308|Ishlab chiqish
+309|Arxitekturani loyihalash va yechimni ishlab chiqish
+310|Testlash va keng joriy etish
+311|Texnik va foydalanuvchi testlarini o'tkazish, keng joriy etish
+312|Monitoring
+313|Samarani baholash va rivojlanish yo'nalishlarini aniqlash
+314|Mahsulotni yopish
+315|Iqtisodiy samarasiz yoki maqsadga muvofiq bo'lmaganda yopish
+316|Sikl har bir iteratsiyada takrorlanadi
+317|**PO va jamoaning asosiy fokusi — gipotezalarni tekshirish.** Ko'pchilik qarorlar ma'lumotlar asosida qabul qilinadi.
+318|**Keraksiz narsa qilish xavfi kamroq** — g'oyalar darhol foydalanuvchilarda tekshiriladi
+319|**Eng qimmatli funksiyalar tezroq chiqadi** — eng katta foyda beradigan yechimlarga fokus
+320|**Tizimlar ishonchliroq** — mahsulot ortiqcha imkoniyatlar bilan yuklanmagan
+321|Mahsulot yondashuvida har qanday g'oya — tekshirilishi kerak bo'lgan gipoteza. Uni shablon bo'yicha shakllantirish qulay: biz falon o'zgarish falon auditoriya uchun falon natijaga olib keladi, deb ishonamiz va haq ekanimizni falon metrika orqali bilamiz. Tekshirish uchun MVP yaratiladi — real foydalanuvchilardan ma'lumot olish uchun yetarli bo'lgan mahsulotning minimal versiyasi. So'ng sikl takrorlanadi: gipoteza, MVP, o'lchash, xulosa. Shunday qilib, biz taxminlardan emas, ma'lumotlardan o'rganamiz.
+322|Gipotezalar va MVP: avval tekshiramiz
+323|GIPOTEZA SHABLONI
+324|Biz [o'zgarish] [auditoriya] uchun [natija]ga olib keladi, deb ishonamiz. [Metrika] [miqdor]ga o'zgarganda haq ekanimizni bilamiz.
+325|MISOL (SHARTLI)
+326|Biz mobil ilova mijozlari uchun karta arizasi anketasini 12 ta maydondan 5 tagacha qisqartirish yuborilgan arizalar sonini oshiradi, deb ishonamiz. Agar 2 haftalik A/B-test davomida yuborish konversiyasi 15% ga oshsa, haq ekanimizni bilamiz.
+327|**MVP (Minimum Viable Product)** — gipotezani real foydalanuvchilarda tekshirish uchun yetarli bo'lgan mahsulotning minimal versiyasi.
+328|Ma'lumotlardan
+329|o'rganamiz
+330|Gipoteza
+331|nimani tekshiramiz
+332|minimal versiya
+333|O'lchash
+334|metrikalar va fikrlar
+335|Xulosa
+336|rivojlantiramiz yoki o'zgartiramiz
+337|Har bir mahsulotning hayotiy sikli bor. Dastlabki bosqichlarda mahsulot sarmoya talab qiladi va hali daromad keltirmaydi: biz mijoz ehtiyojini tasdiqlaymiz va yechim izlaymiz. So'ng mahsulot daromad keltira boshlaydi — vazifa qiymatni oshirishga, keyinroq esa xarajatlarni kamaytirishga siljiydi. Oxirida mijozlar bankning boshqa mahsulotlariga o'tkaziladi. Har bir bosqichning o'z vositalari bor, lekin umumiy yondashuv bitta: gipotezalarni tekshirish.
+338|Mahsulotning hayotiy sikli
+339|Barcha bosqichlar uchun umumiy yondashuv — gipotezalarni tekshirish

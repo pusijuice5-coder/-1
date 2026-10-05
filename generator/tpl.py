@@ -24,7 +24,8 @@ def talk(d, text, notes=None, pose="present", bg="glass", bw=5.7, bx=0.7, by=0.9
     """Ezoza speaks: glass office background + speech bubble (slides 3 and 8)."""
     s = d.new(bg=bg, notes=notes or text.replace("\n", " ").replace("**", ""))
     if sz is None:
-        sz = 20 if len(text) < 110 else 18 if len(text) < 200 else 16
+        ln = len("\n".join(T(t) for t in text.split("\n")))
+        sz = 20 if ln < 110 else 18 if ln < 200 else 16
     s.ezoza(pose, right=12.9, h=7.15)
     paras = [{"runs": parse_runs(t), "spcAft": 6} for t in text.split("\n")]
     bh = text_height(paras, bw - 0.7, sz, False, 1.05, 6) + 0.75

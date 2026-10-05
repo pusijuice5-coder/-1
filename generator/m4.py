@@ -256,7 +256,7 @@ def build(d):
         s.text(x + 1.3, 1.35, 2.5, 0.8, en, sz=12, color=WHITE, anchor="ctr")
         s.text(x + 0.25, 2.3, 3.45, 0.62, what, sz=13.5, bold=True, color=TITLE, lnsp=1.0)
         s.text(x + 0.25, 2.95, 3.45, 0.3, when, sz=11, color=MUTED)
-        s.chip(x + 0.25, 3.38, min(3.45, 0.35 + len(exl) * 0.095), 0.3, exl, fill=MINT, color=G1, sz=9)
+        s.chip(x + 0.25, 3.38, min(3.45, 0.35 + len(T(exl)) * 0.095), 0.3, exl, fill=MINT, color=G1, sz=9)
         yy = 3.85
         for t in items:
             check_icon(s, x + 0.25, yy + 0.04, 0.28)

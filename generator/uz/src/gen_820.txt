@@ -1,0 +1,109 @@
+820|o'zgarish natija berishi haqidagi tekshiriladigan taxmin
+821|gipotezani foydalanuvchilarda tekshirish uchun mahsulotning minimal versiyasi
+822|Metrika
+823|mahsulotning mijoz va biznes uchun qiymatini ko'rsatadigan o'lchanadigan ko'rsatkich
+824|Manfaatdor tomon
+825|mahsulot ta'sir qiladigan yoki mahsulotga ta'sir qiladigan shaxs
+826|joriy faoliyat / mahsulot va texnologiyalarni rivojlantirish
+827|Agar mavzuni chuqurroq o'rganmoqchi bo'lsangiz, Agile Cookbook'dan — bankning to'liq qo'llanmasidan boshlang: unda rollar, mahsulot vositalari va Jira'da ishlash batafsil yoritilgan. Scrum bo'yicha rasmiy qo'llanma va Agile-manifestning asl matnini o'qish ham foydali.
+828|Keyin nimani o'rganish kerak
+829|Bankning to'liq qo'llanmasi (2026-yil iyun): rollarning batafsil profillari, mahsulot vositalari, Jira'da beklog bilan ishlash bo'yicha yo'riqnomalar.
+830|Scrum mualliflari tomonidan yozilgan rasmiy qo'llanma. Rus tilidagi tarjimasi ham bor: scrumguides.org
+831|Agile-manifest
+832|To'rt qadriyat va o'n ikki tamoyil asl ifodasida: agilemanifesto.org
+833|Jamoani ishga tushirish va jamoaviy kelishuvlar uchun shablon: theteamcanvas.com
+834|**Agile-jamoa a'zolariga** o'z roli va Jira'da ishlash amaliyoti bo'yicha chuqurlashtirilgan o'qishni tavsiya qilamiz.
+835|Siz kursning barcha modullarini o'tdingiz. Yakuniy testni topshirish qoldi: barcha mavzular bo'yicha o'n ikki savol, o'tish bali — sakson foiz, ya'ni kamida o'nta to'g'ri javob. Test oldidan «Moduldan asosiy xulosalar» slaydlari va atamalar lug'atini ko'zdan kechirish foydali. Omad!
+836|Siz barcha modullarni o'tdingiz!
+837|Oxirgisi qoldi — yakuniy test. Omad!
+838|barcha modullar bo'yicha savol
+839|o'tish bali — 12 tadan 10 ta
+840|daqiqa
+841|**Maslahat:** test oldidan «Moduldan asosiy xulosalar» slaydlari va atamalar lug'atini ko'zdan kechiring.
+842|Yakuniy test, 1-savol (jami 12 ta). Agile asosida nima yotadi? To'g'ri javob: B — Fikrlash tarzi: 4 qadriyat va 12 tamoyil. Agile — bu, avvalo, fikrlash tarzi, Scrum va Kanban kabi amaliyotlar esa uni qo'llash usuli xolos.
+843|YAKUNIY TEST
+844|1-savol, jami 12 ta
+845|Agile asosida nima yotadi?
+846|Scrum uchrashuvlari va marosimlari to'plami
+847|Jira'dagi vazifalarni hisobga olish tizimi
+848|Rejalar va hujjatlardan voz kechish
+849|Bitta javob variantini tanlang.
+850|Yakuniy test, 2-savol (jami 12 ta). Qaysi fikr Agile-manifest qadriyatlariga mos keladi? To'g'ri javob: D — Ishlaydigan mahsulot to'liq hujjatlashtirishdan muhimroq. Manifest ishlaydigan mahsulotni to'liq hujjatlashtirishdan ko'ra ko'proq qadrlaydi. Qolgan variantlar qadriyatlarni teskari qilib qo'yadi.
+851|2-savol, jami 12 ta
+852|Qaysi fikr Agile-manifest qadriyatlariga mos keladi?
+853|Jarayonlar va vositalar odamlar va o'zaro hamkorlikdan muhimroq
+854|Rejaga amal qilish o'zgarishlarga tayyorlikdan muhimroq
+855|Shartnomani kelishish buyurtmachi bilan hamkorlikdan muhimroq
+856|Ishlaydigan mahsulot to'liq hujjatlashtirishdan muhimroq
+857|Yakuniy test, 3-savol (jami 12 ta). Qaysi fikr afsona? To'g'ri javob: A — Agile faqat IT uchun mos. Agile-yondashuvlar bankning istalgan yo'nalishida — mijozlar uchun mahsulotlardan tortib HR va o'qitishgacha ishlaydi.
+858|3-savol, jami 12 ta
+859|Qaysi fikr afsona?
+860|Agile faqat IT uchun mos
+861|Agile'da rejalar tez-tez va qisqaroq muddatga tuziladi
+862|Hujjatlar aynan foyda keltiradigan miqdorda bo'ladi
+863|Scrum — Agile freymvorklaridan biri
+864|Yakuniy test, 4-savol (jami 12 ta). Qaysi faoliyat kross-funksional agile-jamoalarga o'tadi? To'g'ri javob: C — Change — mahsulotlar, mijoz yo'li va texnologiyalarni rivojlantirish. Agile-jamoalarga Change — rivojlanish o'tadi. Run funksional bo'linmalarda qoladi.
+865|4-savol, jami 12 ta
+866|Qaysi faoliyat kross-funksional agile-jamoalarga o'tadi?
+867|Run — mijozlarga xizmat ko'rsatish va operatsiyalar
+868|Nazorat, komplayens va xavfsizlik
+869|Change — mahsulotlar, mijoz yo'li va texnologiyalarni rivojlantirish
+870|Bankning barcha faoliyati, istisnosiz
+871|Yakuniy test, 5-savol (jami 12 ta). Jamoa «nima» qilishi va qaysi tartibda qilishi uchun kim javob beradi? To'g'ri javob: B — Mahsulot egasi. Mahsulot egasi «nima» va beklog ustuvorliklari uchun, jamoa esa «qanday» va sifat uchun javob beradi.
+872|5-savol, jami 12 ta
+873|Jamoa «nima» qilishi va qaysi tartibda qilishi uchun kim javob beradi?
+874|Yakuniy test, 6-savol (jami 12 ta). Agile-jamoaning odatiy hajmi qancha? To'g'ri javob: A — 4 nafardan 10 nafargacha. Jamoada 4 nafardan 10 nafargacha odam bo'ladi — shunda unda barcha kerakli kompetensiyalar bo'ladi va jamoa boshqariladigan bo'lib qoladi.
+875|6-savol, jami 12 ta
+876|Agile-jamoaning odatiy hajmi qancha?
+877|4 nafardan 10 nafargacha
+878|1–2 kishi
+879|15–20 kishi
+880|Hajmning ahamiyati yo'q
+881|Yakuniy test, 7-savol (jami 12 ta). MVP nima? To'g'ri javob: C — Gipotezani real foydalanuvchilarda tekshirish uchun mahsulotning minimal versiyasi. MVP — gipotezani real foydalanuvchilarda tekshirish uchun yetarli bo'lgan mahsulotning minimal versiyasi.
+882|7-savol, jami 12 ta
+883|MVP nima?
+884|Mahsulotning barcha funksiyalarga ega birinchi to'liq versiyasi
+885|Mahsulotning rahbariyat uchun taqdimoti
+886|Gipotezani real foydalanuvchilarda tekshirish uchun mahsulotning minimal versiyasi
+887|Jamoaning eng qimmatli a'zosi
+888|Yakuniy test, 8-savol (jami 12 ta). Mahsulot loyihadan nimasi bilan farq qiladi? To'g'ri javob: D — Mahsulot kerak ekan rivojlanadi, samarasi esa doimiy baholanadi. Mahsulot mijozga kerak ekan yashaydi va uning samarasi doimiy baholanadi. Loyiha vaqt bilan cheklangan, samarasi — oxirida.
+889|8-savol, jami 12 ta
+890|Mahsulot loyihadan nimasi bilan farq qiladi?
+891|Mahsulot vaqt va byudjet bilan cheklangan
+892|Mahsulot samarasi faqat oxirida baholanadi
+893|Mahsulot mijozning emas, biznesning so'roviga asoslanadi
+894|Mahsulot kerak ekan rivojlanadi, samarasi esa doimiy baholanadi
+895|Yakuniy test, 9-savol (jami 12 ta). Bank jamoalarida sprintning etalon davomiyligi qancha? To'g'ri javob: B — 2 hafta. Sprint 1 oygacha davom etadi, etalon — 2 hafta (10 ish kuni). Chorak = 6 ta sprint.
+896|9-savol, jami 12 ta
+897|Bank jamoalarida sprintning etalon davomiyligi qancha?
+898|1 kun
+899|2 hafta
+900|3 oy
+901|Davomiylik belgilanmagan
+902|Yakuniy test, 10-savol (jami 12 ta). Definition of Done nima? To'g'ri javob: A — Jamoaning barcha vazifalari uchun yagona «tayyor» standarti. DoD — jamoaning har qanday vazifasi tugallangan deb hisoblanadigan yagona mezonlar.
+903|10-savol, jami 12 ta
+904|Definition of Done nima?
+905|Yaqin sprint uchun vazifalar ro'yxati
+906|Muayyan hikoyaning qabul qilish mezonlari
+907|Scrum-masterning rahbarga hisoboti
+908|Yakuniy test, 11-savol (jami 12 ta). Retrospektiva nima uchun o'tkaziladi? To'g'ri javob: C — Jamoaning jarayonlari, vositalari va o'zaro hamkorligini yaxshilash. Retrospektivada jamoa keyingi sprint uchun o'z ish usulining 1–2 ta yaxshilanishini tanlaydi.
+909|11-savol, jami 12 ta
+910|Retrospektiva nima uchun o'tkaziladi?
+911|Inkrementni manfaatdor tomonlarga ko'rsatish
+912|Keyingi sprint uchun vazifalarni tanlash
+913|Jamoaning jarayonlari, vositalari va o'zaro hamkorligini yaxshilash
+914|Har bir xodimning ishini baholash
+915|Yakuniy test, 12-savol (jami 12 ta). SBI modeli bo'yicha qayta aloqa qanday tuzilgan? To'g'ri javob: D — Vaziyat (Situation) — Xulq-atvor (Behavior) — Ta'sir (Impact). SBI: Situation — vaziyat, Behavior — xulq-atvor (baholarsiz faktlar), Impact — jamoa, mijoz va natijaga ta'sir.
+916|12-savol, jami 12 ta
+917|SBI modeli bo'yicha qayta aloqa qanday tuzilgan?
+918|Kuchli tomonlar (Strengths) — To'siqlar (Barriers) — G'oyalar (Ideas)
+919|Status — Byudjet — Indikatorlar
+920|Sprint — Beklog — Inkrement
+921|Vaziyat (Situation) — Xulq-atvor (Behavior) — Ta'sir (Impact)
+922|Tabriklaymiz! Siz «Ipak Yuli Bankda Agile» kursini o'tdingiz. Endi bank agile-jamoalari qanday tuzilganini bilasiz va moslashuvchan amaliyotlarni o'z ishingizda qo'llay olasiz. Kichikdan boshlang: beshinchi moduldan bitta amaliyotni tanlang va uni shu haftadayoq sinab ko'ring. Bu yo'lni men bilan birga o'tganingiz uchun rahmat!
+923|MARRA
+924|Tabriklaymiz!
+925|Siz «Ipak Yuli Bankda Agile» kursini o'tdingiz
+926|Kichikdan boshlang: 5-moduldan bitta amaliyotni tanlang va uni shu haftadayoq sinab ko'ring.
+927|Bu yo'lni men bilan birga o'tganingiz uchun rahmat!
+928|Yakunlash

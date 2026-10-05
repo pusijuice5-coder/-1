@@ -1,0 +1,170 @@
+0|Ikkinchi usul — iterativ yondashuv, ya'ni Agile. Mahsulot kichik qismlarda o'sib boradi: har ikki-to'rt haftada ishlaydigan natija paydo bo'ladi, uni mijozlarga ko'rsatib, qayta aloqa olish mumkin. Qayta aloqa rejani hali arzon paytda o'zgartiradi.
+1|Qiymat yaratishning ikki usuli
+2|Ikkinchi usul
+3|Iterativ yondashuv (Agile)
+4|2 hafta
+5|Iteratsiya 1
+6|Iteratsiya 2
+7|Iteratsiya 3
+8|Iteratsiya 4
+9|Har 2–4 haftada ishlaydigan natija. Qayta aloqa rejani hali arzon paytda o'zgartiradi.
+10|Kaskad yondashuv o'z-o'zidan yomon emas — talablar ma'lum va barqaror bo'lganda u yaxshi ishlaydi. Agile esa noma'lum narsalar ko'p va mijozlardan tezkor qayta aloqa muhim bo'lgan joyda yutadi.
+11|Kaskad o'z-o'zidan yomon emas.
+12|Hammasi oldindan ma'lum bo'lgan joyda u yaxshi. Noma'lum narsalar ko'p bo'lsa, Agile yutadi.
+13|Kaskad
+14|talablar ma'lum va barqaror bo'lsa
+15|noma'lumlar ko'p va tezkor qayta aloqa muhim bo'lsa
+16|Agile — bu, avvalo, fikrlash tarzi. U to'rtta qadriyatda bayon etilgan, o'n ikkita tamoyil bilan belgilangan va ko'plab amaliyotlar orqali tarqaladi: Scrum, Kanban, Lean va boshqalar. Amaliyotlar eng ko'zga tashlanadigan qism, ammo ularning kuchi eng kam. Agar jamoa barcha Scrum uchrashuvlarini o'tkazsa-yu, Agile qadriyatlariga amal qilmasa, natija bo'lmaydi.
+17|Agile — bu…
+18|…mijoz darhol foydalana oladigan funksionalni tez va muntazam yetkazib berish, qayta aloqani muntazam yig'ish hamda xavf va noaniqlik sharoitida ishlash uchun mahsulotni rivojlantirish yondashuvi.
+19|Agile — bu
+20|fikrlash tarzi
+21|bayon etilgan
+22|4 qadriyatda
+23|belgilangan
+24|12 tamoyil bilan
+25|tarqaladi
+26|ko'plab amaliyotlar orqali
+27|kuchliroq, kamroq ko'rinadi
+28|kuchsizroq, ko'proq ko'rinadi
+29|Agile — bu ish jarayonidan ko'ra ko'proq xodimlarning fikrlashi va ishga munosabati haqida
+30|2001-yilda dasturiy ta'minot ishlab chiqish bo'yicha o'n yetti nafar mutaxassis Agile-manifestni shakllantirdi. Uning asosida to'rtta qadriyat yotadi. Odamlar va o'zaro hamkorlik jarayonlar va vositalardan muhimroq. Ishlaydigan mahsulot to'liq hujjatlashtirishdan muhimroq. Buyurtmachi bilan hamkorlik shartnoma shartlarini kelishishdan muhimroq. O'zgarishlarga tayyorlik dastlabki rejaga amal qilishdan muhimroq. Manifest jarayonlar, hujjatlar, shartnomalar va rejalarni inkor etmaydi — u faqat ustuvorliklarni belgilaydi.
+31|Agile-manifestning 4 qadriyati
+32|2001-yilda Agile-manifest mualliflari tomonidan shakllantirilgan
+33|Odamlar va o'zaro hamkorlik
+34|muhimroq
+35|jarayonlar va vositalardan
+36|Ishlaydigan mahsulot
+37|to'liq hujjatlashtirishdan
+38|Buyurtmachi bilan hamkorlik
+39|shartnoma shartlarini kelishishdan
+40|O'zgarishlarga tayyorlik
+41|dastlabki rejaga amal qilishdan
+42|Pastdagilarning ahamiyatini inkor etmagan holda, biz yuqoridagilarni ko'proq qadrlaymiz
+43|Bu qadriyatlar bank hayotida qanday ko'rinadi? Departamentlar o'rtasidagi uzoq yozishmalar o'rniga — kerakli odamlarning qisqa uchrashuvi. Hajmli texnik topshiriq o'rniga — bir haftadayoq mijozlarga ko'rsatish mumkin bo'lgan prototip. Yakuniy topshirish o'rniga — filial xodimlari qatnashadigan muntazam namoyishlar. Talablarning o'zgarishi esa yillik rejani qayta yozishga emas, keyingi sprint uchun ustuvorliklarni qayta ko'rib chiqishga sabab bo'ladi. Misollar shartli, lekin ular farqni yaxshi ko'rsatadi.
+44|Qadriyatlar bankda qanday ko'rinadi
+45|OLDIN
+46|departamentlar o'rtasida 20 ta xatdan iborat yozishma
+47|ENDI
+48|yurist va risk-menejer bilan 15 daqiqalik uchrashuv — masala hal
+49|60 sahifalik texnik topshiriq
+50|bir haftadan so'ng mijozlar ko'radigan ekranning interaktiv prototipi
+51|biznes natijani ilk bor yakuniy topshirishda ko'radi
+52|filial xodimlari har 2 haftada namoyishga keladi
+53|yangi talab = yillik rejani qayta kelishish
+54|jamoa keyingi sprint uchun ustuvorliklarni qayta ko'rib chiqadi
+55|O'n ikki tamoyil qadriyatlarni batafsilroq ochib beradi. Qulaylik uchun biz ularni ma'nosiga ko'ra guruhladik. Birinchi guruh — mijoz va qiymat haqida: ishlaydigan mahsulotni erta va tez-tez yetkazib berish. Ikkinchisi — o'zgarishlar va soddalik haqida: o'zgarishlar mamnuniyat bilan qabul qilinadi, ortiqcha ish esa kerak emas. Uchinchisi — odamlar haqida: biznes va jamoa birga ishlaydi, yuzma-yuz muloqot qiladi, ularga ishoniladi. To'rtinchisi — sifat va doimiy takomillashtirish haqida.
+56|Agile-manifestning 12 tamoyili
+57|Ma'nosiga ko'ra guruhlangan
+58|Mijoz va qiymat
+59|Asosiy ustuvorlik — qiymatni erta va muntazam yetkazib berish orqali mijozni qoniqtirish
+60|Ishlaydigan mahsulotni imkon qadar tez-tez chiqarish — bir necha haftadan bir necha oygacha
+61|Ishlaydigan mahsulot — taraqqiyotning asosiy ko'rsatkichi
+62|O'zgarishlar va soddalik
+63|Talablardagi o'zgarishlar hatto kechki bosqichlarda ham qabul qilinadi — bu raqobat ustunligi
+64|Soddalik — ortiqcha ish qilmaslik san'ati — juda muhim
+65|Odamlar va jamoa
+66|Biznes va ishlab chiquvchilar har kuni birga ishlaydi
+67|Mahsulot ustida motivatsiyali mutaxassislar ishlaydi: ularga sharoit yarating va ishoning
+68|Yuzma-yuz muloqot — ma'lumot almashishning eng samarali usuli
+69|Eng yaxshi yechimlar o'zini o'zi tashkil etuvchi jamoalarda tug'iladi
+70|Sifat va rivojlanish
+71|Cheksiz davom ettirish mumkin bo'lgan barqaror ish sur'ati
+72|Texnik mukammallik va loyihalash sifatiga doimiy e'tibor
+73|Jamoa muntazam ravishda o'z ishini tahlil qiladi va uni yaxshilaydi
+74|Agile atrofida ko'plab afsonalar bor. Keling, ulardan qaysi biri haqiqat, qaysi biri esa yo'qligini aniqlab olamiz.
+75|Agile atrofida afsonalar ko'p.
+76|Keling, qayerda afsona, qayerda fakt ekanini aniqlab olamiz!
+77|Agile faqat IT uchun emas — bu yondashuvlar har qanday biznes yo'nalishida samarali. Agile'da rejalar bor, shunchaki ular tez-tez va qisqaroq muddatga tuziladi. Hujjatlar kerak — aynan foyda keltiradigan hajmda, regulyator talablarini esa hech kim bekor qilmagan. Agile — tartibsizlik emas: mas'uliyat sohalari aniq taqsimlangan. Scrum esa Agile'ning sinonimi emas, balki freymvorklardan biri xolos.
+78|Agile haqida afsonalar va faktlar
+79|AFSONA
+80|«Agile — faqat IT uchun»
+81|FAKT
+82|Bu yondashuvlar bankning istalgan yo'nalishida ishlaydi: mijozlar uchun mahsulotlardan tortib HR va o'qitishgacha.
+83|«Agile'da rejalar yo'q»
+84|Rejalar tez-tez va qisqa muddatga tuziladi: sprint maqsadi, choraklik maqsadlar, mahsulot yo'l xaritasi.
+85|«Hujjatlar kerak emas»
+86|Hujjatlar aynan foyda keltiradigan miqdorda bo'ladi. Regulyator talablarini hech kim bekor qilmagan.
+87|«Agile — mas'uliyatsiz tartibsizlik»
+88|Mas'uliyat aniq: Mahsulot egasi «nima» uchun, jamoa esa «qanday» va sifat uchun javob beradi.
+89|«Agile va Scrum — bir narsa»
+90|Scrum — freymvorklardan biri. Kanban, Lean va boshqa amaliyotlar ham bor.
+91|O'zingizni tekshiring. Jamoa ikki oy davomida yangi xizmat uchun batafsil texnik topshiriq tayyorladi. Birinchi namoyishdayoq filial xodimlari mijozlarga butunlay boshqa narsa kerakligini aytishdi. Agile'ning qaysi qadriyati bu vaziyatning oldini olishga yordam bergan bo'lardi? To'g'ri javob: B. 
+92|O'zingizni tekshiring
+93|Jamoa ikki oy davomida yangi xizmat uchun batafsil texnik topshiriq tayyorladi. Birinchi namoyishdayoq filial xodimlari mijozlarga butunlay boshqa narsa kerakligini aytishdi.
+94|**Agile'ning qaysi qadriyati bu vaziyatning oldini olishga yordam bergan bo'lardi?**
+95|VAZIYAT
+96|Agile'ning qaysi qadriyati bu vaziyatning oldini olishga yordam bergan bo'lardi?
+97|A
+98|To'liq hujjatlashtirish: texnik topshiriqni yanada batafsilroq yozish
+99|B
+100|Buyurtmachi bilan hamkorlik: foydalanuvchilarni birinchi haftalardanoq jalb qilish
+101|C
+102|Rejaga amal qilish: tasdiqlangan texnik topshiriqqa qat'iyroq rioya qilish
+103|D
+104|Jarayonlar va vositalar: talablarni kelishish tizimini joriy etish
+105|Bitta variantni tanlang. Tahlil — keyingi slaydda.
+106|To'g'ri javob — B, buyurtmachi bilan hamkorlik. Agar foydalanuvchilar birinchi haftalardanoq ishda qatnashganida, jamoa muammo haqida ikki oydan keyin emas, darhol bilgan bo'lardi. Qolgan variantlar manifest kamroq qadrlaydigan narsalarni — hujjatlar, reja va jarayonlarni kuchaytirishni taklif qiladi.
+107|Tahlil
+108|Batafsilroq texnik topshiriq g'oyani foydalanuvchilarda sinab ko'rmaydi — xato xuddi shunday kech aniqlanardi.
+109|Foydalanuvchilardan erta va muntazam qayta aloqa olish yo'nalishni arzon paytda to'g'rilash imkonini beradi.
+110|Rejaga qat'iy amal qilish mijozlarga kerak bo'lmagan mahsulotni ishga tushirishga olib kelardi.
+111|Yana bitta kelishish jarayoni foydalanuvchilar bilan jonli muloqot o'rnini bosmaydi.
+112|NOTO'G'RI
+113|TO'G'RI
+114|Birinchi modulga yakun yasaymiz. Agile — bu uchrashuvlar to'plami emas, fikrlash tarzi. Uning mohiyati — qiymatni kichik qadamlar bilan yaratish va qayta aloqadan o'rganish. Agile rejalar, hujjatlar va mas'uliyatni bekor qilmaydi. Ikkinchi modulga o'tamiz — u agile-tashkilot va jamoalar qanday tuzilgani haqida.
+115|1-moduldan asosiy xulosalar
+116|Agile — bu fikrlash tarzi: avval 4 qadriyat va 12 tamoyil, shundan keyingina Scrum va Kanban kabi amaliyotlar.
+117|Asosiy g'oya — qiymatni kichik qadamlar bilan yetkazib berish va mijozlarning qayta aloqasidan o'rganish.
+118|Agile rejalar, hujjatlar va mas'uliyatni bekor qilmaydi — u ularni foydaliroq qiladi.
+119|Keyingisi: 2-modul. Agile-tashkilot va jamoalar
+120|Ikkinchi modulda agile-tashkilot qanday tuzilganini, Run va Change nimasi bilan farq qilishini, agile-jamoa qanday ishlashini va unda kim nima uchun javob berishini ko'rib chiqamiz.
+121|2-modul
+122|Agile-tashkilot va jamoalar
+123|USHBU MODULDA
+124|1. Agile-tashkilot nima
+125|2. Run va Change: faoliyatning ikki turi
+126|3. Jamoa — asosiy birlik
+127|4. Asosiy rollar va mas'uliyat sohalari
+128|Tashkilotning moslashuvchanligi — bu uning bozordagi o'zgarishlarga tez moslasha olish qobiliyati. Bunga ish bo'linmalar o'rtasida qo'ldan qo'lga kamroq o'tishi va odamlar joylarda qaror qabul qilish uchun ko'proq vakolat olishi orqali erishiladi. Agile-tashkilotning operatsion modeli beshta o'lchamni qamrab oladi: strategiya, tuzilma, jarayonlar, odamlar va texnologiyalar. Bu elementlar faqat butun kompaniyada qo'llanilgandagina samara beradi.
+129|Agile-tashkilot
+130|Tashkilot moslashuvchanligi (agility)
+131|— bu uning bozordagi o'zgarishlarga tez moslashish va yangi yo'nalishda harakatlanish qobiliyati.
+132|Bunga quyidagilar orqali erishiladi:
+133|bo'linmalar o'rtasida ishni rasmiy topshirishlar sonini kamaytirish
+134|joylarda qaror qabul qilish vakolatlarini kengaytirish
+135|Yangi model elementlari faqat butun kompaniyada qo'llanilganda ishlaydi.
+136|Strategiya
+137|Umumiy vizyon va maqsadlar doirasidagi imkoniyatlardan foydalanish uchun doimiy rivojlanadi
+138|Tuzilma
+139|Mijoz uchun mustaqil ravishda qiymat yaratadigan, o'zini o'zi tashkil etuvchi kross-funksional jamoalar
+140|Jarayonlar
+141|Agile-yondashuvlar (Scrum, Kanban) hamda sodda sinxronlash va boshqaruv mexanizmlari
+142|Odamlar
+143|«T-shaped» xodimlar, «joylarda» qabul qilinadigan qarorlar, ochiqlik va eksperimentlar madaniyati
+144|Texnologiyalar
+145|Mustaqilroq IT-landshaft va maksimal avtomatlashtirish
+146|Bank faoliyatida ishning ikki turini ajratish mumkin. Run — bu joriy faoliyat: mijozlarga xizmat ko'rsatish, operatsiyalar, hisobotlar, nazorat. U barqarorlik va reglamentlar muhim bo'lgan funksional bo'linmalarda qoladi. Change — bu rivojlanish: yangi mahsulotlar, mijoz yo'lini yaxshilash, texnologiyalarni joriy etish. Bu faoliyat biznes va IT xodimlari birga ishlaydigan kross-funksional agile-jamoalarga o'tadi.
+147|Run va Change: faoliyatning ikki turi
+148|joriy faoliyat
+149|filiallar va kontakt-markazda mijozlarga xizmat ko'rsatish
+150|operatsiyalar, hisob-kitoblar, hisobotlar
+151|nazorat, komplayens, xavfsizlik
+152|Funksional bo'linmalarda qoladi. Asosiysi — barqarorlik, reglamentlar va sifat.
+153|rivojlanish
+154|yangi mahsulotlar va xizmatlar
+155|mijoz yo'lini yaxshilash
+156|texnologiyalarni joriy etish
+157|Kross-funksional agile-jamoalarga o'tadi: biznes va IT umumiy maqsadli bitta jamoada.
+158|Muhim: Agile har bir kishiga taalluqli. Run'da ishlasangiz ham, agile-jamoalar bilan mijoz, ekspert yoki buyurtmachi sifatida hamkorlik qilasiz. Bu haqda beshinchi modulda batafsil gaplashamiz.
+159|**Agile har bir kishiga taalluqli.**
+160|Run'da ishlasangiz ham, agile-jamoalar bilan mijoz, ekspert yoki buyurtmachi sifatida hamkorlik qilasiz. Batafsil — 5-modulda.
+161|Agile-tashkilotda asosiy tuzilmaviy birlik — jamoa. U avtonom, o'z missiyasi, metrikalari va moliyaviy natijasi uchun to'liq javob beradi hamda o'z sohasida qarorlarni o'zi qabul qiladi. Jamoada to'rt nafardan o'n nafargacha odam bo'ladi va unda barcha kerakli kompetensiyalar jamlangan. Shuning uchun a'zolar T-shaped mutaxassisga aylanadi: ular o'z sohasida chuqur ekspertizaga ega va qo'shni sohalarni tushunadi. Jamoa o'z maqsadi bor ekan, mavjud bo'ladi.
+162|Jamoa — Agile-tashkilotning asosiy birligi
+163|**Avtonomlik** va o'zini o'zi boshqarish
+164|**To'liq mas'uliyat:** missiya, maqsadli metrikalar va moliyaviy natija uchun
+165|**Mustaqil qarorlar** — o'z mas'uliyat sohasi doirasida
+166|Jamoada **4 nafardan 10 nafargacha** odam
+167|**Kross-funksionallik:** barcha kerakli kompetensiyalar — jamoa ichida
+168|Jamoa o'z maqsadi bor ekan, **mavjud bo'ladi**
+169|**Umumiy makon** — jismoniy yoki virtual

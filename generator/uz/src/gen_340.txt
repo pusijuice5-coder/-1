@@ -1,0 +1,180 @@
+340|Kelajakdagi tushumning asosiy qismi
+341|Joriy tushumning asosiy qismi
+342|Ehtiyojni tasdiqlash
+343|Mijozning ustuvor ehtiyojlarini imkon qadar tez topish
+344|VOSITALAR
+345|Yechim topish
+346|Barqaror yechim taklif qilish va daromad olishni boshlash
+347|MVP, UX-intervyu, Story Mapping
+348|Qiymatni optimallashtirish
+349|Mamnunlik va yangi mijozlar hisobiga foydani oshirish
+350|A/B-testlar, kogort tahlili, Roadmap
+351|Ishlab chiqarishni optimallashtirish
+352|Mijoz ehtiyojini arzonroq qondirish
+353|Boshqa mahsulotlarga o'tkazish
+354|Mijozlarni bankning boshqa mahsulotlariga o'tkazish
+355|MAU va Retention tahlili
+356|Mahsulot vizyoni — rivojlanish yo'nalishini belgilaydigan asosiy artefakt. Uni bitta jumla bilan ifodalash qulay: falon mijozlar uchun falon muammoni falon yechim yordamida hal qiladigan falon mahsulot. So'ng vizyon to'rtta blokda ochib beriladi: maqsadli auditoriya, muammo, yechim va foyda. Kredit kartaga mobil ariza berishning shartli misoliga qarang. Vizyon — jonli hujjat: jamoa mijoz va bozorni yaxshiroq tushungan sari u aniqlashtirib boriladi.
+357|Mahsulot vizyoni
+358|Jamoa va manfaatdor tomonlarga mahsulot nima uchun va kim uchun yaratilayotganini bir xil tushunishga yordam beradigan hamda ustuvorlashtirish uchun asos bo'ladigan jonli artefakt.
+359|[ … ] uchun [ … ] muammosini [ … ] yordamida hal qiladigan [ … ] mahsuloti
+360|Maqsadli auditoriya
+361|Foydalanuvchimiz kim? Birinchi navbatda kimning muammolarini hal qilamiz?
+362|Ofisga kelishi noqulay bo'lgan bankning ish haqi mijozlari
+363|Muammo
+364|Auditoriyada qanday muammo va ehtiyojlar bor?
+365|Karta rasmiylashtirish uchun filialga borishga vaqt sarflash kerak
+366|Yechim
+367|Yechim qanday ko'rinadi? U muqobillardan nimasi bilan yaxshi?
+368|Oldindan ma'qullangan limit bilan ilovada ariza — 5 daqiqada
+369|Foyda
+370|Mijoz nima oladi? Bank nima oladi va qanday xarajatlarni ko'taradi?
+371|Mijozga — ofisga bormasdan karta. Bankka — kartalar soni o'sishi va filiallarga kamroq yuklama
+372|Lean Canvas — mahsulotni bir sahifada tavsiflashga yordam beradigan vosita. U to'qqizta blokdan iborat va ularni raqamlar tartibida to'ldirish kerak: avval mijozlar segmenti va uning muammolari, so'ng noyob qiymat taklifi, yechim, kanallar, asosiy metrikalar, daromadlar, xarajatlar va sizning ustunligingiz. Bunday ketma-ketlik mijozni tushunmasdan turib yechimga berilib ketishdan saqlaydi.
+373|Lean Canvas: mahsulot bir sahifada
+374|Mijozlar muammolari
+375|Top-3 muammo va ehtiyoj
+376|Mavjud muqobillar
+377|Mijozlar ularni hozir qanday hal qiladi
+378|Har bir muammo uchun yechim
+379|Asosiy metrikalar
+380|Mahsulot muvaffaqiyatli ekanini qanday bilamiz
+381|Noyob qiymat taklifi
+382|Aniq xabar: sizni nima ajratib turadi va nega mahsulotga e'tibor berishga arziydi
+383|Sizning ustunligingiz
+384|Nusxa ko'chirish yoki sotib olish qiyin bo'lgan narsa
+385|Kanallar
+386|Mahsulot mijozga qanday yetib boradi
+387|Mijozlar segmenti
+388|Mijozlaringiz kim
+389|Ilk foydalanuvchilar
+390|Ideal birinchi foydalanuvchilar qanday bo'ladi
+391|Xarajatlar tuzilmasi
+392|Doimiy va o'zgaruvchan xarajatlar
+393|Daromadlar
+394|Daromad manbalari
+395|**Raqamlar tartibida to'ldiring:** avval mijoz va uning muammosi, keyin qiymat taklifi, yechim, kanallar va mahsulot iqtisodiyoti.
+396|Mahsulot yondashuvida qarorlar ma'lumotlar asosida qabul qilinadi, buning uchun esa metrikalar kerak. Yaxshi metrikani o'lchash mumkin, u o'zgarishlarga sezgir, qaror qabul qilishga yordam beradi, yuqori darajadagi metrikalar bilan bog'langan va boshqa metrikalar bilan muvozanatlashgan. Masalan, faqat xizmat ko'rsatish tezligini o'lchasangiz, sifatni qurbon qilish mumkin, shuning uchun bu metrikalar birga ko'riladi. O'ngda — turli turdagi metrikalarga misollar.
+397|Metrikalar: ma'lumotlarga asoslangan qarorlar
+398|**Metrika** — mahsulot mijoz va biznes uchun qiymat yaratayotganini aks ettiradigan va ma'lumotlarga asoslangan (data driven) qarorlar qabul qilishga yordam beradigan o'lchanadigan ko'rsatkich.
+399|Yaxshi metrika belgilari
+400|Uni o'lchash mumkin
+401|O'zgarishlarga sezgir
+402|O'z darajasida qaror qabul qilishga yordam beradi
+403|Yuqori darajadagi metrikalar bilan bog'langan
+404|Boshqa metrikalar bilan muvozanatlashgan: masalan, xizmat ko'rsatish tezligi — va uning sifati
+405|Mahsulot metrikalari: foyda
+406|O'rtacha chek, ARPPU, mijozni jalb qilish qiymati
+407|Mijoz metrikalari
+408|Oylik faol mijozlar (MAU), ro'yxatdan o'tishlar, shartnomalar
+409|Mijoz yo'li
+410|Bosqichma-bosqich konversiya, NPS, mijozlar ketishi va saqlab qolinishi
+411|Moliyaviy
+412|Sof foyda, sof foizli daromad, EBITDA
+413|Texnologik
+414|Time to market, muvaffaqiyatsiz relizlar ulushi, mavjudlik
+415|Operatsion
+416|Metrikalar daraxti muayyan jamoaning ishini bank maqsadlari bilan bog'laydi. Kontakt-markaz misoliga qarang. Yuqorida — bankning P&L va xarajatlari. Bitta murojaatga sarflanadigan xarajat o'rtacha javob vaqti va qo'ng'iroq daqiqasi narxiga bog'liq. Javob vaqti mijozni identifikatsiya qilish vaqti va ma'lumotni aniqlashtirish vaqtidan tashkil topadi. Agar ko'proq mijozlar ovoz orqali identifikatsiya qilinsa, jamoa identifikatsiya vaqtini qisqartira oladi. Shunday qilib, jamoa o'z ishi bank natijasiga qanday ta'sir qilishini ko'radi.
+417|Metrikalar daraxti: jamoadan bank maqsadlarigacha
+418|STRATEGIYA DARAJASI · misol: kontakt-markaz
+419|Xarajatlar
+420|RUN xarajatlari
+421|MAHSULOT DARAJASI
+422|1 ta murojaat xarajati
+423|O'rtacha javob vaqti
+424|Qo'ng'iroq daqiqasi narxi
+425|JAMOA DARAJASI
+426|Identifikatsiya vaqti
+427|Ma'lumotni aniqlashtirish vaqti
+428|Ovoz orqali identifikatsiya qilingan mijozlar ulushi (%)
+429|Tamoyillar
+430|Metrikalar matematik va mazmunan bog'langan
+431|Kamida 3 daraja — shunda daraxt tushunarli
+432|Mahsulot chegaralarini aks ettiradi
+433|Mijoz harakatlariga asoslangan va bank uchun foydani ko'rsatadi
+434|**Top-down:** bank strategiyasidan mahsulot metrikalariga
+435|**Bottom-up:** mahsulotga ta'sir qiluvchi jamoalarning joriy «taqsimoti»dan
+436|O'zingizni tekshiring. Jamoa yangi funksiyani — mijozga kredit bo'yicha yaqinlashayotgan to'lov haqida eslatmani ishga tushirmoqchi. Mahsulot yondashuvi nuqtayi nazaridan birinchi navbatda nima qilish to'g'ri? To'g'ri javob: A. 
+437|Jamoa yangi funksiyani — mijozga kredit bo'yicha yaqinlashayotgan to'lov haqida eslatmani ishga tushirmoqchi.
+438|**Mahsulot yondashuvi nuqtayi nazaridan birinchi navbatda nima qilish to'g'ri?**
+439|Mahsulot yondashuvi nuqtayi nazaridan birinchi navbatda nima qilish to'g'ri?
+440|Gipoteza shakllantirib, uni MVP orqali kichik mijozlar guruhida tekshirish
+441|Barcha turdagi eslatmalar uchun to'liq texnik topshiriq yozish
+442|Tezroq samara olish uchun funksiyani darhol barcha mijozlar uchun ishlab chiqish
+443|Raqobatchilar o'xshash xizmatni ishga tushirguncha kutib, uni takrorlash
+444|To'g'ri javob — A. Mahsulot yondashuvida har qanday g'oya — gipoteza. Avval u shakllantiriladi, metrika belgilanadi va MVP yordamida kichik mijozlar guruhida tekshiriladi. Faqat ma'lumotlar qiymatni tasdiqlasagina, yechim kengaytiriladi.
+445|Gipoteza, MVP va metrika qiymatni kengaytirishdan oldin tez va arzon tekshirish imkonini beradi.
+446|Tekshiruvdan oldin batafsil texnik topshiriq — bu loyiha mantig'i va keraksiz narsa qilish xavfi.
+447|Tekshiruvsiz resurslarni metrikalarni o'zgartirmaydigan yoki mijozlarning g'ashiga tegadigan narsaga sarflash mumkin.
+448|O'z mijozingizni tushunmasdan nusxa ko'chirish qiymatni kafolatlamaydi, vaqt esa boy beriladi.
+449|Uchinchi modul yakunlari. Mahsulot — mijoz uchun qiymat va u kerak ekan, rivojlanadi. G'oyalar gipoteza sifatida MVP va metrikalar orqali tekshiriladi. Mahsulot vizyoni va metrikalar daraxti esa jamoa ishini bank maqsadlari bilan bog'laydi. Keyingi mavzu — Scrum, bank agile-jamoalarining asosiy ish freymvorki.
+450|3-moduldan asosiy xulosalar
+451|Mahsulot — tashqi yoki ichki mijoz uchun qiymat. U kerak ekan, rivojlanadi, samarasi esa doimiy baholanadi.
+452|G'oyalar — gipotezalar: shakllantiramiz, MVP orqali tekshiramiz, o'lchaymiz va xulosa chiqaramiz.
+453|Mahsulot vizyoni va metrikalar daraxti jamoa ishini bank maqsadlari bilan bog'laydi.
+454|Keyingisi: 4-modul. Scrum
+455|To'rtinchi modul Scrumga — bank agile-jamoalari ishlaydigan asosiy freymvorkka bag'ishlangan. Qadriyatlar va tamoyillar, sprintlar ritmi, beklog bilan ishlash, sifat mezonlari, ustuvorlashtirish va Scrum tadbirlarini ko'rib chiqamiz.
+456|4-modul
+457|Scrum: jamoa qanday ishlaydi
+458|1. Scrum qadriyatlari va tamoyillari
+459|2. Sprint va ish ritmi
+460|3. Beklog, hikoyalar va sifat mezonlari
+461|4. Ustuvorlashtirish va Scrum tadbirlari
+462|5. Scrum va Kanban
+463|Scrum — to'qsoninchi yillar boshida yaratilgan yengil freymvork. Uning asosida beshta qadriyat bor: fokus, jasorat, ochiqlik, sadoqat va hurmat. Shuningdek, empirizmning uchta tamoyili — shaffoflik, inspeksiya va moslashuv. Ular bino ustunlariga o'xshaydi: ish va jarayon hammaga ko'rinib turishi, muntazam tekshirilishi, tekshiruv natijalariga ko'ra esa reja va ish usuli moslashtirilishi kerak.
+464|Scrum: qadriyatlar va tamoyillar
+465|Scrum — 1990-yillarda yaratilgan, iterativ-inkremental ishlab chiqish uchun yengil freymvork. U mahsulot yaratish va jamoani yagona yaxlitlik sifatida rivojlantirishga yordam beradi.
+466|5 ta qadriyat
+467|F
+468|Fokus
+469|jamoa sprint va uning maqsadiga e'tibor qaratadi
+470|J
+471|Jasorat
+472|qiyin ishga dadil kirishadi va muammolar haqida rostini aytadi
+473|O
+474|Ochiqlik
+475|taraqqiyot, muammolar va g'oyalar bilan halol bo'lishadi
+476|S
+477|Sadoqat
+478|har kim jamoa maqsadlari uchun qo'lidan kelganini qiladi
+479|H
+480|Hurmat
+481|hamma bir-birining tajribasi va hissasini qadrlaydi
+482|Empirizmning 3 tamoyili
+483|qarorlar — tajriba va faktlarga asoslanadi
+484|Shaffoflik
+485|Ish va jarayon jamoaga va barcha manfaatdorlarga ko'rinadi
+486|Inspeksiya
+487|Muammolarni o'z vaqtida ko'rish uchun artefaktlar va jarayonni muntazam tekshiramiz
+488|Moslashuv
+489|Tekshiruv natijalariga ko'ra reja va ish usulini o'zgartiramiz
+490|Mana butun Scrum bitta sxemada. Rejalashtirishda jamoa mahsulot beklogidan vazifalarni sprint beklogiga tanlaydi. So'ng sprint boshlanadi — odatda ikki hafta — uning davomida har kuni qisqa kundalik Scrum o'tadi. Sprint oxirida sharhda jamoa inkrementni — tayyor natijani — ko'rsatadi va beklogni to'ldiradigan qayta aloqa oladi. Retrospektivada jamoa o'z ish usulini yaxshilaydi. Scrumda uchta rol, har biri o'z majburiyatiga ega uchta artefakt va beshta tadbir bor.
+491|Scrum bitta sxemada
+492|Mahsulot beklogi
+493|Sprintni rejalashtirish
+494|Sprint beklogi
+495|Sprint
+496|Sprint sharhi
+497|Inkrement
+498|Kundalik
+499|15 daqiqa
+500|1 oygacha, etalon — 2 hafta
+501|**Retrospektiva**
+502|keyingi sprint uchun yaxshilanishlar
+503|manfaatdor tomonlarning qayta aloqasi beklogni to'ldiradi
+504|Beklogni dolzarblashtirish — doimiy, vaqtning ≈10 foizi
+505|tadbir
+506|artefakt
+507|3 ta rol
+508|Mahsulot egasi, Scrum-master, ishlab chiquvchilar — birgalikda Scrum-jamoa
+509|3 ta artefakt va ularning majburiyatlari
+510|Mahsulot beklogi → mahsulot maqsadi
+511|Sprint beklogi → sprint maqsadi
+512|Inkrement → Definition of Done
+513|5 ta tadbir
+514|Sprint, rejalashtirish, kundalik Scrum, sharh, retrospektiva
+515|+ doimiy jarayon sifatida beklogni dolzarblashtirish
+516|Bankning agile-jamoalari aniq ritmda ishlaydi. Chorak — bu o'n ikki hafta yoki oltita ikki haftalik sprint. Har sprintda mahsulot egalari umumiy bog'liqliklari bor jamoalar bilan sinxronlashadi, chorak oxirida esa choraklik sharh va rejalashtirish o'tkaziladi. Sprint ichida — o'nta ish kuni. Birinchi kuni — rejalashtirish, har kuni — kundalik Scrum, sprint davomida — beklogni dolzarblashtirish, oxirgi kuni — sharh va retrospektiva. Asosiy qoida: sprint maqsadi o'zgarmaydi, ish hajmini esa aniqlashtirish mumkin.
+517|Ish ritmi: sprint va chorak
+518|Chorak = 12 hafta = 6 ta sprint
+519|Sprint 1

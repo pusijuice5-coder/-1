@@ -1,0 +1,64 @@
+0|BARCHA XODIMLAR UCHUN BAZAVIY KURS
+1|Ipak Yuli Bankda Agile
+2|Boshlash
+3|Выберите язык Tilni tanlang
+4|Русский язык
+5|Assalomu alaykum! Men Ezozaman. \n\nBirga Agile nima ekanini, Scrum va Kanban qanday ishlashini va moslashuvchan yondashuv Ipak Yuli Bankka nega tezroq rivojlanishga yordam berishini bilib olamiz. \n\nOldinda keyslar, testlar va biroz amaliyot. Qani, boshladik!
+6|Kurs haqida
+7|Bankning barcha xodimlari: front- va bek-ofis, IT, yordamchi bo'linmalar va rahbarlar. Maxsus bilim shart emas.
+8|Kim uchun
+9|Agile-jamoa a'zosi bo'lmasangiz ham, ular bilan mijoz, ekspert yoki buyurtmachi sifatida ishlaysiz. Kurs umumiy til va bu ish qanday tashkil etilganini tushunishni beradi.
+10|Nima uchun
+11|Modullar ketma-ket o'tiladi. Har birining oxirida — o'zingizni tekshirish uchun vaziyat va asosiy xulosalar. Kurs yakuniy test bilan tugaydi.
+12|Qanday o'tish kerak
+13|Agile an'anaviy yondashuvdan nimasi bilan farq qilishini va bankka nima uchun kerakligini tushuntirish
+14|Agile-jamoadagi rollarni va ularning mas'uliyat sohalarini farqlash
+15|Mahsulotni mijoz, qiymat va metrikalar orqali tavsiflash
+16|Scrum siklini tushunish:\nsprint, beklog va tadbirlar
+17|Kursdan keyin nimalarni qila olasiz?
+18|Agile-amaliyotlarni o'z ishingizda qo'llash va agile-jamoalar bilan samarali hamkorlik qilish
+19|Kurs marshruti
+20|5 Madaniyat va men
+21|Ishonch, qayta aloqa, ishingizdagi amaliyotlar
+22|3 Mahsulot yondashuvi
+23|Mahsulot, gipotezalar va MVP, vizyon, metrikalar
+24|Sprint, beklog, sifat mezonlari, tadbirlar
+25|2 Tashkilot va jamoalar
+26|Run va Change, agile-jamoa, asosiy rollar
+27|1 Agile: fikrlash tarzi
+28|Qadriyatlar, tamoyillar va afsonalar
+29|Maslahat: modullarni ketma-ket o'ting — har biri oldingisiga tayanadi.
+30|Start
+31|Marra 
+32|Yakuniy test: 12 ta savol
+33|≈ 20 daqiqa
+34|Kurs davomiyligi
+35|Keling, deyarli har bir kompaniyada sodir bo'ladigan voqeadan boshlaymiz. Videoni tomosha qiling va o'ylab ko'ring: xato qayerda edi?
+36|Keling, deyarli har bir kompaniyada sodir bo'ladigan voqeadan boshlaymiz.
+37|Videoni tomosha qiling va o'ylab ko'ring: xato qayerda edi?
+38|Agile: fikrlash tarzi
+39|1-modul
+40|1. Qiymat yaratishning ikki usuli
+41|2. Aslida Agile nima
+42|3. Manifestning 4 qadriyati va 12 tamoyili
+43|4. Agile haqida afsonalar va faktlar
+44|USHBU MODULDA
+45|1-MODUL  ·  AGILE: FIKRLASH TARZI
+46|Qiymat yaratishning ikki usuli
+47|Kaskad yondashuv (Waterfall)
+48|Tahlil
+49|Loyihalash
+50|Ishlab chiqish
+51|Testlash
+52|Ishga tushirish
+53|Mijoz qiymatni faqat oxirida oladi. Talablardagi xatolar kech aniqlanadi — ularni tuzatish qimmatga tushadi.
+54|Iterativ yondashuv (Agile)
+55|2 hafta
+56|Iteratsiya 1
+57|Iteratsiya 2
+58|Iteratsiya 3
+59|Iteratsiya 4
+60|Har 2–4 haftada ishlaydigan natija. Qayta aloqa rejani hali arzon paytda o'zgartiradi.
+61|Qachon nima mos keladi: kaskad — talablar ma'lum va barqaror bo'lsa; Agile — noma'lumlar ko'p va tezkor qayta aloqa muhim bo'lsa.
+62|Birinchi usul 
+63|Qiymat yaratishning ikki tubdan farq qiladigan usuli bor. Kaskad yondashuvda bosqichlar qat'iy ketma-ket boradi va mijoz natijani faqat eng oxirida oladi. Agar talablarda xato bo'lsa, u kech aniqlanadi. Iterativ yondashuvda mahsulot kichik qismlarda o'sadi: har ikki-to'rt haftada ishlaydigan natija paydo bo'ladi va unga qayta aloqa olish mumkin. Kaskad o'z-o'zidan yomon emas — talablar ma'lum va barqaror bo'lganda u yaxshi. Agile esa noma'lum narsalar ko'p bo'lgan joyda yutadi.
