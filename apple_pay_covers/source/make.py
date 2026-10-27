@@ -62,9 +62,22 @@ def cover_text(part, subtitle):
 """
 
 
+def cover_text_bi(part, sub_ru, sub_uz):
+    return f"""
+<img class="o" src="{A}logo.png" style="left:110px;top:92px;height:62px;z-index:5">
+<div class="pill" style="left:110px;top:236px;padding:13px 30px;font-size:28px;z-index:5">Часть {part} · {part}-qism</div>
+<div class="h1" style="left:106px;top:318px;font-size:70px;z-index:5">Apple Pay<br>для банка-эмитента</div>
+<div class="sub" style="left:110px;top:488px;font-size:30px;z-index:5">{sub_ru}</div>
+<div class="h1" style="left:106px;top:600px;font-size:70px;z-index:5">Emitent bank uchun<br>Apple Pay</div>
+<div class="sub" style="left:110px;top:770px;font-size:30px;z-index:5">{sub_uz}</div>
+<div class="cap" style="left:110px;bottom:118px;font-size:20px;z-index:5">Курс «Структура взаимодействия банка-эмитента с Apple Pay»</div>
+<div class="cap" style="left:110px;bottom:84px;font-size:20px;z-index:5">«Emitent bankning Apple Pay bilan o‘zaro hamkorlik tuzilmasi» kursi</div>
+"""
+
+
 COVER_LINES = lines([104, 527, 950, 1373, 1796])
 
-cover1 = page(1920, 1080, COVER_LINES + cover_text(1, "Apple Wallet и добавление карты") + "".join([
+ART1 = "".join([
     bokeh(420, -170, 320),
     bokeh(820, 900, 300),
     img("phone.png", 1340, 120, 430, z=2),
@@ -73,9 +86,9 @@ cover1 = page(1920, 1080, COVER_LINES + cover_text(1, "Apple Wallet и доба�
     img("apple_logo.png", 1690, 40, 190, rot=10, z=5),
     img("apple_logo.png", 1180, 150, 150, rot=-14, z=5),
     img("apple_logo.png", 1640, 800, 230, rot=18, z=5),
-]))
+])
 
-cover2 = page(1920, 1080, COVER_LINES + cover_text(2, "Платежи и управление картой") + "".join([
+ART2 = "".join([
     bokeh(420, -170, 320),
     bokeh(820, 900, 300),
     img("phone.png", 1340, 120, 430, z=2),
@@ -85,15 +98,23 @@ cover2 = page(1920, 1080, COVER_LINES + cover_text(2, "Платежи и упр�
     img("ic15_2.png", 1080, 860, 150, rot=-20, z=5),
     img("apple_logo.png", 1700, 40, 190, rot=10, z=5),
     img("apple_logo.png", 1650, 800, 230, rot=18, z=5),
-]))
+])
+
+SUB1 = ("Apple Wallet и добавление карты", "Apple Wallet va kartani qo‘shish")
+SUB2 = ("Платежи и управление картой", "To‘lovlar va kartani boshqarish")
+
+cover1 = page(1920, 1080, COVER_LINES + cover_text(1, SUB1[0]) + ART1)
+cover2 = page(1920, 1080, COVER_LINES + cover_text(2, SUB2[0]) + ART2)
+cover1_bi = page(1920, 1080, COVER_LINES + cover_text_bi(1, *SUB1) + ART1)
+cover2_bi = page(1920, 1080, COVER_LINES + cover_text_bi(2, *SUB2) + ART2)
 
 THUMB_LINES = lines([270, 540, 810])
 
 
-def thumb(part, digit, extra):
+def thumb(label, digit, extra):
     return page(1080, 1080, THUMB_LINES + f"""
 <img class="o" src="{A}logo.png" style="left:72px;top:72px;height:54px;z-index:5">
-<div class="pill" style="left:72px;top:158px;padding:12px 28px;font-size:28px;z-index:5">Часть {part}</div>
+<div class="pill" style="left:72px;top:158px;padding:12px 28px;font-size:28px;z-index:5">{label}</div>
 """ + "".join([
         bokeh(-110, 860, 300),
         bokeh(860, -120, 260),
@@ -101,10 +122,16 @@ def thumb(part, digit, extra):
     ]) + extra)
 
 
-thumb1 = thumb(1, "digit_1.png", img("wallet.png", 640, 560, 340, rot=8, z=4))
-thumb2 = thumb(2, "digit_2.png", img("ic15_5.png", 720, 720, 220, rot=-8, z=4))
+EXTRA1 = img("wallet.png", 640, 560, 340, rot=8, z=4)
+EXTRA2 = img("ic15_5.png", 720, 720, 220, rot=-8, z=4)
+thumb1 = thumb("Часть 1", "digit_1.png", EXTRA1)
+thumb2 = thumb("Часть 2", "digit_2.png", EXTRA2)
+thumb1_bi = thumb("Часть 1 · 1-qism", "digit_1.png", EXTRA1)
+thumb2_bi = thumb("Часть 2 · 2-qism", "digit_2.png", EXTRA2)
 
-for name, html in [("cover1", cover1), ("cover2", cover2), ("thumb1", thumb1), ("thumb2", thumb2)]:
+PAGES = [("cover1", cover1), ("cover2", cover2), ("thumb1", thumb1), ("thumb2", thumb2),
+         ("cover1_bi", cover1_bi), ("cover2_bi", cover2_bi), ("thumb1_bi", thumb1_bi), ("thumb2_bi", thumb2_bi)]
+for name, html in PAGES:
     with open(os.path.join(B, name + ".html"), "w", encoding="utf-8") as fh:
         fh.write(html)
 print("ok")

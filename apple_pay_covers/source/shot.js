@@ -6,6 +6,8 @@ const dir = __dirname;
 const jobs = [
   ['cover1', 1920, 1080], ['cover2', 1920, 1080],
   ['thumb1', 1080, 1080], ['thumb2', 1080, 1080],
+  ['cover1_bi', 1920, 1080], ['cover2_bi', 1920, 1080],
+  ['thumb1_bi', 1080, 1080], ['thumb2_bi', 1080, 1080],
 ];
 
 (async () => {
