@@ -1,0 +1,1851 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Бизнес-игра «Шерлок»</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Oswald:wght@500;600;700&display=swap">
+<style>
+/* Layout: рабочий стол ведущего — узкая колонка для чтения, документы дела лежат листами бумаги; слайды — отдельный тёмный «экран». */
+:root {
+  --paper: #EDF0F5;
+  --surface: #FFFFFF;
+  --ink: #131C2E;
+  --muted: #566076;
+  --line: #D2D8E2;
+  --wash: #E2E7EF;
+  --stamp: #BF3528;
+  --blue: #23468F;
+  --say: #E7EDFA;
+  --say-line: #23468F;
+  --hit: #FBE6E2;
+  --doc-bg: #FFFFFF;
+  --doc-ink: #131C2E;
+  --doc-muted: #566076;
+  --doc-line: #B9C1CE;
+  --doc-fill: #EFF2F6;
+  --s-bg: #0F1930;
+  --s-panel: #1A2644;
+  --s-ink: #F3F5F9;
+  --s-muted: #A9B4C8;
+  --s-accent: #F2594E;
+  --s-line: #2F3C5E;
+  --s-ok: #5CC98F;
+  --s-warn: #F2B84B;
+  --f-display: "Oswald", "Roboto Condensed", "Arial Narrow", sans-serif;
+  --f-body: "Golos Text", "Inter", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", "DejaVu Sans Mono", ui-monospace, monospace;
+}
+
+/* Страница-комплект: оболочка, вкладки, экран со слайдами. Тёмная тема — только переопределение токенов. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0D1320; --surface: #151D2E; --ink: #E7EBF3; --muted: #9BA6BA; --line: #2A344B; --wash: #1B2539;
+    --stamp: #EC6A5C; --blue: #93B2F6; --say: #17223B; --say-line: #93B2F6; --hit: #3A2024;
+    --doc-bg: #1A2235; --doc-ink: #E7EBF3; --doc-muted: #9BA6BA; --doc-line: #3A4662; --doc-fill: #222C44;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0D1320; --surface: #151D2E; --ink: #E7EBF3; --muted: #9BA6BA; --line: #2A344B; --wash: #1B2539;
+  --stamp: #EC6A5C; --blue: #93B2F6; --say: #17223B; --say-line: #93B2F6; --hit: #3A2024;
+  --doc-bg: #1A2235; --doc-ink: #E7EBF3; --doc-muted: #9BA6BA; --doc-line: #3A4662; --doc-fill: #222C44;
+  color-scheme: dark;
+}
+
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
+*, *::before, *::after { box-sizing: border-box; }
+a { color: var(--blue); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+button { font: inherit; color: inherit; }
+
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 2px solid var(--ink); }
+.top-in, .wrap { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.top-in { display: flex; align-items: center; gap: 4px 20px; flex-wrap: wrap; padding-block: 10px 0; }
+.brand { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: 17px; white-space: nowrap; }
+.brand small { font-weight: 500; color: var(--stamp); letter-spacing: .1em; margin-left: .5em; font-size: .78em; }
+.tabs { display: flex; gap: 2px; overflow-x: auto; margin-left: auto; max-width: 100%; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 8px 11px 9px; font-family: var(--f-display); font-weight: 500; text-transform: uppercase; letter-spacing: .07em; font-size: 14px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--stamp); }
+
+.wrap { padding-block: 28px 72px; }
+.view > .sec, .view > .lead-block, .hero { max-width: 760px; }
+.view > .sec:has(table), .view > .sec.wide { max-width: 100%; }
+.view > .sec:has(table) > p, .view > .sec:has(table) > ol, .view > .sec:has(table) > ul, .view > .sec:has(table) > .block > p,
+.view > .sec:has(table) > .block > .say, .view > .sec:has(table) > .block > .do, .view > .sec:has(table) > .block > .note, .view > .sec:has(table) > .copybox, .view > .sec:has(table) > h3 { max-width: 760px; }
+.view-h { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; font-size: clamp(30px, 5vw, 44px); line-height: 1.04; margin: 4px 0 8px; text-wrap: balance; }
+.view-lead { color: var(--muted); max-width: 680px; margin: 0 0 28px; font-size: 17px; }
+
+/* Обзор: шапка */
+.hero { margin-bottom: 36px; }
+.eyebrow { font-family: var(--f-display); font-weight: 500; text-transform: uppercase; letter-spacing: .16em; font-size: 13px; color: var(--stamp); margin: 0 0 10px; }
+.hero h1 { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; font-size: clamp(44px, 10vw, 92px); line-height: .96; letter-spacing: -.01em; margin: 0; }
+.hero h1 span { display: block; font-size: .36em; font-weight: 500; letter-spacing: .02em; line-height: 1.2; margin-top: .35em; color: var(--muted); }
+.hero-lead { font-size: 18px; margin: 20px 0 22px; max-width: 640px; }
+.logline { background: var(--s-bg); color: var(--s-ink); font-family: var(--f-mono); font-size: 13.5px; line-height: 1.7; padding: 14px 16px; overflow-x: auto; border-left: 4px solid var(--s-accent); }
+.logline div { white-space: pre; }
+.logline b { color: var(--s-accent); font-weight: 500; }
+.logline + .small { margin-top: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; padding: 0; list-style: none; }
+.chips li { border: 1.5px solid var(--ink); padding: 3px 11px 4px; font-family: var(--f-display); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; font-size: 13.5px; }
+
+/* Интерактив */
+ul.check.live > li { padding-left: 0; }
+ul.check.live > li::before { display: none; }
+ul.check.live label { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; cursor: pointer; }
+ul.check.live input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--stamp); }
+ul.check.live input:checked + span { color: var(--muted); text-decoration: line-through; }
+.btn { border: 1.5px solid var(--ink); background: var(--surface); padding: 6px 14px 7px; font-family: var(--f-display); font-weight: 500; text-transform: uppercase; letter-spacing: .07em; font-size: 13.5px; cursor: pointer; border-radius: 2px; }
+.btn:hover { background: var(--wash); }
+.btn.primary { background: var(--ink); color: var(--paper); }
+.btn.primary:hover { background: var(--stamp); border-color: var(--stamp); color: #fff; }
+.btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.copybox .btn { margin-top: 12px; }
+.gate { border: 2px solid var(--stamp); padding: 22px 22px 24px; max-width: 620px; }
+.gate h2 { font-family: var(--f-display); text-transform: uppercase; font-size: 24px; margin: 0 0 8px; color: var(--stamp); }
+.gate p { margin: 0 0 16px; }
+
+/* Материалы дела */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+.docs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+.docs .sheet { min-width: 0; font-size: 14.5px; padding: 22px 26px 16px; border: 1px solid var(--doc-line); box-shadow: 0 1px 0 var(--doc-line), 6px 6px 0 var(--wash); max-width: 860px; }
+.docs .sheet .cols2 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+/* Экран */
+.stage { background: var(--s-bg); border: 1px solid var(--s-line); }
+.stage-slide { width: 100%; margin: 0 auto; }
+.stage-bar { display: flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; padding: 10px 12px; background: var(--s-panel); color: var(--s-ink); border-top: 1px solid var(--s-line); }
+.stage-bar .btn { background: transparent; color: var(--s-ink); border-color: var(--s-muted); }
+.stage-bar .btn:hover { background: var(--s-bg); }
+.stage-bar .btn.primary { background: var(--s-accent); border-color: var(--s-accent); color: var(--s-bg); }
+.stage-bar select { font: inherit; font-size: 14px; background: var(--s-bg); color: var(--s-ink); border: 1.5px solid var(--s-muted); padding: 6px 8px; max-width: 100%; min-width: 0; border-radius: 2px; }
+.s-count { font-family: var(--f-mono); font-size: 14px; min-width: 4.5em; text-align: center; font-variant-numeric: tabular-nums; }
+.t-ctl { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-left: auto; }
+.t-val { font-family: var(--f-mono); font-size: 18px; font-variant-numeric: tabular-nums; min-width: 3.4em; text-align: right; }
+.stage:fullscreen { display: grid; grid-template-rows: 1fr auto; align-items: center; border: 0; }
+.stage:fullscreen .stage-slide { width: min(100vw, calc((100vh - 62px) * 16 / 9)); }
+.stage-note { margin-top: 12px; }
+
+@media (max-width: 620px) {
+  body { font-size: 15.5px; }
+  .tabs { margin-left: -6px; width: calc(100% + 6px); }
+  dl.facts > div { grid-template-columns: 1fr; gap: 2px; }
+  .block-m { margin-left: 0; width: 100%; }
+  .docs .sheet { padding: 16px 14px 12px; font-size: 13.5px; }
+  .docs .sheet .docno { margin-left: 0; width: 100%; }
+  table.t { font-size: .9em; }
+  .t-ctl { margin-left: 0; }
+  .logline { font-size: 11px; padding: 12px; }
+  .docs dl.kv { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .docs dl.kv dd { margin-bottom: .55em; }
+  .scroll > table.t:has(th:nth-child(3)) { min-width: 520px; }
+  .scroll > table.t:has(th:nth-child(4)) { min-width: 640px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tabs button, .btn { transition: background-color .12s, color .12s, border-color .12s; }
+}
+
+/* Общие компоненты: листы дела, бланки, блоки руководства. Размеры в em — базовый кегль задаёт контекст (экран или печать). */
+
+/* ---------- Лист дела / бланк ---------- */
+.sheet { background: var(--doc-bg); color: var(--doc-ink); font-family: var(--f-body); line-height: 1.42; display: flex; flex-direction: column; box-sizing: border-box; }
+.sheet-h { display: flex; align-items: center; gap: .6em; flex-wrap: wrap; border-bottom: 2px solid var(--doc-ink); padding-bottom: .5em; margin-bottom: .9em; }
+.tag { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: .07em; font-size: .8em; }
+.tag-env { color: var(--stamp); border: 1.5px solid var(--stamp); padding: .08em .55em; border-radius: 2px; }
+.docno { margin-left: auto; font-family: var(--f-display); font-weight: 700; font-size: 1.25em; text-transform: uppercase; letter-spacing: .03em; }
+.docno small { font-size: .6em; font-weight: 500; letter-spacing: .05em; }
+.sheet-t { font-family: var(--f-display); font-weight: 600; font-size: 1.55em; line-height: 1.15; margin: 0 0 .55em; text-wrap: balance; }
+.sheet-b { flex: 1; min-width: 0; }
+.sheet-b p { margin: 0 0 .65em; }
+.sheet-f { margin-top: 1em; padding-top: .45em; border-top: 1px solid var(--doc-line); font-size: .72em; color: var(--doc-muted); }
+.letterhead { font-family: var(--f-display); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: 1.05em; margin-bottom: .15em !important; }
+.doc-kicker { color: var(--doc-muted); font-size: .92em; margin-bottom: 1.1em !important; }
+.doc-note { font-size: .86em; color: var(--doc-muted); }
+.sign { margin-top: 1.5em !important; }
+.sigline { display: inline-block; width: 9em; border-bottom: 1px solid var(--doc-ink); margin: 0 .5em; }
+.sheet ol.tight, .sheet ul.tight { margin: .2em 0 .75em; padding-left: 1.4em; }
+.sheet ol.tight li, .sheet ul.tight li { margin: .16em 0; }
+.sheet ol.spaced { margin: .3em 0 .8em; padding-left: 1.4em; }
+.sheet ol.spaced li { margin: .5em 0; }
+.mini-h { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; font-size: .92em; margin: 1.1em 0 .4em !important; }
+.mini-h small { font-family: var(--f-body); font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--doc-muted); margin-left: .5em; }
+.rule { margin: 0 0 .5em !important; }
+.cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4em; }
+.cols2 > * { min-width: 0; }
+.scroll { overflow-x: auto; }
+
+table.log { border-collapse: collapse; width: 100%; font-family: var(--f-mono); font-size: .8em; font-variant-numeric: tabular-nums; }
+table.log th { font-family: var(--f-display); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; font-size: .98em; text-align: left; border-bottom: 1.5px solid var(--doc-ink); padding: .3em .55em; white-space: nowrap; }
+table.log td { border-bottom: 1px solid var(--doc-line); padding: .2em .55em; vertical-align: top; }
+table.log.compact td { padding: .16em .55em; }
+table.log.wrap { font-family: var(--f-body); font-size: .88em; }
+table.log.wrap td { padding: .42em .55em; }
+table.log.wrap th { white-space: normal; }
+[data-doc="4"] table.log td:nth-child(5), [data-doc="14"] table.log td:nth-child(3) { text-align: right; white-space: nowrap; }
+[data-doc="4"] table.log td:nth-child(-n+3) { white-space: nowrap; }
+[data-doc="6"] table.log td:first-child { font-weight: 600; }
+.nowrap { white-space: nowrap; }
+
+.statement { border: 1px solid var(--doc-line); background: var(--doc-fill); padding: .8em 1em .5em; margin-bottom: .9em; }
+.st-head { font-size: .9em; color: var(--doc-muted); border-bottom: 1px dashed var(--doc-line); padding-bottom: .45em; }
+.st-head b { color: var(--doc-ink); }
+dl.kv { display: grid; grid-template-columns: minmax(0, max-content) minmax(0, 1fr); gap: .35em 1.4em; margin: .4em 0 1em; }
+dl.kv dt { color: var(--doc-muted); }
+dl.kv dd { margin: 0; font-weight: 600; }
+
+svg.plan { display: block; width: 100%; height: auto; margin: .3em 0 .8em; }
+.p-wall { fill: none; stroke: var(--doc-ink); stroke-width: 2.5; }
+.p-room, .p-desk { fill: var(--doc-fill); stroke: var(--doc-ink); stroke-width: 1.3; }
+.p-seat { fill: var(--doc-bg); stroke: var(--doc-ink); stroke-width: 1.3; }
+.p-gap { stroke: var(--doc-bg); stroke-width: 6; }
+.p-dim { stroke: var(--doc-muted); stroke-width: 1; stroke-dasharray: 4 3; }
+svg.plan text { font-family: var(--f-body); fill: var(--doc-ink); }
+svg.plan .p-id { font-family: var(--f-display); font-weight: 700; font-size: 15px; letter-spacing: .04em; }
+svg.plan .p-name { font-size: 11px; }
+svg.plan .p-lab { font-size: 12px; font-weight: 600; }
+svg.plan .p-small { font-size: 10.5px; fill: var(--doc-muted); }
+
+/* ---------- Бланки ---------- */
+.lines i { display: block; border-bottom: 1px solid var(--doc-line); height: 2.15em; }
+table.grid, table.fv, table.board { border-collapse: collapse; width: 100%; }
+table.grid th, table.grid td { border: 1px solid var(--doc-ink); padding: .4em .55em; text-align: left; vertical-align: top; }
+table.grid th, table.board th { font-family: var(--f-display); text-transform: uppercase; letter-spacing: .05em; font-size: .84em; font-weight: 600; background: var(--doc-fill); }
+table.timeline td { height: 1.95em; }
+table.timeline th:nth-child(1) { width: 12%; } table.timeline th:nth-child(2) { width: 11%; } table.timeline th:nth-child(3) { width: 20%; } table.timeline th:nth-child(5) { width: 11%; }
+table.versions td { height: 1.9em; }
+table.versions th:first-child { width: 30%; } table.versions th:last-child { width: 22%; }
+table.proofs td { height: 3.5em; }
+table.proofs th:first-child, table.recs th:first-child { width: 2.2em; } table.proofs th:last-child { width: 5.5em; }
+table.recs td { height: 4.7em; }
+table.score td { height: 2.3em; }
+table.score th:first-child { width: 34%; }
+table.score tr.total td { background: var(--doc-fill); }
+table.nomin td { height: 2.4em; } table.nomin td:first-child { width: 66%; }
+table.rate td { height: auto; padding: .5em .55em; } table.rate td.scale { width: 13.5em; text-align: center; font-family: var(--f-mono); font-size: .9em; white-space: nowrap; }
+table.board th, table.board td { border: 1.5px solid var(--doc-ink); padding: .5em .6em; text-align: left; width: 33.33%; }
+table.board th small { display: block; font-family: var(--f-body); text-transform: none; letter-spacing: 0; font-weight: 400; font-size: .95em; color: var(--doc-muted); }
+table.fv th, table.fv td { border: 1px solid var(--doc-line); padding: .42em .6em; text-align: left; vertical-align: top; }
+table.fv th { font-family: var(--f-display); text-transform: uppercase; letter-spacing: .05em; font-size: .84em; font-weight: 600; border-bottom: 1.5px solid var(--doc-ink); }
+table.fv td:first-child { width: 2em; color: var(--doc-muted); } table.fv .fv-box { width: 4.2em; text-align: center; }
+.fields { display: flex; gap: .5em 1.8em; flex-wrap: wrap; margin: .7em 0; }
+.fields i { display: inline-block; border-bottom: 1px solid var(--doc-ink); width: 9em; height: 1.1em; vertical-align: bottom; }
+.fields i.long { width: 20em; } .fields i.short { width: 4.5em; }
+.q { margin: 1em 0 .25em !important; }
+.q small { color: var(--doc-muted); float: right; }
+blockquote.story { margin: .5em 0 .9em; padding: .75em 1em; border-left: 4px solid var(--stamp); background: var(--doc-fill); font-size: 1.05em; }
+blockquote.story.small { font-size: .98em; }
+.cards { display: grid; gap: 0; }
+.card { border: 1.5px dashed var(--doc-ink); padding: 1em 1.1em; margin: -0.75px; }
+.card p { margin: 0 0 .45em; }
+.card-t { font-family: var(--f-display); text-transform: uppercase; letter-spacing: .04em; font-weight: 700; font-size: 1.2em; }
+.card-q { font-size: .9em; color: var(--doc-muted); }
+.cards-roles { grid-template-columns: 1fr 1fr; }
+.label { text-align: center; padding: 1.5em 1em; }
+.lab-no { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: .1em; font-size: 1.3em; }
+.lab-name { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; font-size: 3.2em; line-height: 1.05; color: var(--stamp); margin-bottom: .2em !important; }
+.lab-rule { display: inline-block; border: 1.5px solid var(--stamp); color: var(--stamp); font-family: var(--f-display); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; padding: .15em .7em; margin-top: .3em !important; }
+.lab-team { font-size: 1.15em; margin-top: .6em !important; }
+.answer { border: 2px solid var(--stamp); padding: .65em .9em; }
+.cb { display: inline-block; width: .95em; height: .95em; border: 1.5px solid var(--doc-ink); vertical-align: -0.12em; }
+table.key td.box { width: 1.5em; }
+table.alibi small, table.key small { color: var(--doc-muted); white-space: nowrap; }
+
+/* ---------- Руководство ---------- */
+.sec { margin: 0 0 2.4em; }
+.sec h2 { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; font-size: 1.5em; line-height: 1.15; margin: 0 0 .7em; padding-bottom: .28em; border-bottom: 2px solid var(--ink); text-wrap: balance; }
+.sec h3 { font-family: var(--f-body); font-weight: 700; font-size: 1.06em; margin: 1.4em 0 .5em; }
+.sec p { margin: 0 0 .7em; }
+.sec .small, .small { font-size: .87em; color: var(--muted); }
+ol.steps { list-style: none; counter-reset: st; padding: 0; margin: .4em 0 .9em; display: grid; gap: .6em; }
+ol.steps > li { counter-increment: st; position: relative; padding-left: 2.5em; min-height: 1.75em; }
+ol.steps > li::before { content: counter(st); position: absolute; left: 0; top: -.05em; width: 1.75em; height: 1.75em; display: grid; place-items: center; box-sizing: border-box; border: 1.5px solid var(--ink); border-radius: 50%; font-family: var(--f-display); font-weight: 600; font-size: .9em; }
+dl.facts { margin: 0; border-top: 1px solid var(--line); }
+dl.facts > div { display: grid; grid-template-columns: 10.5em 1fr; gap: 1em; padding: .55em 0; border-bottom: 1px solid var(--line); }
+dl.facts dt { font-family: var(--f-display); text-transform: uppercase; letter-spacing: .06em; font-size: .84em; color: var(--muted); padding-top: .18em; }
+dl.facts dd { margin: 0; }
+table.t { border-collapse: collapse; width: 100%; font-size: .94em; }
+table.t th { text-align: left; font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; font-size: .82em; color: var(--muted); border-bottom: 1.5px solid var(--ink); padding: .45em .9em .45em 0; vertical-align: bottom; }
+table.t td { border-bottom: 1px solid var(--line); padding: .5em .9em .5em 0; vertical-align: top; }
+table.t small { color: var(--muted); white-space: nowrap; }
+table.t tr.total td { font-weight: 700; border-bottom: 0; }
+table.t tr.hit td { background: var(--hit); }
+table.t tr.hit td:first-child { box-shadow: inset 3px 0 0 var(--stamp); padding-left: .6em; }
+table.timing td:nth-child(n+3), table.timing th:nth-child(n+3) { font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.trouble td:first-child { font-weight: 600; width: 32%; }
+.say, .do, .note { margin: .8em 0; padding: .7em 1em .75em 1.05em; border-radius: 2px; }
+.say { background: var(--say); border-left: 4px solid var(--say-line); }
+.do { background: var(--wash); border-left: 4px solid var(--ink); }
+.note { border: 1px dashed var(--muted); }
+.lbl { display: block; font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: .09em; font-size: .74em; margin-bottom: .35em; color: var(--muted); }
+.say .lbl { color: var(--say-line); }
+.say p, .note p { margin: 0 0 .5em; }
+.say p:last-child, .note p:last-child { margin: 0; }
+.do ul, .say ul { margin: 0; padding-left: 1.2em; }
+.do li, .say li { margin: .22em 0; }
+.block { border-top: 2px solid var(--ink); padding-top: .85em; margin-top: 1.8em; }
+.block-h { display: flex; align-items: center; gap: .7em; flex-wrap: wrap; margin-bottom: .5em; }
+.block-h h3 { margin: 0; font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: .02em; font-size: 1.28em; }
+.block-n { display: inline-grid; place-items: center; min-width: 1.65em; height: 1.65em; background: var(--ink); color: var(--paper); font-family: var(--f-display); font-weight: 600; border-radius: 2px; }
+.block-m { margin-left: auto; font-family: var(--f-mono); font-size: .78em; color: var(--muted); white-space: nowrap; }
+.goal { color: var(--muted); }
+.dstep { margin: 1.5em 0; }
+.dstep h3 { display: flex; align-items: center; gap: .6em; margin: 0 0 .5em; }
+.dstep h3 small { font-family: var(--f-mono); font-weight: 400; font-size: .76em; color: var(--muted); margin-left: auto; }
+ul.check { list-style: none; padding: 0; margin: .3em 0 1em; display: grid; gap: .4em; }
+ul.check > li { position: relative; padding-left: 1.9em; }
+ul.check > li::before { content: ""; position: absolute; left: 0; top: .18em; width: 1.05em; height: 1.05em; box-sizing: border-box; border: 1.5px solid var(--ink); border-radius: 2px; }
+.copybox { border: 1px solid var(--line); background: var(--surface); padding: .85em 1em; margin: .6em 0; }
+.copybox pre { margin: 0; white-space: pre-wrap; font-family: var(--f-body); font-size: .94em; line-height: 1.5; }
+.copy-t { font-family: var(--f-display); text-transform: uppercase; letter-spacing: .08em; font-size: .76em; font-weight: 600; color: var(--muted); margin: 0 0 .5em !important; }
+.sec .answer { border-color: var(--stamp); font-size: 1.06em; }
+
+/* ---------- Уточнения ---------- */
+table.alibi td:first-child, .nw1 td:first-child, .nwl td:last-child { white-space: nowrap; }
+[data-doc="10"] table.log th:nth-child(1) { width: 9%; } [data-doc="10"] table.log th:nth-child(2) { width: 14%; }
+[data-doc="10"] table.log th:nth-child(4) { width: 15%; } [data-doc="10"] table.log th:nth-child(5) { width: 18%; } [data-doc="10"] table.log th:nth-child(6) { width: 13%; }
+[data-doc="10"] table.log td:nth-child(1), [data-doc="10"] table.log td:nth-child(4), [data-doc="10"] table.log td:nth-child(6) { font-family: var(--f-mono); font-size: .93em; white-space: nowrap; }
+[data-doc="6"] table.log th:nth-child(1) { width: 21%; } [data-doc="6"] table.log th:nth-child(2) { width: 19%; } [data-doc="6"] table.log th:nth-child(4) { width: 19%; }
+
+/* Слайды для экрана. Единый тёмный вид: его показывают на проекторе. Размеры в cqw — слайд масштабируется целиком. */
+.slide { container-type: inline-size; aspect-ratio: 16 / 9; background: var(--s-bg); color: var(--s-ink); overflow: hidden; position: relative; }
+.slide-in { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 3.2cqw 4.6cqw 3.4cqw; font-family: var(--f-body); font-size: 1.72cqw; line-height: 1.35; }
+.s-top { display: flex; justify-content: space-between; font-family: var(--f-display); font-weight: 500; text-transform: uppercase; letter-spacing: .14em; font-size: 1.05cqw; color: var(--s-muted); padding-bottom: 1.1cqw; border-bottom: 1px solid var(--s-line); }
+.s-title { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: .01em; font-size: 4.1cqw; line-height: 1.08; margin: 2.2cqw 0 0; text-wrap: balance; }
+.s-body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 1.5cqw; min-height: 0; }
+.s-body p, .s-body ol, .s-body ul { margin: 0; }
+.s-kicker { font-family: var(--f-display); font-weight: 500; text-transform: uppercase; letter-spacing: .18em; font-size: 1.5cqw; color: var(--s-accent); }
+.s-hero { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; font-size: 13cqw; line-height: .95; letter-spacing: -.01em; margin: 0; }
+.s-sub { font-size: 2.6cqw; color: var(--s-muted); }
+.s-stamp { position: absolute; right: 5cqw; bottom: 6cqw; transform: rotate(-7deg); border: .32cqw solid var(--s-accent); color: var(--s-accent); font-family: var(--f-display); font-weight: 700; font-size: 3.2cqw; letter-spacing: .05em; padding: .25cqw 1.4cqw; border-radius: .3cqw; }
+.s-big { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; font-size: 8.4cqw; line-height: 1; margin: 0; }
+.s-lead { font-size: 2.1cqw; color: var(--s-muted); }
+.s-task { font-size: 2.75cqw; line-height: 1.25; max-width: 30em; text-wrap: balance; }
+.s-tip { font-size: 1.85cqw; color: var(--s-muted); }
+.s-strip { font-family: var(--f-display); font-weight: 500; text-transform: uppercase; letter-spacing: .1em; font-size: 1.5cqw; color: var(--s-accent); border-top: 1px solid var(--s-line); padding-top: 1.2cqw; }
+.s-story { font-size: 1.95cqw; line-height: 1.38; border-left: .4cqw solid var(--s-accent); padding-left: 1.6cqw; }
+.s-legend { font-size: 1.45cqw; color: var(--s-muted); }
+.s-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3.5cqw; }
+.s-fv { padding-left: 1.5em; display: grid; gap: .65cqw; font-size: 1.72cqw; align-content: start; }
+.s-fv li { padding-left: .2em; }
+.s-fv li > span { vertical-align: middle; }
+.s-badge { display: inline-grid; place-items: center; width: 1.55em; height: 1.55em; border-radius: .2em; font-family: var(--f-display); font-weight: 700; font-size: .92em; margin-right: .55em; vertical-align: middle; }
+.s-f { background: var(--s-ok); color: var(--s-bg); }
+.s-v { background: transparent; color: var(--s-warn); box-shadow: inset 0 0 0 .12em var(--s-warn); }
+.s-three { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.6cqw; counter-reset: n; }
+.s-three li { counter-increment: n; border-top: .3cqw solid var(--s-ink); padding-top: 1.1cqw; display: grid; gap: .7cqw; align-content: start; }
+.s-three li::before { content: "0" counter(n); font-family: var(--f-mono); font-size: 1.3cqw; color: var(--s-accent); }
+.s-three b { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; font-size: 2.6cqw; line-height: 1.1; }
+.s-three span { color: var(--s-muted); font-size: 1.7cqw; }
+.s-four { padding-left: 1.3em; display: grid; gap: 1.15cqw; font-size: 2.65cqw; line-height: 1.22; }
+.s-four li::marker { font-family: var(--f-display); font-weight: 700; color: var(--s-accent); }
+.s-rules { padding-left: 1.3em; display: grid; grid-template-columns: 1fr 1fr; gap: 1.6cqw 4cqw; font-size: 1.95cqw; line-height: 1.3; }
+.s-rules li::marker { font-family: var(--f-display); font-weight: 700; color: var(--s-accent); }
+.s-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.3cqw; }
+.s-cards > div { background: var(--s-panel); padding: 1.5cqw 1.3cqw; display: grid; gap: .9cqw; align-content: start; border-top: .3cqw solid var(--s-accent); }
+.s-cards b { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; font-size: 1.75cqw; line-height: 1.1; }
+.s-cards span { font-size: 1.4cqw; color: var(--s-muted); }
+.s-score { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.4cqw; }
+.s-score > div { background: var(--s-panel); padding: 1.3cqw 1.5cqw 1.5cqw; display: grid; gap: .3cqw; }
+.s-score b { font-family: var(--f-display); font-weight: 700; font-size: 6cqw; line-height: 1; }
+.s-score span { font-family: var(--f-display); text-transform: uppercase; letter-spacing: .06em; font-size: 1.4cqw; color: var(--s-muted); }
+.s-method { list-style: none; padding: 0; counter-reset: m; display: grid; gap: 1.1cqw; }
+.s-method li { counter-increment: m; display: grid; grid-template-columns: 3cqw 17cqw 1fr; align-items: baseline; gap: 1.2cqw; border-bottom: 1px solid var(--s-line); padding-bottom: 1.05cqw; }
+.s-method li::before { content: counter(m); font-family: var(--f-display); font-weight: 700; font-size: 2.3cqw; color: var(--s-accent); }
+.s-method b { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; font-size: 2.05cqw; line-height: 1.12; }
+.s-method span { font-size: 1.75cqw; color: var(--s-muted); }
+.s-timeline { list-style: none; padding: 0; display: grid; gap: .95cqw; }
+.s-timeline li { display: grid; grid-template-columns: 17cqw 1fr; gap: 1.6cqw; align-items: baseline; border-bottom: 1px solid var(--s-line); padding-bottom: .9cqw; }
+.s-timeline b { font-family: var(--f-mono); font-weight: 500; font-size: 1.65cqw; color: var(--s-accent); }
+.s-timeline span { font-size: 1.95cqw; line-height: 1.25; }
+.s-table { border-collapse: collapse; width: 100%; font-size: 1.5cqw; line-height: 1.25; }
+.s-table th { text-align: left; font-family: var(--f-display); font-weight: 500; text-transform: uppercase; letter-spacing: .08em; font-size: 1.15cqw; color: var(--s-muted); border-bottom: 1px solid var(--s-ink); padding: .5cqw 1.2cqw .7cqw 0; }
+.s-table td { border-bottom: 1px solid var(--s-line); padding: .72cqw 1.2cqw .72cqw 0; vertical-align: top; }
+.s-table td:first-child { font-weight: 600; white-space: nowrap; }
+.s-table tr.hit td { color: var(--s-bg); background: var(--s-accent); font-weight: 600; }
+.s-table tr.hit td:first-child { padding-left: .8cqw; }
+.s-timer { position: absolute; right: 4.6cqw; bottom: 3.2cqw; font-family: var(--f-mono); font-weight: 500; font-variant-numeric: tabular-nums; font-size: 9cqw; line-height: 1; letter-spacing: -.02em; color: var(--s-ink); }
+.s-timer.warn { color: var(--s-warn); }
+.s-timer.over { color: var(--s-accent); }
+.k-round .s-body { justify-content: flex-start; padding-top: 4cqw; }
+.k-round .s-task { max-width: 21em; }
+.k-cover .s-body { justify-content: center; gap: 1cqw; }
+.k-dense .s-title { font-size: 3.3cqw; margin-top: 1.6cqw; }
+.slide[data-timer] .s-title + .s-body { padding-right: 0; }
+.slide[data-timer] .s-cols { padding-right: 0; }
+.slide[data-timer]:not(:has(.k-round)) .s-timer { font-size: 4.2cqw; top: 6.4cqw; bottom: auto; }
+
+.s-body .s-hero + .s-sub { margin-top: 1.8cqw; }
+
+</style>
+<header class="top"><div class="top-in">
+  <div class="brand">Шерлок<small>дело № 27-Р</small></div>
+  <nav class="tabs" role="tablist" aria-label="Разделы комплекта">
+    <button type="button" role="tab" data-tab="overview" aria-controls="v-overview" aria-selected="true">Обзор</button><button type="button" role="tab" data-tab="prep" aria-controls="v-prep" aria-selected="false">Подготовка</button><button type="button" role="tab" data-tab="script" aria-controls="v-script" aria-selected="false">Сценарий</button><button type="button" role="tab" data-tab="screen" aria-controls="v-screen" aria-selected="false">Экран</button><button type="button" role="tab" data-tab="case" aria-controls="v-case" aria-selected="false">Материалы</button><button type="button" role="tab" data-tab="key" aria-controls="v-key" aria-selected="false">Разгадка</button><button type="button" role="tab" data-tab="debrief" aria-controls="v-debrief" aria-selected="false">Дебриф</button>
+  </nav>
+</div></header>
+<main class="wrap">
+
+<section class="view" id="v-overview" role="tabpanel">
+  <div class="hero">
+    <p class="eyebrow">Бизнес-игра для сотрудников банка · комплект ведущего</p>
+    <h1>Шерлок<span>Дело о платеже № 318</span></h1>
+    <p class="hero-lead">Игра-расследование на три часа. Команды разбирают 15 документов вымышленного банка и выясняют, кто из семи сотрудников увёл со счёта клиента 870 000 000 сум.</p>
+    <div class="logline" aria-label="Три строки из журнала операций">
+<div>16:51  T.ALIEV  ОП-04  Вход в систему</div>
+<div>16:52  T.ALIEV  ОП-04  <b>Ввод п/п № 318 · 870 000 000</b></div>
+<div>16:53  T.ALIEV  ОП-04  Выход из системы</div>
+    </div>
+    <p class="small">С этих трёх строк журнала начинается расследование. Алиева в это время в банке уже не было.</p>
+    <ul class="chips"><li>3 часа</li><li>8–25 человек</li><li>1 ведущий</li><li>3 конверта</li><li>15 документов</li></ul>
+  </div>
+  
+<section class="sec">
+<h2>Паспорт игры</h2>
+<dl class="facts">
+<div><dt>Формат</dt><dd>Очная командная игра-расследование</dd></div>
+<div><dt>Кому</dt><dd>Сотрудникам банка из любых подразделений: фронт-офис, операционный блок, бэк-офис, риски, комплаенс, ИТ. Специальные знания не нужны</dd></div>
+<div><dt>Сколько человек</dt><dd>8–25 участников, 2–5 команд по 4–5 человек</dd></div>
+<div><dt>Время</dt><dd>3 часа: 2 часа 55 минут по сценарию и 5 минут запаса</dd></div>
+<div><dt>Ведущий</dt><dd>Один. Опыт не нужен: в сценарии есть готовые слова для каждого шага</dd></div>
+<div><dt>Что развивает</dt><dd>Аналитическое мышление, внимание к деталям, решение сложных задач, логическое обоснование выводов, командную работу</dd></div>
+</dl>
+</section>
+
+<section class="sec">
+<h2>Сюжет в трёх фразах</h2>
+<p>Пятница, 16:59. Со счёта клиента вымышленного «Чинор Банка» уходит 870 000 000 сум. В понедельник клиент заявляет, что платёж не отправлял, а деньги уже обналичены.</p>
+<p>Команды играют за рабочие группы служебного расследования. Они получают три конверта с документами: журналы операций и пропусков, объяснительные, детализацию звонков, справки. Нужно установить, кто из семи сотрудников это сделал, как, и почему банк этого не заметил.</p>
+</section>
+
+<section class="sec">
+<h2>Почему из каталога выбрана именно эта игра</h2>
+<p>В каталоге десять игр. Для задачи «сотрудники банка, ведущий без опыта» лучше всего подходит «Шерлок».</p>
+<ol class="steps">
+<li><b>Она подходит всем сотрудникам.</b> Большая часть каталога рассчитана на руководителей (делегирование, мотивация, обратная связь) или на продавцов. Умение отделять факты от догадок и замечать детали нужно на любой должности в банке.</li>
+<li><b>Она прощает неопытность ведущего.</b> У дела одна разгадка и готовый ключ. Игру двигают конверты и таймер. В ролевых играх ведущему приходится на ходу давать обратную связь, а это требует практики.</li>
+<li><b>Она про банк.</b> Продиктованный пароль, незаблокированный компьютер, подпись «не глядя», спешка перед отсечкой — участники узнают свою работу. Банк попутно получает урок по операционному риску.</li>
+</ol>
+</section>
+
+<section class="sec">
+<h2>Чему научатся участники</h2>
+<p>После игры участник сможет:</p>
+<ol class="steps">
+<li>Отделять факты от версий и записывать факт вместе с источником.</li>
+<li>Сводить разрозненные данные в ленту времени и таблицу «кто — где — когда».</li>
+<li>Проверять версию: искать то, что её опровергает, а не только то, что подтверждает.</li>
+<li>Обосновывать вывод цепочкой «утверждение — доказательство — источник».</li>
+<li>Работать над сложной задачей в команде: делить материал, сверять находки, укладываться во время.</li>
+</ol>
+</section>
+
+<section class="sec">
+<h2>Как устроена игра</h2>
+<ol class="steps">
+<li><b>Три конверта.</b> «Сигнал», «Следы», «Развязка» — всего 15 документов. Каждый конверт вскрывается по сигналу ведущего.</li>
+<li><b>Две ложные версии.</b> Первый конверт подталкивает к одному подозреваемому, второй — к другому. Так задумано: участники на себе чувствуют, как первая версия мешает видеть факты.</li>
+<li><b>Протокол версий.</b> После первого и второго раунда команда записывает, кого подозревает и на сколько процентов уверена. В разборе это самый сильный материал.</li>
+<li><b>Письменное заключение.</b> Кто, как, чем доказано, что изменить. Ведущий оценивает его по ключу, максимум 100 баллов.</li>
+<li><b>Разбор и дебриф.</b> Разгадка по шагам, затем разговор о том, как команда думала и что из этого пригодится в работе.</li>
+</ol>
+</section>
+
+<section class="sec">
+<h2>Что входит в комплект</h2>
+<div class="scroll"><table class="t">
+<thead><tr><th>Файл</th><th>Что внутри</th><th>Когда нужен</th></tr></thead>
+<tbody>
+<tr><td><b>1. Руководство ведущего</b></td><td>Подготовка, сценарий со словами ведущего, разгадка, дебриф, оценка результата</td><td>Читать заранее, держать в руках на игре</td></tr>
+<tr><td><b>2. Раздаточные материалы</b></td><td>15 документов дела, бланки, карточки, ключ, ведомость печати</td><td>Печатать за 2–3 дня</td></tr>
+<tr><td><b>3. Слайды для экрана</b></td><td>24 слайда: правила, задания раундов, разгадка, дебриф</td><td>Показывать на игре</td></tr>
+</tbody>
+</table></div>
+<p class="small">Три PDF-файла приложены к комплекту. Слайды с таймером открываются и здесь, на вкладке «Экран».</p>
+</section>
+
+<section class="sec">
+<h2>Если вы ведёте игру впервые</h2>
+<ol class="steps">
+<li><b>Прочитайте обзор и сценарий.</b> 30 минут.</li>
+<li><b>Решите дело сами.</b> Пройдите три конверта без ключа, потом сверьтесь с разгадкой. 60–90 минут. Это главный шаг: после него вы понимаете игру лучше любого участника.</li>
+<li><b>Распечатайте материалы и разложите по конвертам.</b> 40 минут, ведомость печати есть в разделе «Подготовка».</li>
+<li><b>Проговорите вслух открытие и правила.</b> 15 минут с таймером. Первые десять минут игры определяют, как пойдёт остальное.</li>
+<li><b>Проведите игру по сценарию.</b> Слова ведущего можно читать с листа.</li>
+<li><b>Соберите анкеты.</b> Через две недели отправьте участникам письмо-напоминание, текст готов.</li>
+</ol>
+</section>
+
+<section class="sec">
+<h2>Тайминг</h2>
+
+<div class="scroll"><table class="t timing">
+<thead><tr><th>№</th><th>Блок</th><th>Минут</th><th>Старт</th><th>Слайды</th></tr></thead>
+<tbody><tr><td>1</td><td>Открытие</td><td>10</td><td>0:00</td><td>1–2</td></tr><tr><td>2</td><td>Разминка «Факт или версия?»</td><td>10</td><td>0:10</td><td>3–4</td></tr><tr><td>3</td><td>Вводная по делу: легенда, правила, роли</td><td>10</td><td>0:20</td><td>5–8</td></tr><tr><td>4</td><td>Раунд 1 «Сигнал»</td><td>25</td><td>0:30</td><td>9–10</td></tr><tr><td>5</td><td>Раунд 2 «Следы»</td><td>25</td><td>0:55</td><td>11–12</td></tr><tr><td>6</td><td>Раунд 3 «Развязка» и заключение</td><td>30</td><td>1:20</td><td>13</td></tr><tr><td>7</td><td>Перерыв. Ведущий считает баллы</td><td>10</td><td>1:50</td><td>14</td></tr><tr><td>8</td><td>Вердикты команд и разгадка</td><td>15</td><td>2:00</td><td>15–19</td></tr><tr><td>9</td><td>Дебриф</td><td>25</td><td>2:15</td><td>20–22</td></tr><tr><td>10</td><td>Перенос в работу и закрытие</td><td>15</td><td>2:40</td><td>23–24</td></tr>
+<tr class="total"><td></td><td>Всего</td><td>175</td><td>2:55</td><td></td></tr></tbody>
+</table></div>
+<p class="small">Старт указан от начала игры. Номера слайдов — из файла «Слайды для экрана».</p>
+</section>
+</section>
+
+<section class="view" id="v-prep" role="tabpanel" hidden>
+  <h1 class="view-h">Подготовка</h1><p class="view-lead">Чек-листы, печать, зал и приглашение. Отметки в чек-листах сохраняются в этом браузере.</p>
+  
+<section class="sec">
+<h2>Чек-листы</h2>
+<h3>За одну-две недели</h3>
+<ul class="check" data-key="w2"><li>Согласуйте дату и зал на 3,5 часа: 3 часа игры и 30 минут на расстановку.</li><li>Соберите группу 8–25 человек. Лучше смешать подразделения.</li><li>Отправьте приглашение. Текст ниже.</li><li>Прочитайте сценарий и решите дело сами.</li><li>Покажите дело службе безопасности или комплаенсу. Они подскажут, как связать разбор с правилами вашего банка.</li><li>Подготовьте призы: команде-победителю и за три номинации.</li></ul>
+<h3>За два-три дня</h3>
+<ul class="check" data-key="d3"><li>Распечатайте материалы по ведомости.</li><li>Разложите документы по конвертам. На каждом — номер конверта и номер команды.</li><li>Соберите канцелярию: листы A3 или флипчарт, маркеры, стикеры, ручки, скотч.</li><li>Проверьте ноутбук и проектор, откройте слайды.</li><li>Проговорите открытие и правила вслух.</li></ul>
+<h3>За час до начала</h3>
+<ul class="check" data-key="h1"><li>Расставьте столы островами: один стол — одна команда. Между столами 2–3 метра.</li><li>На каждый стол положите правила, карточки ролей, «Доску расследования», «Ленту времени», лист заключения, маркеры и стикеры.</li><li>Конверты держите у себя. Вы выдаёте их по раундам.</li><li>Включите первый слайд, проверьте таймер.</li><li>Положите рядом ключ, ведомость баллов и лист наблюдений. Ключ — текстом вниз.</li></ul>
+<h3>После игры</h3>
+<ul class="check" data-key="aft"><li>Соберите анкеты и листы заключений.</li><li>В тот же день запишите три наблюдения: что сработало, что изменить.</li><li>На следующий день отправьте короткий итог заказчику.</li><li>Через 14 дней отправьте участникам письмо «Две недели спустя».</li></ul>
+</section>
+
+<section class="sec">
+<h2>Ведомость печати</h2>
+<p>Страницы указаны по файлу «Раздаточные материалы». Печатайте на A4 с одной стороны, чёрно-белая печать подходит.</p>
+<div class="scroll"><table class="t"><thead><tr><th>Стр.</th><th>Что</th><th>Копий</th><th>Куда</th></tr></thead><tbody><tr><td class="nowrap">2</td><td>Наклейки на конверты</td><td>1 на команду</td><td>Разрезать и наклеить на конверты</td></tr><tr><td class="nowrap">3–8</td><td>Конверт 1 «Сигнал»: документы 1–6</td><td>2 на команду</td><td>В конверт 1</td></tr><tr><td class="nowrap">9–13</td><td>Конверт 2 «Следы»: документы 7–11</td><td>2 на команду</td><td>В конверт 2</td></tr><tr><td class="nowrap">14–18</td><td>Конверт 3 «Развязка»: документы 12–15</td><td>2 на команду</td><td>В конверт 3</td></tr><tr><td class="nowrap">19</td><td>Правила игры</td><td>1 на команду</td><td>На стол команды</td></tr><tr><td class="nowrap">20</td><td>Карточки ролей</td><td>1 на команду</td><td>Разрезать, на стол команды</td></tr><tr><td class="nowrap">21</td><td>Доска расследования</td><td>1–2 на команду</td><td>На стол команды. Лучше увеличить до A3</td></tr><tr><td class="nowrap">22</td><td>Лента времени</td><td>1–2 на команду</td><td>На стол команды</td></tr><tr><td class="nowrap">23–24</td><td>Заключение рабочей группы</td><td>1 на команду и 1 запасной</td><td>На стол команды</td></tr><tr><td class="nowrap">25</td><td>Разминка «Факт или версия?»</td><td>1 на участника</td><td>Раздать в блоке 2</td></tr><tr><td class="nowrap">26</td><td>Анкета участника</td><td>1 на участника</td><td>Раздать в блоке 10</td></tr><tr><td class="nowrap">27</td><td>Карточки «С понедельника я…»</td><td>1 лист на трёх участников</td><td>Разрезать, раздать в блоке 10</td></tr><tr><td class="nowrap">28</td><td>Карточки подсказок</td><td>1 на команду</td><td>Разрезать, хранить у ведущего</td></tr><tr><td class="nowrap">29–30</td><td>Ключ: разгадка и подсчёт баллов</td><td>1</td><td>Ведущему</td></tr><tr><td class="nowrap">31</td><td>Ведомость баллов</td><td>1</td><td>Ведущему</td></tr><tr><td class="nowrap">32</td><td>Лист наблюдений</td><td>1</td><td>Ведущему</td></tr></tbody></table></div>
+<p class="small">Документы дела печатаются в двух экземплярах на команду: так их могут читать несколько человек одновременно.</p>
+</section>
+
+<section class="sec">
+<h2>Что ещё понадобится</h2>
+<div class="scroll"><table class="t">
+<thead><tr><th>Что</th><th>Сколько</th></tr></thead>
+<tbody>
+<tr><td>Конверты A4</td><td>3 на команду</td></tr>
+<tr><td>Листы A3 или флипчарт</td><td>3–4 на команду</td></tr>
+<tr><td>Маркеры двух цветов, стикеры, ручки</td><td>комплект на команду</td></tr>
+<tr><td>Ноутбук и проектор или большой экран</td><td>1</td></tr>
+<tr><td>Таймер: телефон или часы на экране</td><td>1</td></tr>
+<tr><td>Флипчарт для ведущего</td><td>1</td></tr>
+<tr><td>Призы</td><td>команде-победителю и 3 номинации</td></tr>
+<tr><td>Ножницы и скотч</td><td>для карточек и наклеек</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="sec">
+<h2>Как рассадить участников</h2>
+<p>Команды по 4–5 человек. В каждой — люди из разных подразделений и с разным стажем. Проще всего разложить на входе карточки с номерами столов и попросить брать по одной.</p>
+<div class="scroll"><table class="t">
+<thead><tr><th>Участников</th><th>Команд</th><th>В команде</th></tr></thead>
+<tbody>
+<tr><td>8–10</td><td>2</td><td>4–5</td></tr>
+<tr><td>11–15</td><td>3</td><td>4–5</td></tr>
+<tr><td>16–20</td><td>4</td><td>4–5</td></tr>
+<tr><td>21–25</td><td>5</td><td>4–5</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="sec">
+<h2>Приглашение участникам</h2>
+<div class="copybox" id="cp-invite"><p class="copy-t">Текст письма</p><pre>Тема: Приглашаем на бизнес-игру «Шерлок»
+
+Коллеги, добрый день!
+
+Приглашаем вас на бизнес-игру «Шерлок». На три часа вы станете рабочей группой служебного расследования: вам предстоит разобраться в запутанном банковском деле и найти виновного.
+
+Когда: [дата, время]
+Где: [зал]
+
+Готовиться не нужно, специальные знания не требуются. Игра тренирует аналитическое мышление, внимание к деталям и умение доказывать свои выводы.
+
+Пожалуйста, подтвердите участие до [дата].</pre></div>
+</section>
+</section>
+
+<section class="view" id="v-script" role="tabpanel" hidden>
+  <h1 class="view-h">Сценарий</h1><p class="view-lead">Десять блоков по минутам. В синих блоках — слова ведущего, их можно читать с листа.</p>
+  
+<section class="sec">
+<h2>Пять правил ведущего</h2>
+<ol class="steps">
+<li><b>Вы ведёте процесс, а не расследование.</b> Ваши инструменты — время, правила и вопросы.</li>
+<li><b>Не подсказывайте.</b> На любой вопрос по сути дела отвечайте: «Всё, что нужно, есть в документах».</li>
+<li><b>Держите время.</b> Таймер виден всем, раунд заканчивается по сигналу.</li>
+<li><b>Смотрите и записывайте.</b> Три-пять наблюдений за командами понадобятся вам в дебрифе.</li>
+<li><b>Читайте с листа, если так спокойнее.</b> Участники этого не запомнят, а чёткие правила запомнят.</li>
+</ol>
+</section>
+
+<section class="sec">
+<h2>Сценарий по минутам</h2>
+
+
+<section class="block" id="b1">
+<header class="block-h"><span class="block-n">1</span><h3>Открытие</h3><span class="block-m">10 мин · старт 0:00 · слайды 1–2</span></header>
+<p class="goal"><b>Цель блока.</b> Снять напряжение и объяснить, зачем люди пришли.</p>
+
+<div class="do"><span class="lbl">Делайте</span><ul><li>Встречайте участников у входа. Пусть берут карточку с номером стола и садятся в свою команду.</li><li>Начните вовремя, даже если кто-то опаздывает.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Добрый день, коллеги! Меня зовут [имя]. На ближайшие три часа мы перестанем быть сотрудниками своих отделов и станем следователями. В одном банке пропали 870 миллионов сум. Найти виновного предстоит вам.</p><p>Зачем это нужно. В банке мы каждый день принимаем решения по неполной информации: верить ли документу, клиенту, цифре в отчёте. Сегодня потренируем три умения: отделять факты от догадок, замечать детали и доказывать свои выводы.</p><p>Договорённости простые. Телефоны на беззвучный режим. Говорим по одному. Ошибаться можно: это игра.</p><p>Познакомьтесь в командах: имя, подразделение и одна деталь, которую вы заметили сегодня по дороге на работу. Две минуты.</p></div>
+
+</section>
+
+
+<section class="block" id="b2">
+<header class="block-h"><span class="block-n">2</span><h3>Разминка «Факт или версия?»</h3><span class="block-m">10 мин · старт 0:10 · слайды 3–4</span></header>
+<p class="goal"><b>Цель блока.</b> Дать участникам главное правило дня до начала игры.</p>
+
+<div class="do"><span class="lbl">Делайте</span><ul><li>Раздайте каждому лист разминки.</li><li>Включите слайд 3 и таймер на 3 минуты.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Прочитайте короткий текст и восемь утверждений. Рядом с каждым поставьте букву. Ф — факт: это прямо следует из текста. В — версия: это может быть правдой, но в тексте этого нет. Работаем молча, каждый сам. Три минуты.</p></div>
+<div class="do"><span class="lbl">Делайте</span><ul><li>Через 3 минуты спросите: «Сколько фактов у вас получилось? Поднимите руку, у кого пять и больше».</li><li>Покажите слайд 4 с ответами. Разберите вслух утверждения 4 и 7: на них ошибаются чаще всего.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Фактов всего четыре. Остальное мы достроили сами. Мозг не любит пробелов и заполняет их правдоподобной историей. Сегодня ваша задача — ловить себя на этом. Каждый раз спрашивайте: в каком документе это написано?</p></div>
+<div class="note"><span class="lbl">Ответы</span><p>1 — Ф, 2 — В, 3 — Ф, 4 — В, 5 — Ф, 6 — В, 7 — В, 8 — Ф. Попросите участников записать свой результат внизу листа: он пригодится для сравнения с мини-проверкой в анкете.</p></div>
+
+</section>
+
+
+<section class="block" id="b3">
+<header class="block-h"><span class="block-n">3</span><h3>Вводная по делу</h3><span class="block-m">10 мин · старт 0:20 · слайды 5–8</span></header>
+<p class="goal"><b>Цель блока.</b> Все команды понимают задачу, правила и то, как считаются баллы.</p>
+
+<div class="say"><span class="lbl">Говорите</span><p>Вы — рабочая группа служебного расследования в Центральном филиале «Чинор Банка». В пятницу, 14 марта, за минуту до закрытия операционного дня со счёта клиента ушли 870 миллионов сум. В понедельник клиент заявил, что такого платежа не отправлял. Деньги уже обналичены.</p><p>Директор филиала ждёт от вас заключение сегодня. В нём четыре ответа: кто это сделал, как, почему не сработали контроли и что изменить.</p><p>Материалы дела придут тремя конвертами. В них рабочие документы: журналы, объяснительные, справки. Конверт вскрываете только по моему сигналу.</p></div>
+<div class="do"><span class="lbl">Делайте</span><ul><li>Слайд 6: прочитайте правила вслух.</li><li>Слайд 7: попросите распределить роли за одну минуту.</li><li>Слайд 8: объясните баллы. Покажите лист заключения: «Я оцениваю только то, что здесь написано».</li><li>Спросите: «Есть вопросы по правилам?» Ответьте на них.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>На вопросы по сути дела я не отвечаю: всё, что нужно, есть в документах. Если застрянете, можно купить подсказку за пять баллов.</p></div>
+
+</section>
+
+
+<section class="block" id="b4">
+<header class="block-h"><span class="block-n">4</span><h3>Раунд 1 «Сигнал»</h3><span class="block-m">25 мин · старт 0:30 · слайды 9–10</span></header>
+<p class="goal"><b>Цель блока.</b> Команды разбираются в происшествии и строят первую версию.</p>
+
+<div class="do"><span class="lbl">Делайте</span><ul><li>Раздайте конверт 1 каждой команде.</li><li>Включите слайд 9 и таймер на 25 минут.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Конверт номер один, шесть документов. Задача раунда — понять, что произошло, и построить первую версию. Время пошло.</p></div>
+<div class="do"><span class="lbl">Делайте</span><ul><li>Обходите столы. В разговоры не вступайте, заполняйте лист наблюдений.</li><li>На 20-й минуте объявите: «Осталось пять минут».</li><li>Когда таймер закончится, включите слайд 10.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Стоп. Запишите в лист заключения версию номер один: кого вы подозреваете и на сколько процентов уверены. Одна минута. Вслух не говорим.</p></div>
+<div class="note"><span class="lbl">Что обычно происходит</span><p>Команды подозревают Алиева, потому что платёж введён под его учётной записью, или Юсупову, потому что она подтвердила платёж перед самой отсечкой, а клиент говорит, что ему не звонили. Это запланировано. Не поправляйте.</p></div>
+
+</section>
+
+
+<section class="block" id="b5">
+<header class="block-h"><span class="block-n">5</span><h3>Раунд 2 «Следы»</h3><span class="block-m">25 мин · старт 0:55 · слайды 11–12</span></header>
+<p class="goal"><b>Цель блока.</b> Команды проверяют первую версию новыми данными.</p>
+
+<div class="do"><span class="lbl">Делайте</span><ul><li>Раздайте конверт 2.</li><li>Включите слайд 11 и таймер на 25 минут.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Служба безопасности подняла журналы пропусков и взяла первые объяснительные. Конверт номер два, пять документов. Проверьте свою версию: что её подтверждает и что опровергает?</p></div>
+<div class="do"><span class="lbl">Делайте</span><ul><li>С этого раунда можно продавать подсказку 1.</li><li>На 20-й минуте объявите: «Осталось пять минут».</li><li>Когда таймер закончится, включите слайд 12.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Стоп. Версия номер два и уверенность в процентах. Если версия изменилась — отлично: так и работает расследование.</p></div>
+<div class="note"><span class="lbl">Что обычно происходит</span><p>Алиев отпадает: он ушёл из здания. Появляются новые подозреваемые: Назаров (под его записью сменили телефон клиента), Каримов (был в зоне в ту самую минуту и купил машину), Ли (был в зале и «всё может»). Сильные команды уже в этом раунде замечают, что в обоих эпизодах в зале была Рахимова.</p></div>
+
+</section>
+
+
+<section class="block" id="b6">
+<header class="block-h"><span class="block-n">6</span><h3>Раунд 3 «Развязка» и заключение</h3><span class="block-m">30 мин · старт 1:20 · слайды 13</span></header>
+<p class="goal"><b>Цель блока.</b> Команды доводят расследование до конца и сдают письменное заключение.</p>
+
+<div class="do"><span class="lbl">Делайте</span><ul><li>Раздайте конверт 3.</li><li>Включите слайд 13 и таймер на 30 минут.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Последний конверт, четыре документа. У вас 30 минут: примерно 20 на анализ и 10 на заключение. Заключение сдаётся ровно по таймеру. Пишите разборчиво: я оцениваю только то, что написано.</p></div>
+<div class="do"><span class="lbl">Делайте</span><ul><li>В этом раунде можно продавать подсказки 2 и 3.</li><li>На 20-й минуте: «Осталось десять минут. Начинайте писать заключение».</li><li>На 28-й минуте: «Две минуты».</li><li>По таймеру соберите листы. На каждом запишите время сдачи и число подсказок.</li></ul></div>
+<div class="note"><span class="lbl">Если команда нашла ответ раньше</span><p>Скажите: «Хорошо. Теперь закройте дыры: докажите, почему не виноват каждый из шести остальных, и подготовьте рекомендации для банка».</p></div>
+
+</section>
+
+
+<section class="block" id="b7">
+<header class="block-h"><span class="block-n">7</span><h3>Перерыв</h3><span class="block-m">10 мин · старт 1:50 · слайды 14</span></header>
+<p class="goal"><b>Цель блока.</b> Участники отдыхают, вы считаете баллы.</p>
+
+<div class="do"><span class="lbl">Делайте</span><ul><li>Включите слайд 14 и таймер на 10 минут.</li><li>Оцените заключения по ключу: 2 минуты на команду. Заносите баллы в ведомость.</li><li>Выберите победителей в трёх номинациях по своим наблюдениям.</li><li>Результаты пока не объявляйте.</li></ul></div>
+<div class="note"><span class="lbl">Если команд больше пяти</span><p>Проведите взаимную проверку: команды обмениваются заключениями и оценивают их по слайдам разгадки. Вы только разрешаете споры.</p></div>
+
+</section>
+
+
+<section class="block" id="b8">
+<header class="block-h"><span class="block-n">8</span><h3>Вердикты команд и разгадка</h3><span class="block-m">15 мин · старт 2:00 · слайды 15–19</span></header>
+<p class="goal"><b>Цель блока.</b> Все узнают, что произошло на самом деле, и получают результаты.</p>
+
+<div class="say"><span class="lbl">Говорите</span><p>Каждая команда — одна минута. Кого вы назвали и какое доказательство считаете главным?</p></div>
+<div class="do"><span class="lbl">Делайте</span><ul><li>Слушайте команды по очереди. Не комментируйте и не давайте спорить.</li><li>Затем скажите: «А теперь — как всё было» и ведите по слайдам 16–19.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Старший операционист Камила Рахимова. Шесть лет в банке, лучший сотрудник квартала. 20 февраля её брат Даврон регистрирует фирму «Вега Трейд».</p><p>7 марта Тимур Алиев диктует ей по телефону свой новый пароль. 11 марта в обед она остаётся у столов одна и с незаблокированного компьютера стажёра меняет контактный телефон клиента на номер брата. Начальник отдела утверждает изменение, не посмотрев заявление. Заявления и не было.</p><p>14 марта Алиев заранее отпросился на 16:30. В 16:40 Рахимова отправляет стажёра в архив. В 16:45 звонит брату. В 16:51 садится за компьютер Алиева, входит под его паролем, за минуту вводит платёж и кладёт поддельное поручение в лоток контролёра.</p><p>Контролёр спешит до отсечки. Она звонит по номеру из карточки клиента, и «директор» всё подтверждает. В 16:59 деньги уходят.</p><p>Ни одно правило не было нарушено настолько, чтобы система остановила платёж. Каждое было нарушено чуть-чуть.</p></div>
+<div class="do"><span class="lbl">Делайте</span><ul><li>Объявите баллы от последнего места к первому и вручите призы команде-победителю.</li><li>Назовите победителей в номинациях.</li></ul></div>
+<div class="note"><span class="lbl">Почему баллы объявляют сейчас</span><p>Пока люди ждут результатов, они не слышат вопросов дебрифа. Закройте соревнование и переходите к разговору.</p></div>
+
+</section>
+
+
+<section class="block" id="b9">
+<header class="block-h"><span class="block-n">9</span><h3>Дебриф</h3><span class="block-m">25 мин · старт 2:15 · слайды 20–22</span></header>
+<p class="goal"><b>Цель блока.</b> Участники сами формулируют, что помогло и что помешало, и собирают приёмы для работы.</p>
+
+<p>Вопросы, порядок и подсказки для ведущего — в разделе «Дебриф».</p>
+
+</section>
+
+
+<section class="block" id="b10">
+<header class="block-h"><span class="block-n">10</span><h3>Перенос в работу и закрытие</h3><span class="block-m">15 мин · старт 2:40 · слайды 23–24</span></header>
+<p class="goal"><b>Цель блока.</b> Каждый уходит с одним конкретным действием.</p>
+
+<div class="do"><span class="lbl">Делайте</span><ul><li>Раздайте карточки «С понедельника я…» и анкеты.</li><li>Включите слайд 23 и таймер на 5 минут.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Возьмите карточку. Запишите одно действие, которое вы начнёте делать в работе после сегодняшней игры. Конкретно: что, когда, в какой ситуации. Три минуты.</p><p>Теперь расскажите о своём действии соседу. По минуте на каждого.</p></div>
+<div class="do"><span class="lbl">Делайте</span><ul><li>Попросите двух-трёх желающих прочитать карточку вслух.</li><li>Попросите заполнить анкету: мини-проверка и оценки, 4 минуты.</li><li>Соберите анкеты. Карточки участники забирают с собой.</li></ul></div>
+<div class="say"><span class="lbl">Говорите</span><p>Спасибо за работу. Через две недели я напишу вам и спрошу, что из карточки получилось. Дело закрыто.</p></div>
+
+</section>
+</section>
+
+<section class="sec">
+<h2>Сложные ситуации</h2>
+<div class="scroll"><table class="t trouble">
+<thead><tr><th>Что случилось</th><th>Что делать</th></tr></thead>
+<tbody>
+<tr><td>Команда застряла и молчит</td><td>Спросите о процессе, а не о деле: «Как вы записываете то, что уже знаете?» Предложите купить подсказку.</td></tr>
+<tr><td>Команда нашла ответ задолго до конца</td><td>«Докажите, почему не виноват каждый из шести остальных, и подготовьте рекомендации».</td></tr>
+<tr><td>Один участник решает за всех</td><td>Обратитесь к руководителю группы: «Пусть каждый по кругу назовёт одну находку из своего документа».</td></tr>
+<tr><td>Кто-то сидит в стороне</td><td>Дайте ему отдельный документ: «Проверьте, пожалуйста, журнал звонков. Нужен отдельный взгляд».</td></tr>
+<tr><td>«У нас в банке так не бывает»</td><td>«Банк вымышленный, и регламент у него свой — это документ 5. Чем он отличается от нашего, обсудим в конце».</td></tr>
+<tr><td>Команда спорит с баллами</td><td>«Я оцениваю по единому ключу и только то, что записано в листе». Покажите ключ после игры, при всех не пересчитывайте.</td></tr>
+<tr><td>Не успеваете по времени</td><td>Сократите разминку до 5 минут, вердикты до 30 секунд на команду, в финале оставьте только карточку. Дебриф не короче 15 минут.</td></tr>
+<tr><td>Пришёл опоздавший</td><td>Посадите в команду, где меньше людей. Роль — «свежий взгляд»: слушает версию и ищет в ней дыры.</td></tr>
+<tr><td>Команды подсматривают друг у друга</td><td>Напомните, что это соревнование, и раздвиньте столы.</td></tr>
+<tr><td>Никто не назвал виновного</td><td>Это нормальный исход. Разбор станет ценнее: «На каком шаге версия свернула не туда?»</td></tr>
+<tr><td>Вам задали вопрос, на который вы не знаете ответа</td><td>«Хороший вопрос. Запишу и вернусь с ответом после игры».</td></tr>
+</tbody>
+</table></div>
+</section>
+</section>
+
+<section class="view" id="v-screen" role="tabpanel" hidden>
+  <h1 class="view-h">Экран</h1><p class="view-lead">Слайды для проектора с таймером раундов. Если в зале нет интернета, покажите PDF «Слайды для экрана» и засеките время на телефоне.</p>
+  <div class="stage" id="stage">
+    <div class="stage-slide">
+<div class="slide" data-i="0">
+  <div class="slide-in k-cover">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>1 / 24</span></div>
+    
+    <div class="s-body">
+<p class="s-kicker">Бизнес-игра</p>
+<h1 class="s-hero">Шерлок</h1>
+<p class="s-sub">Дело о платеже № 318</p>
+<p class="s-stamp">870 000 000 сум</p></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="1">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>2 / 24</span></div>
+    <h2 class="s-title">Что мы сегодня тренируем</h2>
+    <div class="s-body">
+<ol class="s-three">
+<li><b>Отделять факты от версий</b><span>Что написано в документе, а что мы додумали сами</span></li>
+<li><b>Замечать детали</b><span>И сводить их из разных источников в одну картину</span></li>
+<li><b>Доказывать выводы</b><span>Утверждение, доказательство, источник</span></li>
+</ol>
+<p class="s-strip">3 часа · 3 конверта · 15 документов · 1 виновный</p></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="2" data-timer="3">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>3 / 24</span></div>
+    <h2 class="s-title">Разминка: факт или версия?</h2>
+    <div class="s-body">
+<p class="s-story">Пятница, 18:40. В отделении банка сработала сигнализация. Охранник обнаружил, что дверь кассового узла открыта, а на полу лежит пустой инкассаторский мешок. Заведующая кассой ушла с работы в 18:05. Через десять минут после сигнала приехал наряд охраны.</p>
+<p class="s-legend"><b class="s-badge s-f">Ф</b> факт: прямо следует из текста &nbsp;&nbsp; <b class="s-badge s-v">В</b> версия: в тексте этого нет</p>
+
+<div class="s-cols">
+<ol class="s-fv" start="1"><li><span>Сигнализация сработала в пятницу вечером.</span></li><li><span>В отделение проник посторонний.</span></li><li><span>Дверь кассового узла была открыта.</span></li><li><span>Из кассы пропали деньги.</span></li></ol><ol class="s-fv" start="5"><li><span>Заведующая кассой ушла раньше, чем сработала сигнализация.</span></li><li><span>Заведующая кассой не закрыла дверь.</span></li><li><span>Охранник вызвал наряд.</span></li><li><span>Наряд приехал в 18:50.</span></li></ol>
+</div></div>
+    <div class="s-timer" aria-live="off">03:00</div>
+  </div>
+</div>
+<div class="slide" data-i="3">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>4 / 24</span></div>
+    <h2 class="s-title">Фактов всего четыре</h2>
+    <div class="s-body">
+
+<div class="s-cols">
+<ol class="s-fv" start="1"><li><b class="s-badge s-f">Ф</b><span>Сигнализация сработала в пятницу вечером.</span></li><li><b class="s-badge s-v">В</b><span>В отделение проник посторонний.</span></li><li><b class="s-badge s-f">Ф</b><span>Дверь кассового узла была открыта.</span></li><li><b class="s-badge s-v">В</b><span>Из кассы пропали деньги.</span></li></ol><ol class="s-fv" start="5"><li><b class="s-badge s-f">Ф</b><span>Заведующая кассой ушла раньше, чем сработала сигнализация.</span></li><li><b class="s-badge s-v">В</b><span>Заведующая кассой не закрыла дверь.</span></li><li><b class="s-badge s-v">В</b><span>Охранник вызвал наряд.</span></li><li><b class="s-badge s-f">Ф</b><span>Наряд приехал в 18:50.</span></li></ol>
+</div>
+<p class="s-strip">Остальное мы достроили сами. Весь день спрашивайте себя: в каком документе это написано?</p></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="4">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>5 / 24</span></div>
+    <h2 class="s-title">Пятница, 14 марта, 16:59</h2>
+    <div class="s-body">
+<p class="s-task">Со счёта ООО «Гранд Текстиль» уходит 870 000 000 сум. В понедельник клиент заявляет: такого платежа он не отправлял. Деньги уже обналичены.</p>
+<p class="s-lead">Вы — рабочая группа служебного расследования «Чинор Банка». Директор филиала ждёт ответы:</p>
+<ol class="s-four">
+<li>Кто это сделал?</li>
+<li>Как именно?</li>
+<li>Почему не сработали контроли?</li>
+<li>Что изменить?</li>
+</ol></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="5">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>6 / 24</span></div>
+    <h2 class="s-title">Шесть правил</h2>
+    <div class="s-body">
+<ol class="s-rules"><li>Работаем только с материалами дела. Интернет и телефоны не нужны.</li><li>Конверт вскрываем по сигналу ведущего.</li><li>Каждый вывод подкрепляем номером документа.</li><li>Ведущий не отвечает на вопросы по сути дела. Можно купить подсказку: минус 5 баллов, не больше трёх.</li><li>С другими командами не обмениваемся: это соревнование.</li><li>Заключение сдаём по таймеру. Каждая минута опоздания — минус 5 баллов.</li></ol></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="6">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>7 / 24</span></div>
+    <h2 class="s-title">Роли в команде</h2>
+    <div class="s-body">
+<div class="s-cards"><div><b>Руководитель группы</b><span>«Что мы уже знаем точно? Что проверяем дальше?»</span></div><div><b>Хронист</b><span>«Во сколько это было? Где это записано?»</span></div><div><b>Аналитик</b><span>«Эти два документа сходятся?»</span></div><div><b>Скептик</b><span>«А что говорит против этой версии?»</span></div><div><b>Секретарь</b><span>«Как мы это сформулируем в заключении?»</span></div></div>
+<p class="s-strip">Распределите карточки ролей за одну минуту</p></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="7">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>8 / 24</span></div>
+    <h2 class="s-title">Как считаются баллы</h2>
+    <div class="s-body">
+<div class="s-score"><div><b>30</b><span>Кто</span></div><div><b>30</b><span>Как</span></div><div><b>20</b><span>Доказательства</span></div><div><b>20</b><span>Контроли и рекомендации</span></div></div>
+<p class="s-task">Оценивается только то, что записано в листе заключения.</p>
+<p class="s-tip">Подсказка: минус 5 баллов, не больше трёх. Минута опоздания: минус 5 баллов.</p></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="8" data-timer="25">
+  <div class="slide-in k-round">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>9 / 24</span></div>
+    
+    <div class="s-body">
+<p class="s-kicker">Раунд 1</p>
+<h2 class="s-big">«Сигнал»</h2>
+<p class="s-lead">Конверт 1 · 6 документов</p>
+<p class="s-task">Поймите, что произошло, и постройте первую версию.</p>
+<p class="s-tip">Записывайте факты с номером документа.</p></div>
+    <div class="s-timer" aria-live="off">25:00</div>
+  </div>
+</div>
+<div class="slide" data-i="9" data-timer="1">
+  <div class="slide-in k-round">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>10 / 24</span></div>
+    
+    <div class="s-body">
+<p class="s-kicker">Протокол версий</p>
+<h2 class="s-big">Версия № 1</h2>
+<p class="s-task">Запишите в лист заключения: кого вы подозреваете и на сколько процентов уверены.</p>
+<p class="s-tip">Вслух не говорим. Одна минута.</p></div>
+    <div class="s-timer" aria-live="off">01:00</div>
+  </div>
+</div>
+<div class="slide" data-i="10" data-timer="25">
+  <div class="slide-in k-round">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>11 / 24</span></div>
+    
+    <div class="s-body">
+<p class="s-kicker">Раунд 2</p>
+<h2 class="s-big">«Следы»</h2>
+<p class="s-lead">Конверт 2 · 5 документов</p>
+<p class="s-task">Проверьте версию. Что её подтверждает? Что опровергает?</p>
+<p class="s-tip">Запись в журнале и человек — не одно и то же.</p></div>
+    <div class="s-timer" aria-live="off">25:00</div>
+  </div>
+</div>
+<div class="slide" data-i="11" data-timer="1">
+  <div class="slide-in k-round">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>12 / 24</span></div>
+    
+    <div class="s-body">
+<p class="s-kicker">Протокол версий</p>
+<h2 class="s-big">Версия № 2</h2>
+<p class="s-task">Запишите в лист заключения: кого вы подозреваете и на сколько процентов уверены.</p>
+<p class="s-tip">Вслух не говорим. Одна минута.</p></div>
+    <div class="s-timer" aria-live="off">01:00</div>
+  </div>
+</div>
+<div class="slide" data-i="12" data-timer="30">
+  <div class="slide-in k-round">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>13 / 24</span></div>
+    
+    <div class="s-body">
+<p class="s-kicker">Раунд 3</p>
+<h2 class="s-big">«Развязка»</h2>
+<p class="s-lead">Конверт 3 · 4 документа</p>
+<p class="s-task">20 минут на анализ, 10 минут на заключение.</p>
+<p class="s-tip">Заключение сдаётся ровно по таймеру.</p></div>
+    <div class="s-timer" aria-live="off">30:00</div>
+  </div>
+</div>
+<div class="slide" data-i="13" data-timer="10">
+  <div class="slide-in k-round">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>14 / 24</span></div>
+    
+    <div class="s-body">
+<p class="s-kicker">Заключения сданы</p>
+<h2 class="s-big">Перерыв</h2>
+<p class="s-task">Ведущий считает баллы. Встречаемся через 10 минут.</p></div>
+    <div class="s-timer" aria-live="off">10:00</div>
+  </div>
+</div>
+<div class="slide" data-i="14">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>15 / 24</span></div>
+    <h2 class="s-title">Вердикты команд</h2>
+    <div class="s-body">
+<p class="s-task">Одна минута на команду:</p>
+<ol class="s-four">
+<li>Кого вы назвали?</li>
+<li>Какое доказательство считаете главным?</li>
+</ol></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="15">
+  <div class="slide-in k-dense">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>16 / 24</span></div>
+    <h2 class="s-title">Кто мог сидеть за компьютером?</h2>
+    <div class="s-body">
+<table class="s-table">
+<thead><tr><th>Сотрудник</th><th>11 марта, 13:12 · смена телефона</th><th>14 марта, 16:51–16:53 · ввод платежа</th></tr></thead>
+<tbody><tr><td>Ким О. В.</td><td>В своём кабинете с Каримовым, дверь закрыта</td><td>Вне здания с 14:44</td></tr><tr><td>Юсупова Н. Б.</td><td>Отгул, в здание не входила</td><td>За своим столом, говорит по телефону 16:49–16:54; рядом Ли</td></tr><tr><td>Алиев Т. Р.</td><td>На обеде 13:02–13:47</td><td>Вышел из здания в 16:34</td></tr><tr><td>Назаров Ш. У.</td><td>На обеде 13:02–13:48</td><td>В архиве 16:43–16:59</td></tr><tr><td>Каримов Р. И.</td><td>В кабинете Ким 13:05–13:15</td><td>Вышел из зоны в 16:27</td></tr><tr><td>Ли С. В.</td><td>В серверной, в зону не входил</td><td>У принтера рядом с Юсуповой</td></tr><tr class="hit"><td>Рахимова К. А.</td><td>В зале с 12:55. Одна у столов</td><td>В зале. Своих операций с 16:44 до 17:03 нет</td></tr></tbody>
+</table></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="16">
+  <div class="slide-in k-dense">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>17 / 24</span></div>
+    <h2 class="s-title">Как это было сделано</h2>
+    <div class="s-body">
+<ol class="s-timeline">
+<li><b>7 марта</b><span>Алиев диктует Рахимовой свой пароль по телефону</span></li>
+<li><b>11 марта, 13:12</b><span>С незаблокированного компьютера стажёра она меняет телефон клиента на номер брата</span></li>
+<li><b>14 марта, 16:40</b><span>Алиев ушёл. Стажёра она отправляет в архив</span></li>
+<li><b>16:45</b><span>Звонит брату со своего рабочего телефона</span></li>
+<li><b>16:51–16:53</b><span>Входит под паролем Алиева, вводит платёж, подкладывает поддельное поручение</span></li>
+<li><b>16:56</b><span>Контролёр звонит по подменённому номеру. «Директор» подтверждает</span></li>
+</ol></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="17">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>18 / 24</span></div>
+    <h2 class="s-title">Что её выдало</h2>
+    <div class="s-body">
+<ol class="s-three">
+<li><b>Звонок в 16:45</b><span>С номера 114 на подменённый номер. Платежа в системе ещё не было</span></li>
+<li><b>Рахимов Д. А.</b><span>Директор «Вега Трейд» и её экстренный контакт: брат</span></li>
+<li><b>Две неправды</b><span>«Разбирала очередь» — операций нет. «Не говорила по телефону» — говорила</span></li>
+</ol>
+<p class="s-strip">Лучший сотрудник квартала. Взысканий нет.</p></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="18">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>19 / 24</span></div>
+    <h2 class="s-title">Каждое правило нарушено чуть-чуть</h2>
+    <div class="s-body">
+<ol class="s-rules">
+<li>Пароль продиктован вслух</li>
+<li>Компьютер оставлен незаблокированным</li>
+<li>Изменение утверждено без заявления</li>
+<li>Звонок по номеру, который сменили три дня назад</li>
+<li>Поручение принято без отметки «Принято»</li>
+<li>Подпись проверена в спешке перед отсечкой</li>
+</ol></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="19">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>20 / 24</span></div>
+    <h2 class="s-title">Давайте разберём</h2>
+    <div class="s-body">
+<ol class="s-four">
+<li>Кого вы подозревали после первого раунда? Что заставило передумать?</li>
+<li>Какой документ оказался важнее, чем выглядел?</li>
+<li>Что в работе команды помогало, а что мешало?</li>
+<li>Где это встречается в вашей работе?</li>
+</ol></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="20">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>21 / 24</span></div>
+    <h2 class="s-title">Метод Шерлока</h2>
+    <div class="s-body">
+<ol class="s-method"><li><b>Факт или версия</b><span>Записывайте факт вместе с источником. Всё остальное — версия, пока не проверена.</span></li><li><b>Лента времени</b><span>Выстройте события по минутам. Противоречия становятся видны сразу.</span></li><li><b>Таблица «кто — где — когда»</b><span>Исключайте невозможное. Круг сужается сам.</span></li><li><b>Поиск опровержения</b><span>К каждой версии задайте вопрос: «Что её ломает?»</span></li><li><b>Вывод с опорой</b><span>Утверждение, доказательство, источник. Без третьего звена это мнение.</span></li></ol></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="21">
+  <div class="slide-in ">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>22 / 24</span></div>
+    <h2 class="s-title">Ловушки мышления</h2>
+    <div class="s-body">
+<ol class="s-method"><li><b>Якорь</b><span>Первая версия держит крепче всех следующих. В игре это учётная запись Алиева.</span></li><li><b>Подтверждение</b><span>Мы ищем то, что поддерживает версию, и пропускаем то, что её ломает.</span></li><li><b>Ореол</b><span>«Лучший сотрудник» вне подозрений. Репутация — не алиби.</span></li><li><b>Слух вместо улики</b><span>Кредит, ставки, машина. Мотив есть у многих, доказательств нет ни у кого.</span></li><li><b>Спешка</b><span>За три минуты до отсечки подпись сверяют «на глаз».</span></li></ol></div>
+    
+  </div>
+</div>
+<div class="slide" data-i="22" data-timer="5">
+  <div class="slide-in k-round">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>23 / 24</span></div>
+    
+    <div class="s-body">
+<p class="s-kicker">Перенос в работу</p>
+<h2 class="s-big">С понедельника я…</h2>
+<p class="s-task">Одно действие, которое вы начнёте делать в работе. Что, когда, в какой ситуации.</p>
+<p class="s-tip">3 минуты на карточку, затем расскажите соседу.</p></div>
+    <div class="s-timer" aria-live="off">05:00</div>
+  </div>
+</div>
+<div class="slide" data-i="23">
+  <div class="slide-in k-cover">
+    <div class="s-top"><span>Шерлок · дело № 27-Р</span><span>24 / 24</span></div>
+    
+    <div class="s-body">
+<p class="s-kicker">Спасибо за работу</p>
+<h1 class="s-hero">Дело закрыто</h1>
+<p class="s-sub">Заполните, пожалуйста, анкету</p></div>
+    
+  </div>
+</div></div>
+    <div class="stage-bar">
+      <button type="button" class="btn" id="s-prev" aria-label="Предыдущий слайд">Назад</button>
+      <span class="s-count" id="s-count">1 / 24</span>
+      <button type="button" class="btn primary" id="s-next" aria-label="Следующий слайд">Дальше</button>
+      <select id="s-jump" aria-label="Перейти к слайду"><option value="0">1. Титул</option><option value="1">2. Что тренируем</option><option value="2">3. Разминка</option><option value="3">4. Разминка: ответы</option><option value="4">5. Легенда</option><option value="5">6. Правила</option><option value="6">7. Роли</option><option value="7">8. Баллы</option><option value="8">9. Раунд 1</option><option value="9">10. Версия № 1</option><option value="10">11. Раунд 2</option><option value="11">12. Версия № 2</option><option value="12">13. Раунд 3</option><option value="13">14. Перерыв</option><option value="14">15. Вердикты команд</option><option value="15">16. Разгадка: кто где был</option><option value="16">17. Разгадка: схема</option><option value="17">18. Разгадка: доказательства</option><option value="18">19. Что не сработало</option><option value="19">20. Дебриф</option><option value="20">21. Метод Шерлока</option><option value="21">22. Ловушки мышления</option><option value="22">23. С понедельника я…</option><option value="23">24. Дело закрыто</option></select>
+      <div class="t-ctl" id="t-ctl" hidden>
+        <span class="t-val" id="t-val">00:00</span>
+        <button type="button" class="btn primary" id="t-go">Старт</button>
+        <button type="button" class="btn" id="t-reset">Сброс</button>
+        <button type="button" class="btn" id="t-plus">+1 мин</button>
+      </div>
+      <button type="button" class="btn" id="s-full">На весь экран</button>
+    </div>
+  </div>
+  <p class="small stage-note">Клавиши: стрелки влево и вправо листают слайды, пробел запускает и останавливает таймер. Со слайда 16 начинается разгадка.</p>
+</section>
+
+<section class="view" id="v-case" role="tabpanel" hidden>
+  <h1 class="view-h">Материалы дела</h1><p class="view-lead">15 документов в трёх конвертах. Здесь их удобно читать и решать дело самому. Для печати берите PDF «Раздаточные материалы»: там ещё бланки, карточки и ключ.</p>
+  <div class="filters" role="group" aria-label="Фильтр по конвертам">
+    <button type="button" class="btn" data-env-filter="0" aria-pressed="true">Все</button>
+    <button type="button" class="btn" data-env-filter="1" aria-pressed="false">Конверт 1 · Сигнал</button>
+    <button type="button" class="btn" data-env-filter="2" aria-pressed="false">Конверт 2 · Следы</button>
+    <button type="button" class="btn" data-env-filter="3" aria-pressed="false">Конверт 3 · Развязка</button>
+  </div>
+  <div class="docs" id="docs">
+<article class="sheet doc" data-env="1" data-doc="1">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 1 · Сигнал</span>
+    <span class="docno">Док. 1</span>
+  </header>
+  <h3 class="sheet-t">Распоряжение о служебном расследовании</h3>
+  <div class="sheet-b">
+<p class="letterhead">АКБ «Чинор Банк» · Центральный филиал</p>
+<p class="doc-kicker">Распоряжение № 27-Р от 17 марта</p>
+<p><b>Что произошло.</b> В пятницу, 14 марта, в 16:59 со счёта клиента ООО «Гранд Текстиль» исполнен платёж № 318 на 870 000 000 сум в пользу ООО «Вега Трейд» (счёт в другом банке). Основание — бумажное платёжное поручение. В понедельник, 17 марта, клиент заявил, что такого поручения не давал. К этому времени деньги со счёта получателя уже сняты.</p>
+<p><b>Что известно.</b> Платёж введён и подтверждён в операционном отделе филиала. Вход в операционную зону — только по личным картам. Доступ есть у семи сотрудников:</p>
+<ol class="tight">
+<li>Ким Ольга Викторовна — начальник операционного отдела</li>
+<li>Юсупова Нигора Бахтияровна — контролёр</li>
+<li>Алиев Тимур Рашидович — операционист</li>
+<li>Рахимова Камила Анваровна — старший операционист</li>
+<li>Назаров Шахзод Улугбекович — операционист-стажёр</li>
+<li>Каримов Рустам Икрамович — клиентский менеджер</li>
+<li>Ли Сергей Владимирович — системный администратор</li>
+</ol>
+<p>По данным системы контроля доступа (СКУД), никто, кроме этих семи сотрудников, в марте в операционную зону не входил.</p>
+<p><b>Поручаю рабочей группе установить:</b></p>
+<ol class="tight">
+<li>Кто из сотрудников совершил хищение.</li>
+<li>Как оно было совершено — по шагам.</li>
+<li>Почему не сработали контрольные процедуры.</li>
+<li>Что изменить, чтобы это не повторилось.</li>
+</ol>
+<p>Материалы поступают в рабочую группу тремя пакетами по мере готовности. Срок представления заключения — сегодня.</p>
+<p class="sign">Директор филиала <span class="sigline"></span> Б. Н. Салимов</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="1" data-doc="2">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 1 · Сигнал</span>
+    <span class="docno">Док. 2</span>
+  </header>
+  <h3 class="sheet-t">Заявление клиента</h3>
+  <div class="sheet-b">
+<p class="letterhead">ООО «Гранд Текстиль»</p>
+<p class="doc-kicker">Директору Центрального филиала АКБ «Чинор Банк» · 17 марта</p>
+<p>14 марта с расчётного счёта нашей компании списано 870 000 000 сум в пользу ООО «Вега Трейд» с назначением «Оплата за оборудование по договору № 47 от 3 марта».</p>
+<p>Заявляю:</p>
+<ol class="tight">
+<li>Такого платёжного поручения я не подписывал и в банк не передавал.</li>
+<li>Договора № 47 с ООО «Вега Трейд» у нас нет. С этой организацией мы никогда не работали.</li>
+<li>14 марта представители нашей компании в банк не приезжали.</li>
+<li>Из банка мне 14 марта никто не звонил.</li>
+<li>Наш контактный телефон для подтверждения платежей прежний: <span class="nowrap">+998 71 200-14-47</span>. Заявлений о его смене мы не подавали.</li>
+</ol>
+<p>Прошу вернуть средства на счёт и провести проверку.</p>
+<p class="sign">Директор <span class="sigline"></span> Ф. Т. Умаров</p>
+<p class="doc-note">Отметка банка: заявление принято 17 марта в 09:40, вх. № 512.</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="1" data-doc="3">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 1 · Сигнал</span>
+    <span class="docno">Док. 3</span>
+  </header>
+  <h3 class="sheet-t">План операционного зала и телефонный справочник</h3>
+  <div class="sheet-b">
+<p>Операционная зона, 1 этаж. Каждый сотрудник работает в АБС (автоматизированной банковской системе) за своим закреплённым рабочим местом. Кружок — место сотрудника.</p>
+
+<svg class="plan" viewBox="0 0 720 372" role="img" aria-label="План операционного зала">
+  <rect x="10" y="10" width="700" height="340" class="p-wall"/>
+  <rect x="10" y="10" width="210" height="120" class="p-room"/>
+  <line x1="150" y1="130" x2="196" y2="130" class="p-gap"/>
+  <text x="115" y="52" class="p-lab" text-anchor="middle">Кабинет начальника отдела</text>
+  <text x="115" y="74" class="p-id" text-anchor="middle">НО-01</text>
+  <text x="115" y="94" class="p-name" text-anchor="middle">Ким О. В. · тел. 111</text>
+  <text x="173" y="146" class="p-small" text-anchor="middle">дверь</text>
+
+  <rect x="470" y="34" width="150" height="62" class="p-desk"/>
+  <text x="545" y="58" class="p-id" text-anchor="middle">КН-01</text>
+  <text x="545" y="78" class="p-name" text-anchor="middle">Юсупова Н. Б. · тел. 112</text>
+  <circle cx="545" cy="112" r="9" class="p-seat"/>
+  <rect x="636" y="34" width="56" height="44" class="p-desk"/>
+  <text x="664" y="61" class="p-small" text-anchor="middle">принтер</text>
+  <text x="545" y="140" class="p-small" text-anchor="middle">сидит лицом к стене</text>
+
+  <rect x="232" y="228" width="140" height="62" class="p-desk"/>
+  <text x="302" y="252" class="p-id" text-anchor="middle">ОП-03</text>
+  <text x="302" y="272" class="p-name" text-anchor="middle">Рахимова К. А. · тел. 114</text>
+  <circle cx="302" cy="306" r="9" class="p-seat"/>
+
+  <rect x="388" y="228" width="140" height="62" class="p-desk"/>
+  <text x="458" y="252" class="p-id" text-anchor="middle">ОП-04</text>
+  <text x="458" y="272" class="p-name" text-anchor="middle">Алиев Т. Р. · тел. 113</text>
+  <circle cx="458" cy="306" r="9" class="p-seat"/>
+
+  <rect x="544" y="228" width="140" height="62" class="p-desk"/>
+  <text x="614" y="252" class="p-id" text-anchor="middle">ОП-05</text>
+  <text x="614" y="272" class="p-name" text-anchor="middle">Назаров Ш. У. · тел. 115</text>
+  <circle cx="614" cy="306" r="9" class="p-seat"/>
+
+  <line x1="458" y1="150" x2="458" y2="220" class="p-dim"/>
+  <text x="468" y="190" class="p-small">≈ 6 м</text>
+
+  <line x1="50" y1="350" x2="120" y2="350" class="p-gap"/>
+  <text x="85" y="340" class="p-small" text-anchor="middle">вход</text>
+  <text x="85" y="368" class="p-small" text-anchor="middle">считыватель карт</text>
+</svg>
+<div class="cols2">
+<div>
+<p class="mini-h">Внутренние телефоны</p>
+
+<div class="scroll"><table class="log compact">
+<thead><tr><th>Номер</th><th>Сотрудник</th><th>Где стоит</th></tr></thead>
+<tbody><tr><td>111</td><td>Ким О. В.</td><td>кабинет НО-01</td></tr><tr><td>112</td><td>Юсупова Н. Б.</td><td>стол КН-01</td></tr><tr><td>113</td><td>Алиев Т. Р.</td><td>стол ОП-04</td></tr><tr><td>114</td><td>Рахимова К. А.</td><td>стол ОП-03</td></tr><tr><td>115</td><td>Назаров Ш. У.</td><td>стол ОП-05</td></tr><tr><td>121</td><td>Каримов Р. И.</td><td>каб. 204, 2 этаж</td></tr><tr><td>130</td><td>Ли С. В.</td><td>каб. 108, 1 этаж</td></tr></tbody>
+</table></div>
+</div>
+<div>
+<p class="mini-h">Пояснения</p>
+<ul class="tight">
+<li>ОП — рабочее место операциониста, КН — контролёра, НО — начальника отдела.</li>
+<li>Столы операционистов стоят в ряд. Контролёр сидит к ним спиной.</li>
+<li>Архив находится в цокольном этаже, вход по карте.</li>
+<li>Серверная — 1 этаж, вход по карте.</li>
+<li>У клиентского менеджера и системного администратора рабочих мест в зале нет.</li>
+</ul>
+</div>
+</div></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="1" data-doc="4">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 1 · Сигнал</span>
+    <span class="docno">Док. 4</span>
+  </header>
+  <h3 class="sheet-t">Выписка из журнала операций АБС</h3>
+  <div class="sheet-b">
+<p>14 марта, 16:20–17:10. Операционный отдел. Сумма указана в сумах.</p>
+
+<div class="scroll"><table class="log">
+<thead><tr><th>Время</th><th>Учётная запись</th><th>Место</th><th>Действие</th><th>Сумма</th></tr></thead>
+<tbody><tr><td>16:21</td><td>K.RAKHIMOVA</td><td>ОП-03</td><td>Ввод п/п № 306</td><td>12 400 000</td></tr><tr><td>16:23</td><td>N.YUSUPOVA</td><td>КН-01</td><td>Контроль № 305 — подтверждён</td><td></td></tr><tr><td>16:24</td><td>SH.NAZAROV</td><td>ОП-05</td><td>Ввод п/п № 307</td><td>3 150 000</td></tr><tr><td>16:25</td><td>K.RAKHIMOVA</td><td>ОП-03</td><td>Ввод п/п № 308</td><td>41 000 000</td></tr><tr><td>16:26</td><td>T.ALIEV</td><td>ОП-04</td><td>Ввод п/п № 309</td><td>48 700 000</td></tr><tr><td>16:27</td><td>N.YUSUPOVA</td><td>КН-01</td><td>Контроль № 306, 307 — подтверждены</td><td></td></tr><tr><td>16:28</td><td>T.ALIEV</td><td>ОП-04</td><td>Ввод п/п № 310</td><td>7 900 000</td></tr><tr><td>16:29</td><td>K.RAKHIMOVA</td><td>ОП-03</td><td>Ввод п/п № 311</td><td>9 650 000</td></tr><tr><td>16:30</td><td>T.ALIEV</td><td>ОП-04</td><td>Выход из системы</td><td></td></tr><tr><td>16:31</td><td>N.YUSUPOVA</td><td>КН-01</td><td>Контроль № 308–310 — подтверждены</td><td></td></tr><tr><td>16:33</td><td>K.RAKHIMOVA</td><td>ОП-03</td><td>Ввод п/п № 312</td><td>215 000 000</td></tr><tr><td>16:35</td><td>N.YUSUPOVA</td><td>КН-01</td><td>Контроль № 311, 312 — подтверждены</td><td></td></tr><tr><td>16:36</td><td>SH.NAZAROV</td><td>ОП-05</td><td>Ввод п/п № 313</td><td>1 800 000</td></tr><tr><td>16:38</td><td>K.RAKHIMOVA</td><td>ОП-03</td><td>Ввод п/п № 314</td><td>26 300 000</td></tr><tr><td>16:39</td><td>SH.NAZAROV</td><td>ОП-05</td><td>Ввод п/п № 315</td><td>9 400 000</td></tr><tr><td>16:40</td><td>N.YUSUPOVA</td><td>КН-01</td><td>Контроль № 313, 314 — подтверждены</td><td></td></tr><tr><td>16:41</td><td>K.RAKHIMOVA</td><td>ОП-03</td><td>Ввод п/п № 316</td><td>17 250 000</td></tr><tr><td>16:43</td><td>N.YUSUPOVA</td><td>КН-01</td><td>Контроль № 315 — подтверждён</td><td></td></tr><tr><td>16:44</td><td>K.RAKHIMOVA</td><td>ОП-03</td><td>Ввод п/п № 317</td><td>5 600 000</td></tr><tr><td>16:46</td><td>N.YUSUPOVA</td><td>КН-01</td><td>Контроль № 316 — подтверждён</td><td></td></tr><tr><td>16:48</td><td>N.YUSUPOVA</td><td>КН-01</td><td>Контроль № 317 — подтверждён</td><td></td></tr><tr><td>16:51</td><td>T.ALIEV</td><td>ОП-04</td><td>Вход в систему</td><td></td></tr><tr><td>16:52</td><td>T.ALIEV</td><td>ОП-04</td><td>Ввод п/п № 318: «Гранд Текстиль» → «Вега Трейд»</td><td>870 000 000</td></tr><tr><td>16:53</td><td>T.ALIEV</td><td>ОП-04</td><td>Выход из системы</td><td></td></tr><tr><td>16:58</td><td>N.YUSUPOVA</td><td>КН-01</td><td>Контроль № 318 — подтверждён. Отметка: «звонок клиенту 16:56, подтверждено»</td><td></td></tr><tr><td>16:59</td><td>СИСТЕМА</td><td>—</td><td>Отправка рейса: п/п № 313–318</td><td></td></tr><tr><td>17:03</td><td>K.RAKHIMOVA</td><td>ОП-03</td><td>Ввод п/п № 319</td><td>18 200 000</td></tr><tr><td>17:04</td><td>SH.NAZAROV</td><td>ОП-05</td><td>Ввод п/п № 320</td><td>2 700 000</td></tr><tr><td>17:06</td><td>K.RAKHIMOVA</td><td>ОП-03</td><td>Ввод п/п № 321</td><td>33 900 000</td></tr><tr><td>17:09</td><td>N.YUSUPOVA</td><td>КН-01</td><td>Контроль № 319–321 — подтверждены, исполнение 17 марта</td><td></td></tr></tbody>
+</table></div>
+<p class="doc-note">П/п — платёжное поручение. Рейс — отправка пакета платежей в расчётную систему. Последний рейс дня уходит в 17:00 («отсечка»): платежи, подтверждённые позже, исполняются на следующий рабочий день.</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="1" data-doc="5">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 1 · Сигнал</span>
+    <span class="docno">Док. 5</span>
+  </header>
+  <h3 class="sheet-t">Выдержки из регламента операционного отдела</h3>
+  <div class="sheet-b">
+<p class="mini-h">2. Учётные записи и рабочее место</p>
+<p class="rule"><b>2.1.</b> Сотрудник работает в АБС только под своей учётной записью. Передавать пароль другим лицам, включая коллег и руководителя, запрещено.</p>
+<p class="rule"><b>2.2.</b> Уходя с рабочего места, сотрудник блокирует компьютер. Если этого не сделать, блокировка включится автоматически через 15 минут бездействия.</p>
+<p class="rule"><b>2.3.</b> Пароль меняется не реже одного раза в 30 дней. Забытый пароль сбрасывает системный администратор по заявке сотрудника. Каждый сброс записывается в журнал.</p>
+<p class="mini-h">3. Платежи юридических лиц</p>
+<p class="rule"><b>3.1.</b> Платёж проходит два этапа: ввод (операционист) и контроль (контролёр). Один сотрудник не может выполнить оба этапа по одному платежу.</p>
+<p class="rule"><b>3.2.</b> Бумажное платёжное поручение принимается от представителя клиента, регистрируется в журнале приёма документов и получает отметку «Принято» с датой и временем.</p>
+<p class="rule"><b>3.3.</b> Контролёр сверяет подпись и оттиск печати на поручении с карточкой образцов.</p>
+<p class="rule"><b>3.4.</b> Платёж от 500 000 000 сум контролёр подтверждает звонком клиенту по контактному телефону из карточки клиента в АБС. Отметка о звонке вносится в АБС.</p>
+<p class="rule"><b>3.5.</b> Платежи, подтверждённые до 17:00, исполняются текущим днём.</p>
+<p class="mini-h">4. Изменение данных клиента</p>
+<p class="rule"><b>4.1.</b> Контактные данные клиента меняются только по письменному заявлению, подписанному руководителем клиента.</p>
+<p class="rule"><b>4.2.</b> Изменение вводит операционист. Начальник отдела утверждает его после проверки оригинала заявления.</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="1" data-doc="6">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 1 · Сигнал</span>
+    <span class="docno">Док. 6</span>
+  </header>
+  <h3 class="sheet-t">Справка отдела кадров и службы безопасности</h3>
+  <div class="sheet-b">
+<p>Сотрудники, имеющие доступ в операционную зону Центрального филиала. Данные на 17 марта.</p>
+
+<div class="scroll"><table class="log wrap">
+<thead><tr><th>Сотрудник</th><th>Должность, стаж</th><th>Отметки</th><th>Экстренный контакт</th></tr></thead>
+<tbody><tr><td>Ким Ольга Викторовна</td><td>начальник отдела, 11 лет</td><td>Благодарность правления (2023). Взысканий нет.</td><td>Ким А. С., супруг</td></tr><tr><td>Юсупова Нигора Бахтияровна</td><td>контролёр, 8 лет</td><td>В феврале обращалась за материальной помощью: лечение матери. 10–11 марта — отгулы.</td><td>Юсупов Б. Т., супруг</td></tr><tr><td>Алиев Тимур Рашидович</td><td>операционист, 4 года</td><td>Выговор (2024): пароль на стикере у монитора. По данным службы безопасности — просрочка по потребительскому кредиту в январе–феврале.</td><td>Алиева С. М., супруга</td></tr><tr><td>Рахимова Камила Анваровна</td><td>старший операционист, 6 лет</td><td>«Лучший сотрудник IV квартала». Взысканий нет.</td><td>Рахимов Д. А., брат</td></tr><tr><td>Назаров Шахзод Улугбекович</td><td>операционист-стажёр, 2 месяца</td><td>Испытательный срок до 12 апреля. Замечание (февраль): уходит с места, не блокируя компьютер. Со слов коллег — делает ставки на спорт.</td><td>Назарова М. К., мать</td></tr><tr><td>Каримов Рустам Икрамович</td><td>клиентский менеджер, 5 лет</td><td>Ведёт клиента ООО «Гранд Текстиль». По данным службы безопасности — в марте купил автомобиль примерно за 420 000 000 сум.</td><td>Каримова Л. Р., супруга</td></tr><tr><td>Ли Сергей Владимирович</td><td>системный администратор, 3 года</td><td>Замечание (2024): установка нелицензионной программы на рабочий компьютер.</td><td>Ли В. Н., отец</td></tr></tbody>
+</table></div>
+<p class="doc-note">Экстренный контакт — человек, которому банк звонит, если с сотрудником что-то случилось. Указывается сотрудником при приёме на работу.</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="2" data-doc="7">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 2 · Следы</span>
+    <span class="docno">Док. 7</span>
+  </header>
+  <h3 class="sheet-t">Журнал СКУД за 14 марта</h3>
+  <div class="sheet-b">
+<p>Система контроля доступа, 14:30–18:10. На 14:30 в операционной зоне находились: Ким О. В., Юсупова Н. Б., Алиев Т. Р., Рахимова К. А., Назаров Ш. У.</p>
+
+<div class="scroll"><table class="log">
+<thead><tr><th>Время</th><th>Сотрудник</th><th>Точка</th><th>Проход</th></tr></thead>
+<tbody><tr><td>14:41</td><td>Ким О. В.</td><td>ОЗ</td><td>выход</td></tr><tr><td>14:44</td><td>Ким О. В.</td><td>Т</td><td>выход</td></tr><tr><td>15:02</td><td>Ли С. В.</td><td>СР</td><td>вход</td></tr><tr><td>15:10</td><td>Назаров Ш. У.</td><td>ОЗ</td><td>выход</td></tr><tr><td>15:16</td><td>Назаров Ш. У.</td><td>ОЗ</td><td>вход</td></tr><tr><td>15:25</td><td>Юсупова Н. Б.</td><td>ОЗ</td><td>выход</td></tr><tr><td>15:33</td><td>Юсупова Н. Б.</td><td>ОЗ</td><td>вход</td></tr><tr><td>15:40</td><td>Ли С. В.</td><td>СР</td><td>выход</td></tr><tr><td>15:52</td><td>Рахимова К. А.</td><td>ОЗ</td><td>выход</td></tr><tr><td>15:58</td><td>Рахимова К. А.</td><td>ОЗ</td><td>вход</td></tr><tr><td>16:20</td><td>Каримов Р. И.</td><td>ОЗ</td><td>вход</td></tr><tr><td>16:27</td><td>Каримов Р. И.</td><td>ОЗ</td><td>выход</td></tr><tr><td>16:32</td><td>Алиев Т. Р.</td><td>ОЗ</td><td>выход</td></tr><tr><td>16:34</td><td>Алиев Т. Р.</td><td>Т</td><td>выход</td></tr><tr><td>16:41</td><td>Назаров Ш. У.</td><td>ОЗ</td><td>выход</td></tr><tr><td>16:43</td><td>Назаров Ш. У.</td><td>АР</td><td>вход</td></tr><tr><td>16:45</td><td>Ли С. В.</td><td>ОЗ</td><td>вход</td></tr><tr><td>16:59</td><td>Назаров Ш. У.</td><td>АР</td><td>выход</td></tr><tr><td>17:01</td><td>Назаров Ш. У.</td><td>ОЗ</td><td>вход</td></tr><tr><td>17:06</td><td>Ли С. В.</td><td>ОЗ</td><td>выход</td></tr><tr><td>17:12</td><td>Каримов Р. И.</td><td>Т</td><td>выход</td></tr><tr><td>17:34</td><td>Юсупова Н. Б.</td><td>ОЗ</td><td>выход</td></tr><tr><td>17:36</td><td>Юсупова Н. Б.</td><td>Т</td><td>выход</td></tr><tr><td>17:41</td><td>Рахимова К. А.</td><td>ОЗ</td><td>выход</td></tr><tr><td>17:43</td><td>Рахимова К. А.</td><td>Т</td><td>выход</td></tr><tr><td>17:45</td><td>Назаров Ш. У.</td><td>ОЗ</td><td>выход</td></tr><tr><td>17:47</td><td>Назаров Ш. У.</td><td>Т</td><td>выход</td></tr><tr><td>18:02</td><td>Ли С. В.</td><td>Т</td><td>выход</td></tr></tbody>
+</table></div>
+<p class="doc-note">Точки: <b>Т</b> — турникет на входе в здание, <b>ОЗ</b> — дверь операционной зоны, <b>АР</b> — архив, <b>СР</b> — серверная.</p>
+<p class="doc-note">Ким О. В. и Алиев Т. Р. после выхода 14 марта в здание не возвращались.</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="2" data-doc="8">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 2 · Следы</span>
+    <span class="docno">Док. 8</span>
+  </header>
+  <h3 class="sheet-t">Объяснительная Алиева Т. Р.</h3>
+  <div class="sheet-b">
+<div class="statement">
+<p class="st-head"><b>Объяснительная.</b> Алиев Тимур Рашидович, операционист. 17 марта</p>
+
+<p>14 марта я ушёл с работы в 16:30: в 17:00 у дочери был концерт в музыкальной школе. Ольга Викторовна меня отпустила, я предупредил об этом на утренней планёрке. Перед уходом вышел из АБС.</p>
+<p>Платёж № 318 я не вводил. Поручение ООО «Гранд Текстиль» в тот день в руках не держал. Как оно оказалось в моих документах дня, не знаю.</p>
+<p>О пароле. 5 марта я забыл пароль, администратор его сбросил, я задал новый. 7 марта я был на выезде у клиента и по телефону продиктовал новый пароль Камиле Рахимовой, чтобы она отправила мой срочный платёж. Она включила громкую связь. Я слышал в зале голоса Нигоры Юсуповой и Шахзода Назарова. Больше никому пароль не сообщал и нигде его не записывал. После этого пароль не менял.</p>
+<p>О кредите. Просрочка была, 3 марта я её закрыл. Справку из банка могу предоставить.</p>
+<p class="sign">Подпись <span class="sigline"></span> Алиев Т. Р.</p>
+</div></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="2" data-doc="9">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 2 · Следы</span>
+    <span class="docno">Док. 9</span>
+  </header>
+  <h3 class="sheet-t">Объяснительная Юсуповой Н. Б.</h3>
+  <div class="sheet-b">
+<div class="statement">
+<p class="st-head"><b>Объяснительная.</b> Юсупова Нигора Бахтияровна, контролёр. 17 марта</p>
+
+<p>14 марта перед отсечкой шёл плотный поток платежей. Около 16:40 я вызвала Сергея Ли: в принтере у моего стола замяло бумагу.</p>
+<p>С 16:49 я примерно пять минут говорила по телефону с бухгалтером ООО «Азия Логистик» и записывала за ней. Сергей всё это время стоял у принтера рядом со мной.</p>
+<p>Закончив разговор, я увидела в лотке «На контроль» поручение № 318 ООО «Гранд Текстиль», а в очереди АБС — платёж, введённый Алиевым. Лоток стоит на краю моего стола, операционисты кладут в него документы весь день. Кто положил это поручение, я не видела. Что Тимура уже нет на месте, не заметила: я сижу спиной к столам операционистов.</p>
+<p>Подпись сверила с карточкой образцов — похожа. Отметки «Принято» на поручении не было. До отсечки оставалось несколько минут, клиент крупный, и я решила платёж не задерживать.</p>
+<p>Сумма больше 500 миллионов, поэтому я позвонила по контактному телефону из карточки клиента. Ответил мужчина, представился директором Умаровым, назвал сумму и получателя. В 16:58 я подтвердила платёж.</p>
+<p>То, что телефон в карточке изменён три дня назад, я не заметила: система об этом не предупреждает.</p>
+<p class="sign">Подпись <span class="sigline"></span> Юсупова Н. Б.</p>
+</div></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="2" data-doc="10">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 2 · Следы</span>
+    <span class="docno">Док. 10</span>
+  </header>
+  <h3 class="sheet-t">Журнал изменений карточек клиентов</h3>
+  <div class="sheet-b">
+<p>АБС, операционный отдел. 10–13 марта.</p>
+
+<div class="scroll"><table class="log wrap">
+<thead><tr><th>Дата, время</th><th>Клиент</th><th>Что изменено</th><th>Ввёл</th><th>Основание</th><th>Утвердил</th></tr></thead>
+<tbody><tr><td>10.03<br>10:22</td><td>ООО «Азия Логистик»</td><td>Юридический адрес</td><td>T.ALIEV<br>ОП-04</td><td>Заявление от 10.03. Скан прикреплён.</td><td>O.KIM<br>10.03 11:05</td></tr><tr><td>11.03<br>13:12</td><td>ООО «Гранд Текстиль»</td><td>Контактный телефон для подтверждения платежей.<br>Было: <span class="nowrap">+998 71 200-14-47</span><br>Стало: <span class="nowrap">+998 90 915-22-08</span></td><td>SH.NAZAROV<br>ОП-05</td><td>«Заявление клиента от 11.03». Скан не прикреплён.</td><td>O.KIM<br>11.03 15:40</td></tr><tr><td>12.03<br>11:47</td><td>ИП Садыков А. Н.</td><td>Адрес электронной почты</td><td>K.RAKHIMOVA<br>ОП-03</td><td>Заявление от 12.03. Скан прикреплён.</td><td>O.KIM<br>12.03 16:02</td></tr><tr><td>13.03<br>09:30</td><td>ООО «Мега Строй»</td><td>Главный бухгалтер</td><td>SH.NAZAROV<br>ОП-05</td><td>Заявление от 13.03. Скан прикреплён.</td><td>O.KIM<br>13.03 10:15</td></tr></tbody>
+</table></div>
+<p class="doc-note">Справка администратора АБС. Сеанс SH.NAZAROV на рабочем месте ОП-05 11 марта: вход в 08:56, выход в 18:04. Последнее действие перед изменением карточки «Гранд Текстиль» выполнено в 13:01. Между 13:01 и 13:12 автоблокировка не включалась: прошло меньше 15 минут. Прикреплять скан заявления система не требует.</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="2" data-doc="11">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 2 · Следы</span>
+    <span class="docno">Док. 11</span>
+  </header>
+  <h3 class="sheet-t">Журнал СКУД за 11 марта</h3>
+  <div class="sheet-b">
+<p>Система контроля доступа, 12:00–14:00. На 12:00 в операционной зоне находились: Ким О. В., Алиев Т. Р., Рахимова К. А., Назаров Ш. У.</p>
+
+<div class="scroll"><table class="log">
+<thead><tr><th>Время</th><th>Сотрудник</th><th>Точка</th><th>Проход</th></tr></thead>
+<tbody><tr><td>12:08</td><td>Рахимова К. А.</td><td>ОЗ</td><td>выход</td></tr><tr><td>12:10</td><td>Рахимова К. А.</td><td>Т</td><td>выход</td></tr><tr><td>12:15</td><td>Ким О. В.</td><td>ОЗ</td><td>выход</td></tr><tr><td>12:31</td><td>Ли С. В.</td><td>СР</td><td>вход</td></tr><tr><td>12:50</td><td>Ким О. В.</td><td>ОЗ</td><td>вход</td></tr><tr><td>12:53</td><td>Рахимова К. А.</td><td>Т</td><td>вход</td></tr><tr><td>12:55</td><td>Рахимова К. А.</td><td>ОЗ</td><td>вход</td></tr><tr><td>13:02</td><td>Алиев Т. Р.</td><td>ОЗ</td><td>выход</td></tr><tr><td>13:02</td><td>Назаров Ш. У.</td><td>ОЗ</td><td>выход</td></tr><tr><td>13:05</td><td>Каримов Р. И.</td><td>ОЗ</td><td>вход</td></tr><tr><td>13:15</td><td>Каримов Р. И.</td><td>ОЗ</td><td>выход</td></tr><tr><td>13:20</td><td>Ли С. В.</td><td>СР</td><td>выход</td></tr><tr><td>13:47</td><td>Алиев Т. Р.</td><td>ОЗ</td><td>вход</td></tr><tr><td>13:48</td><td>Назаров Ш. У.</td><td>ОЗ</td><td>вход</td></tr></tbody>
+</table></div>
+<p class="doc-note">Точки: <b>Т</b> — турникет на входе в здание, <b>ОЗ</b> — дверь операционной зоны, <b>АР</b> — архив, <b>СР</b> — серверная.</p>
+<p class="doc-note">Юсупова Н. Б. 11 марта в здание не входила. Ли С. В. 11 марта в операционную зону не входил.</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="3" data-doc="12">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 3 · Развязка</span>
+    <span class="docno">Док. 12</span>
+  </header>
+  <h3 class="sheet-t">Детализация вызовов АТС</h3>
+  <div class="sheet-b">
+<p>Телефонная станция филиала, 14 марта, 16:00–17:10. Внутренние номера операционного отдела, клиентского менеджера и системного администратора. Содержание разговоров не записывается.</p>
+
+<div class="scroll"><table class="log">
+<thead><tr><th>Начало</th><th>Внутр. номер</th><th>Вызов</th><th>Номер абонента</th><th>Длительность</th></tr></thead>
+<tbody><tr><td>16:04</td><td>121</td><td>исходящий</td><td><span class="nowrap">+998 71 244-18-60</span></td><td>02:15</td></tr><tr><td>16:11</td><td>113</td><td>исходящий</td><td><span class="nowrap">+998 93 507-41-19</span></td><td>01:03</td></tr><tr><td>16:17</td><td>112</td><td>входящий</td><td><span class="nowrap">+998 71 268-30-05</span></td><td>03:40</td></tr><tr><td>16:29</td><td>115</td><td>исходящий</td><td><span class="nowrap">+998 90 915-28-02</span></td><td>00:48</td></tr><tr><td>16:38</td><td>112</td><td>внутренний</td><td>130</td><td>00:35</td></tr><tr><td>16:45</td><td>114</td><td>исходящий</td><td><span class="nowrap">+998 90 915-22-08</span></td><td>01:12</td></tr><tr><td>16:49</td><td>112</td><td>входящий</td><td><span class="nowrap">+998 71 233-90-12</span></td><td>05:07</td></tr><tr><td>16:56</td><td>112</td><td>исходящий</td><td><span class="nowrap">+998 90 915-22-08</span></td><td>01:26</td></tr><tr><td>17:02</td><td>121</td><td>исходящий</td><td><span class="nowrap">+998 71 244-18-60</span></td><td>00:52</td></tr><tr><td>17:08</td><td>114</td><td>входящий</td><td><span class="nowrap">+998 71 255-76-31</span></td><td>02:10</td></tr></tbody>
+</table></div>
+<p class="doc-note">Чей внутренний номер — смотрите телефонный справочник (док. 3).</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="3" data-doc="13">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 3 · Развязка</span>
+    <span class="docno">Док. 13<small> · лист 1 из 2</small></span>
+  </header>
+  <h3 class="sheet-t">Объяснительные сотрудников</h3>
+  <div class="sheet-b">
+
+<div class="statement">
+<p class="st-head"><b>Объяснительная.</b> Назаров Шахзод Улугбекович, операционист-стажёр. 18 марта</p>
+
+<p>11 марта с 13:00 примерно до 13:50 я обедал в столовой вместе с Тимуром Алиевым. Телефон в карточке ООО «Гранд Текстиль» я не менял и заявления такого не видел. Компьютер, уходя на обед, не заблокировал. Признаю.</p>
+<p>14 марта около 16:40 Камила Анваровна попросила меня срочно отнести папки в архив. Обычно мы сдаём их по понедельникам, но она сказала, что в понедельник будет проверка. Вернулся около 17:00.</p>
+<p>Пароль Тимура я слышал 7 марта по громкой связи, но не запоминал и не записывал. Про ставки: один раз показал коллегам приложение, сам не играю.</p>
+</div>
+
+<div class="statement">
+<p class="st-head"><b>Объяснительная.</b> Ким Ольга Викторовна, начальник операционного отдела. 18 марта</p>
+
+<p>14 марта с 15:00 я была на совещании в головном офисе и в филиал в тот день не вернулась. Алиева отпустила в 16:30 по семейным обстоятельствам. Он сказал об этом на утренней планёрке при всём отделе.</p>
+<p>11 марта около 13:05 ко мне в кабинет зашёл Каримов с договором ООО «Азия Логистик» и пробыл минут десять. Дверь была закрыта. Из кабинета за это время ни он, ни я не выходили. Зал мне из кабинета не виден.</p>
+<p>Изменение телефона «Гранд Текстиль» я утвердила в 15:40 вместе с другими заявками за день. Оригинал заявления не смотрела: основание в системе стояло, сотрудникам я доверяю. Понимаю, что нарушила пункт 4.2.</p>
+</div>
+
+<div class="statement">
+<p class="st-head"><b>Объяснительная.</b> Каримов Рустам Икрамович, клиентский менеджер. 18 марта</p>
+
+<p>«Гранд Текстиль» — мой клиент. О смене контактного телефона директор Умаров мне не говорил, заявление через меня не проходило.</p>
+<p>11 марта я был у Ольги Викторовны с договором и из её кабинета сразу ушёл к себе. К столам операционистов не подходил. 14 марта в 16:20 занёс в отдел документы «Азия Логистик» и ушёл минут через пять. Прав на ввод платежей в АБС у меня нет.</p>
+<p>Автомобиль я купил на деньги от продажи квартиры отца. Договор купли-продажи от 26 февраля готов предоставить.</p>
+</div></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="3" data-doc="13">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 3 · Развязка</span>
+    <span class="docno">Док. 13<small> · лист 2 из 2</small></span>
+  </header>
+  <h3 class="sheet-t">Объяснительные сотрудников</h3>
+  <div class="sheet-b">
+
+<div class="statement">
+<p class="st-head"><b>Объяснительная.</b> Рахимова Камила Анваровна, старший операционист. 18 марта</p>
+
+<p>14 марта после 16:30 я разбирала свою очередь платежей. От экрана не отрывалась, по телефону ни с кем не разговаривала. Кто сидел за столом Алиева, не видела. По залу ходил Сергей Ли — возможно, он что-то заметил.</p>
+<p>Пароль Тимура знали многие: он сам диктовал его по громкой связи.</p>
+<p>11 марта я вернулась с обеда около часа дня и работала за своим столом. К компьютеру Назарова при мне никто не подходил.</p>
+<p>Хочу добавить. Шахзод в последнее время расспрашивал о лимитах и о крупных клиентах. А у Тимура, насколько я знаю, трудности с кредитом.</p>
+</div>
+
+<div class="statement">
+<p class="st-head"><b>Объяснительная.</b> Ли Сергей Владимирович, системный администратор. 18 марта</p>
+
+<p>14 марта около 16:40 мне позвонила Нигора Юсупова: в принтере у её стола замяло бумагу. Я пришёл в 16:45 и занимался принтером до начала шестого.</p>
+<p>Когда я вошёл, Камила Рахимова разговаривала по телефону у себя за столом. Через несколько минут Нигоре позвонили, она говорила минут пять. Я всё это время стоял у принтера рядом с ней. За столами Алиева и Назарова, когда я пришёл, никого не было.</p>
+<p>Что происходило дальше у столов операционистов, я не видел: принтер стоит у стены, я стоял к залу спиной.</p>
+<p>Пароли пользователей я видеть не могу. Могу только сбросить пароль по заявке, и каждый сброс остаётся в журнале.</p>
+</div></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="3" data-doc="14">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 3 · Развязка</span>
+    <span class="docno">Док. 14</span>
+  </header>
+  <h3 class="sheet-t">Сведения о получателе платежа</h3>
+  <div class="sheet-b">
+<p>Получены службой безопасности по официальному запросу. 18 марта.</p>
+<dl class="kv">
+<dt>Организация</dt><dd>ООО «Вега Трейд»</dd>
+<dt>Дата регистрации</dt><dd>20 февраля текущего года</dd>
+<dt>Вид деятельности</dt><dd>Оптовая торговля</dd>
+<dt>Уставный фонд</dt><dd>Минимальный</dd>
+<dt>Сотрудники</dt><dd>1 человек</dd>
+<dt>Единственный учредитель и директор</dt><dd>Рахимов Даврон Анварович</dd>
+<dt>Расчётный счёт</dt><dd>Открыт 24 февраля в другом банке</dd>
+</dl>
+<p class="mini-h">Движение по счёту</p>
+
+<div class="scroll"><table class="log">
+<thead><tr><th>Дата</th><th>Операция</th><th>Сумма, сум</th></tr></thead>
+<tbody><tr><td>24.02 – 13.03</td><td>Операций не было</td><td>—</td></tr><tr><td>14.03</td><td>Зачисление от ООО «Гранд Текстиль», п/п № 318</td><td>870 000 000</td></tr><tr><td>15.03</td><td>Шесть переводов на карты физических лиц</td><td>512 000 000</td></tr><tr><td>16.03</td><td>Снятие наличных</td><td>355 000 000</td></tr><tr><td>17.03</td><td>Остаток</td><td>3 000 000</td></tr></tbody>
+</table></div>
+<p class="doc-note">Договор № 47 от 3 марта между ООО «Вега Трейд» и ООО «Гранд Текстиль» банку получателя не предоставлялся.</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article>
+<article class="sheet doc" data-env="3" data-doc="15">
+  <header class="sheet-h">
+    <span class="tag">Дело № 27-Р</span>
+    <span class="tag tag-env">Конверт 3 · Развязка</span>
+    <span class="docno">Док. 15</span>
+  </header>
+  <h3 class="sheet-t">Заключение службы информационной безопасности</h3>
+  <div class="sheet-b">
+<p>По результатам проверки журналов и документов. 18 марта.</p>
+<ol class="spaced">
+<li><b>Удалённый доступ.</b> Удалённых подключений к рабочим местам ОП-04 и ОП-05 11 и 14 марта не было. Все действия выполнены с клавиатуры этих рабочих мест.</li>
+<li><b>Пароли.</b> Учётная запись T.ALIEV: последний сброс пароля — 5 марта в 09:14, исполнитель S.LI, заявка Алиева. После 5 марта пароль не сбрасывался и не менялся. Вход 14 марта в 16:51 выполнен действующим паролем с первой попытки. Учётная запись SH.NAZAROV: сбросов не было.</li>
+<li><b>Платёжное поручение № 318.</b> Подпись выполнена с подражанием подписи Умарова Ф. Т. Оттиск печати нанесён цветным струйным принтером. Отметки «Принято» нет. В журнале приёма документов 14 марта поручение не зарегистрировано. По журналу посетителей представители ООО «Гранд Текстиль» 14 марта в филиал не приходили. Поручение найдено в документах дня Алиева Т. Р.</li>
+<li><b>Заявление о смене телефона.</b> Заявления ООО «Гранд Текстиль» от 11 марта в юридическом деле клиента нет. В журнале приёма документов оно не зарегистрировано.</li>
+<li><b>Видеонаблюдение.</b> Камеры операционного зала направлены на входную дверь и кассовый узел. Столы операционистов в кадр не попадают.</li>
+</ol>
+<p class="sign">Начальник службы <span class="sigline"></span> А. Р. Хасанов</p></div>
+  <footer class="sheet-f">Учебное дело. Банк, организации, люди и телефонные номера вымышлены.</footer>
+</article></div>
+</section>
+
+<section class="view" id="v-key" role="tabpanel" hidden>
+  <h1 class="view-h">Разгадка</h1><p class="view-lead">Ответ, схема, доказательства и подсчёт баллов. Только для ведущего.</p>
+  <div class="gate" id="gate">
+    <h2>Сначала решите дело сами</h2>
+    <p>Это главный шаг подготовки. Пройдите три конверта на вкладке «Материалы» и только потом открывайте разгадку: так вы поймёте, где участникам будет трудно.</p>
+    <button type="button" class="btn primary" id="gate-open">Показать разгадку</button>
+    <button type="button" class="btn" data-go="case">К материалам дела</button>
+  </div>
+  <div id="key-body" hidden>
+<section class="sec">
+<h2>Ответ</h2>
+<p class="answer"><b>Виновна Рахимова Камила Анваровна, старший операционист.</b> Сообщник — её брат Рахимов Даврон Анварович, директор и единственный учредитель ООО «Вега Трейд».</p>
+</section>
+
+<section class="sec">
+<h2>Как это было сделано</h2>
+<div class="scroll"><table class="t nw1 nwl">
+<thead><tr><th>Когда</th><th>Что произошло</th><th>Док.</th></tr></thead>
+<tbody>
+<tr><td>20 февраля</td><td>Брат Рахимовой регистрирует ООО «Вега Трейд».</td><td>14</td></tr>
+<tr><td>5 марта</td><td>Алиев забывает пароль, администратор его сбрасывает, Алиев задаёт новый.</td><td>8, 15</td></tr>
+<tr><td>7 марта</td><td>Алиев диктует новый пароль Рахимовой по телефону. Она включает громкую связь, пароль слышат Юсупова и Назаров.</td><td>8</td></tr>
+<tr><td>11 марта, 13:12</td><td>Юсупова в отгуле, Алиев и Назаров на обеде, Ким и Каримов в кабинете за закрытой дверью. Рахимова с незаблокированного компьютера Назарова меняет контактный телефон клиента на номер сообщника. Заявления клиента не существует.</td><td>10, 11, 13, 15</td></tr>
+<tr><td>11 марта, 15:40</td><td>Ким утверждает изменение вместе с другими, не посмотрев оригинал заявления.</td><td>10, 13</td></tr>
+<tr><td>14 марта, утро</td><td>Алиев на планёрке при всём отделе говорит, что уйдёт в 16:30.</td><td>8, 13</td></tr>
+<tr><td>16:32–16:34</td><td>Алиев выходит из зоны и из здания.</td><td>7</td></tr>
+<tr><td>16:40</td><td>Рахимова отправляет Назарова в архив. Он там с 16:43 до 16:59.</td><td>13, 7</td></tr>
+<tr><td>16:45</td><td>Рахимова со своего телефона (внутренний 114) звонит на подменённый номер: предупреждает сообщника.</td><td>12, 3, 13</td></tr>
+<tr><td>16:49–16:54</td><td>Юсупова говорит по телефону с клиентом. Ли стоит у принтера рядом с ней, спиной к залу.</td><td>12, 9, 13</td></tr>
+<tr><td>16:51–16:53</td><td>Рахимова за компьютером Алиева (ОП-04): вход под его паролем, ввод платежа № 318, выход. Поддельное поручение кладёт в лоток контролёра.</td><td>4, 15</td></tr>
+<tr><td>16:56</td><td>Юсупова звонит по номеру из карточки клиента. Отвечает сообщник и подтверждает платёж.</td><td>12, 9</td></tr>
+<tr><td>16:58–16:59</td><td>Юсупова подтверждает платёж, он уходит последним рейсом.</td><td>4</td></tr>
+<tr><td>15–16 марта</td><td>Деньги со счёта «Вега Трейд» переведены на карты и сняты наличными.</td><td>14</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="sec">
+<h2>Кто где был</h2>
+<p>Главный логический ход дела. В обоих эпизодах нужно было физически сидеть за конкретным компьютером: 11 марта — за ОП-05, 14 марта — за ОП-04. Удалённых подключений не было (док. 15).</p>
+<div class="scroll"><table class="t alibi">
+<thead><tr><th>Сотрудник</th><th>11 марта, 13:12</th><th>14 марта, 16:51–16:53</th><th>Знал новый пароль Алиева</th></tr></thead>
+<tbody><tr><td><b>Ким О. В.</b></td><td>В своём кабинете с Каримовым, дверь закрыта <small>док. 13</small></td><td>Вне здания с 14:44 <small>док. 7</small></td><td>нет</td></tr><tr><td><b>Юсупова Н. Б.</b></td><td>Отгул, в здание не входила <small>док. 6, 11</small></td><td>За своим столом, говорит по телефону 16:49–16:54; рядом Ли <small>док. 12, 9, 13</small></td><td>да</td></tr><tr><td><b>Алиев Т. Р.</b></td><td>На обеде 13:02–13:47 <small>док. 11</small></td><td>Вышел из здания в 16:34 <small>док. 7</small></td><td>свой</td></tr><tr><td><b>Назаров Ш. У.</b></td><td>На обеде 13:02–13:48 <small>док. 11</small></td><td>В архиве 16:43–16:59 <small>док. 7</small></td><td>да</td></tr><tr><td><b>Каримов Р. И.</b></td><td>В кабинете Ким 13:05–13:15 <small>док. 11, 13</small></td><td>Вышел из зоны в 16:27 <small>док. 7</small></td><td>нет</td></tr><tr><td><b>Ли С. В.</b></td><td>В серверной, в зону не входил <small>док. 11</small></td><td>У принтера рядом с Юсуповой <small>док. 7, 9, 13</small></td><td>нет</td></tr><tr class="hit"><td><b>Рахимова К. А.</b></td><td>В зале с 12:55. Одна у столов <small>док. 11</small></td><td>В зале. Своих операций с 16:44 до 17:03 нет <small>док. 7, 4</small></td><td>да</td></tr></tbody>
+</table></div>
+<p class="small">Юсупова и Ли подтверждают алиби друг друга, Ким и Каримов — тоже. Чтобы усомниться в этом, пришлось бы предположить сговор двух человек, а на него в деле ничто не указывает. На Рахимову же указывают ещё четыре независимых доказательства.</p>
+</section>
+
+<section class="sec">
+<h2>Доказательства</h2>
+<div class="scroll"><table class="t nwl">
+<thead><tr><th>Доказательство</th><th>В чём оно состоит</th><th>Док.</th></tr></thead>
+<tbody><tr><td><b>Только она была в зале и свободна в оба момента</b></td><td>11 марта в 13:12 и 14 марта в 16:51–16:53. У остальных шести есть алиби.</td><td>7, 11, 12, 13</td></tr><tr><td><b>Звонок с её телефона на подменённый номер</b></td><td>В 16:45 с внутреннего номера 114 звонили на <span class="nowrap">+998 90 915-22-08</span>. Платежа в системе ещё не было.</td><td>12, 3</td></tr><tr><td><b>Получатель — фирма её брата</b></td><td>Директор ООО «Вега Трейд» — Рахимов Даврон Анварович. Экстренный контакт Рахимовой — «Рахимов Д. А., брат».</td><td>14, 6</td></tr><tr><td><b>Две неправды в объяснительной</b></td><td>«Разбирала очередь» — с 16:44 до 17:03 у неё нет операций. «По телефону не говорила» — опровергают АТС и Ли.</td><td>13, 4, 12</td></tr><tr><td><b>Убрала свидетеля</b></td><td>В 16:40 отправила Назарова в архив, хотя папки сдают по понедельникам.</td><td>13, 7</td></tr></tbody>
+</table></div>
+</section>
+
+<section class="sec">
+<h2>Что не сработало в банке</h2>
+<div class="scroll"><table class="t">
+<thead><tr><th>Сбой</th><th>Что произошло</th><th>Что изменить</th></tr></thead>
+<tbody><tr><td><b>Пароль продиктован вслух</b></td><td>Алиев нарушил п. 2.1. Учётная запись перестала удостоверять человека.</td><td>Вход по паролю и второму фактору (токен, карта). Нулевая терпимость к передаче паролей.</td></tr><tr><td><b>Компьютер не заблокирован</b></td><td>Назаров нарушил п. 2.2. Автоблокировка через 15 минут — слишком долго.</td><td>Автоблокировка через 2–3 минуты. Блокировка при выходе из зоны по карте.</td></tr><tr><td><b>Изменение утверждено без заявления</b></td><td>Ким нарушила п. 4.2: «четыре глаза» сработали формально. Система не требует скан.</td><td>Без прикреплённого скана изменение не сохраняется. Утверждающий сверяет оригинал.</td></tr><tr><td><b>Звонок по только что изменённому номеру</b></td><td>Система не предупреждает о недавней смене контакта.</td><td>«Период охлаждения»: 5–10 дней после смены звонить и по старому номеру. Уведомлять клиента о смене по старому каналу.</td></tr><tr><td><b>Принято поручение без отметки «Принято»</b></td><td>Юсупова нарушила п. 3.2: документ не проходил приём.</td><td>Контролёр не принимает поручение без регистрации. Сверка с журналом приёма.</td></tr><tr><td><b>Проверка подписи в спешке</b></td><td>Подпись сверена «на глаз» за минуты до отсечки.</td><td>Крупные платежи в последние 15 минут до отсечки — только с усиленной проверкой или следующим днём.</td></tr><tr><td><b>Системы не связаны</b></td><td>Учётная запись Алиева работала, когда он уже вышел из здания.</td><td>Связать СКУД и АБС: вышел из здания — сеанс закрыт, вход невозможен.</td></tr><tr><td><b>Доверие без проверки</b></td><td>«Лучшему сотруднику» вопросов не задают. Просьба отнести папки не вызвала сомнений.</td><td>Выборочные проверки для всех. Культура «спросить — нормально».</td></tr></tbody>
+</table></div>
+</section>
+
+<section class="sec">
+<h2>Ложные следы</h2>
+<p>Они заложены нарочно. Каждый показывает одну ошибку мышления, и о каждом стоит спросить в дебрифе.</p>
+<div class="scroll"><table class="t">
+<thead><tr><th>След</th><th>Когда и почему на него идут</th><th>Что его снимает</th></tr></thead>
+<tbody><tr><td><b>Учётная запись Алиева</b></td><td>Раунд 1. Платёж введён под T.ALIEV — «значит, Алиев».</td><td>Журнал показывает запись, а не человека. СКУД: Алиев вышел из здания в 16:34.</td></tr><tr><td><b>Быстрый контроль Юсуповой</b></td><td>Раунд 1. Клиент говорит, что ему не звонили, — «значит, звонка не было».</td><td>Звонок был (АТС, 16:56), но на подменённый номер. Юсупова небрежна, а не причастна.</td></tr><tr><td><b>Учётная запись Назарова</b></td><td>Раунд 2. Телефон изменён под SH.NAZAROV; о нём ходят слухи про ставки.</td><td>В 13:12 он был на обеде. Компьютер остался незаблокированным.</td></tr><tr><td><b>Каримов в зоне в 13:12</b></td><td>Раунд 2. Клиентский менеджер этого клиента, был в зоне в нужную минуту, купил машину.</td><td>Сидел в кабинете Ким за закрытой дверью. 14 марта вышел из зоны в 16:27.</td></tr><tr><td><b>Ли в зале в 16:52</b></td><td>Раунд 2. Системный администратор «может всё».</td><td>Пароль не знал, сброс оставил бы след. Стоял у принтера рядом с Юсуповой.</td></tr><tr><td><b>Номер 915-28-02</b></td><td>Раунд 3. В 16:29 Назаров звонил на номер, похожий на подменённый.</td><td>Это другой номер: 915-28-02, а не 915-22-08. Проверка на внимательность.</td></tr><tr><td><b>Слухи и репутация</b></td><td>Весь день. Кредит Алиева, ставки Назарова, лечение матери Юсуповой, машина Каримова.</td><td>Мотив бывает у многих. Ни один слух не является доказательством. У «лучшего сотрудника» слухов нет.</td></tr></tbody>
+</table></div>
+</section>
+
+<section class="sec">
+<h2>Подсчёт баллов</h2>
+<div class="scroll"><table class="t">
+<thead><tr><th>Раздел</th><th>Как считать</th><th>Макс.</th></tr></thead>
+<tbody>
+<tr><td><b>1. Кто</b></td><td>Названа Рахимова — 30 баллов. Другое имя — 0.</td><td>30</td></tr>
+<tr><td><b>2. Как</b></td><td>5 баллов за каждый из шести элементов схемы: подмена телефона, чужой компьютер, чужой пароль, ввод платежа, поддельное поручение, ложное подтверждение.</td><td>30</td></tr>
+<tr><td><b>3. Доказательства</b></td><td>5 баллов за каждое из четырёх, если совпадает с ключом по смыслу. Без номера документа — 3 балла.</td><td>20</td></tr>
+<tr><td><b>4. Контроли</b></td><td>4 балла за пару «сбой → рекомендация», максимум пять пар. Сбой без рекомендации — 2 балла.</td><td>20</td></tr>
+<tr><td><b>Вычеты</b></td><td>Минус 5 за каждую подсказку и за каждую минуту опоздания.</td><td></td></tr>
+</tbody>
+</table></div>
+<p class="small">При равенстве баллов выше команда, которая взяла меньше подсказок. Если и это равно — та, что сдала заключение раньше. Засчитывайте разумные формулировки, которые не совпадают с ключом дословно.</p>
+<h3>Шесть элементов схемы</h3>
+<ol class="steps"><li><b>Подмена телефона.</b> 11 марта в 13:12 сменила контактный телефон ООО «Гранд Текстиль» на номер сообщника.</li><li><b>Чужой компьютер.</b> Сделала это с незаблокированного компьютера Назарова под его учётной записью, пока он обедал. Заявления клиента не существовало.</li><li><b>Чужой пароль.</b> Пароль Алиева узнала 7 марта: он продиктовал его по телефону.</li><li><b>Ввод платежа.</b> 14 марта в 16:51–16:53 вошла под записью Алиева на его рабочем месте ОП-04 и ввела платёж № 318. Алиев к этому времени ушёл, Назарова она отправила в архив.</li><li><b>Поддельное поручение.</b> Положила в лоток контролёра поддельное бумажное поручение. Через приём документов оно не проходило.</li><li><b>Ложное подтверждение.</b> Контролёр позвонила по подменённому номеру. Ответил сообщник и подтвердил платёж.</li></ol>
+</section>
+
+<section class="sec">
+<h2>Подсказки</h2>
+<p>Каждая стоит 5 баллов. Выдавайте по порядку, карточкой или устно.</p>
+<ol class="steps"><li><b>Выдаётся со второго раунда.</b> Запись в журнале показывает, под чьей учётной записью выполнено действие. Она не показывает, кто сидел за клавиатурой. Возьмите два момента — 11 марта, 13:12 и 14 марта, 16:51–16:53 — и выпишите по журналам СКУД, кто в это время физически был в операционной зоне.</li><li><b>Выдаётся в третьем раунде.</b> Номер <span class="nowrap">+998 90 915-22-08</span> встречается в детализации АТС дважды. Посмотрите на время первого звонка. По справочнику проверьте, чей это внутренний номер.</li><li><b>Выдаётся в третьем раунде.</b> Сравните фамилию, инициалы и отчество директора ООО «Вега Трейд» (док. 14) с графой «Экстренный контакт» в справке отдела кадров (док. 6).</li></ol>
+</section></div>
+</section>
+
+<section class="view" id="v-debrief" role="tabpanel" hidden>
+  <h1 class="view-h">Дебриф</h1><p class="view-lead">Разговор после игры, оценка результата и то, что делать дальше.</p>
+  
+<section class="sec">
+<h2>Зачем нужен дебриф</h2>
+<p>Дебриф — это разговор после игры, в котором участники сами формулируют, чему научились. Без него игра остаётся развлечением. Ваша работа здесь — задавать вопросы и слушать.</p>
+<ol class="steps">
+<li><b>Спрашивайте, а не объясняйте.</b> Три четверти времени говорят участники.</li>
+<li><b>После вопроса молчите.</b> Сосчитайте про себя до семи. Кто-нибудь ответит.</li>
+<li><b>Не оценивайте ответы.</b> Вместо «правильно» говорите «спасибо» и спрашивайте: «Кто видит иначе?»</li>
+<li><b>Записывайте слова участников на флипчарт.</b> Итог вы соберёте из их же формулировок.</li>
+</ol>
+</section>
+
+<section class="sec">
+<h2>Пять шагов дебрифа</h2>
+
+<div class="dstep">
+<h3><span class="block-n">1</span>Эмоции <small>3 мин</small></h3>
+<div class="say"><span class="lbl">Спросите</span><ul><li>Одним словом: как вам было?</li></ul></div>
+<p><b>Что вы услышите.</b> Азарт, досаду, удивление, «я же говорил».</p>
+<p><b>К чему подвести.</b> Пока эмоции не названы, анализ не идёт. Не комментируйте, просто соберите слова.</p>
+</div>
+
+<div class="dstep">
+<h3><span class="block-n">2</span>Что происходило <small>7 мин</small></h3>
+<div class="say"><span class="lbl">Спросите</span><ul><li>Кого вы подозревали после первого раунда? Поднимите руки, кто назвал Алиева. Кто Юсупову?</li><li>Что заставило вас изменить версию?</li><li>Какой документ оказался важнее, чем выглядел?</li><li>Кто заметил звонок в 16:45? Фамилию директора «Вега Трейд»? Как именно вы это заметили?</li></ul></div>
+<p><b>Что вы услышите.</b> «Увидели учётную запись и решили, что всё ясно». «Справку кадров прочитали по диагонали».</p>
+<p><b>К чему подвести.</b> Первая версия появляется быстро и держит крепко. Детали теряются там, где документ кажется фоновым.</p>
+</div>
+
+<div class="dstep">
+<h3><span class="block-n">3</span>Как работала команда <small>5 мин</small></h3>
+<div class="say"><span class="lbl">Спросите</span><ul><li>Как вы поделили документы? Что сделали бы иначе?</li><li>Как вы записывали находки? Что помогло свести всё вместе?</li><li>Был ли момент, когда кто-то сказал важное, а команда не услышала?</li></ul></div>
+<p><b>Что вы услышите.</b> Команды, которые чертили таблицу или ленту времени, расскажут об этом сами.</p>
+<p><b>К чему подвести.</b> Приведите два-три своих наблюдения: «Я видел, что на десятой минуте второго раунда команда начертила таблицу». Только что видели, без оценок.</p>
+</div>
+
+<div class="dstep">
+<h3><span class="block-n">4</span>Приёмы и ловушки <small>5 мин</small></h3>
+<div class="say"><span class="lbl">Спросите</span><ul><li>Какие приёмы сегодня сработали? Давайте соберём список.</li><li>Посмотрите на слайд с ловушками. Какую из них вы сегодня заметили у себя?</li></ul></div>
+
+<p><b>К чему подвести.</b> Сначала запишите слова участников, потом покажите слайд 21 «Метод Шерлока» и свяжите его с их списком. Затем слайд 22.</p>
+</div>
+
+<div class="dstep">
+<h3><span class="block-n">5</span>Мост в работу <small>5 мин</small></h3>
+<div class="say"><span class="lbl">Спросите</span><ul><li>Где в вашей работе запись в системе принимают за факт о человеке?</li><li>Какие решения вы принимаете в спешке, «перед отсечкой»? Что в них можно проверять иначе?</li><li>Что из этого дела вы видели у себя в подразделении?</li></ul></div>
+<p><b>Что вы услышите.</b> Примеры про пароли, общие учётные записи, подпись «пачкой», срочные платежи.</p>
+<p><b>К чему подвести.</b> Здесь не ищут виноватых среди присутствующих. Ищут места, где правило легко нарушить «чуть-чуть».</p>
+</div>
+</section>
+
+<section class="sec">
+<h2>Метод Шерлока</h2>
+<p>Пять приёмов, которые участники уносят с собой. Они же на слайде 21.</p>
+<ol class="steps"><li><b>Факт или версия.</b> Записывайте факт вместе с источником. Всё остальное — версия, пока не проверена.</li><li><b>Лента времени.</b> Выстройте события по минутам. Противоречия становятся видны сразу.</li><li><b>Таблица «кто — где — когда».</b> Исключайте невозможное. Круг сужается сам.</li><li><b>Поиск опровержения.</b> К каждой версии задайте вопрос: «Что её ломает?»</li><li><b>Вывод с опорой.</b> Утверждение, доказательство, источник. Без третьего звена это мнение.</li></ol>
+<h3>Ловушки мышления из этого дела</h3>
+<ol class="steps"><li><b>Якорь.</b> Первая версия держит крепче всех следующих. В игре это учётная запись Алиева.</li><li><b>Подтверждение.</b> Мы ищем то, что поддерживает версию, и пропускаем то, что её ломает.</li><li><b>Ореол.</b> «Лучший сотрудник» вне подозрений. Репутация — не алиби.</li><li><b>Слух вместо улики.</b> Кредит, ставки, машина. Мотив есть у многих, доказательств нет ни у кого.</li><li><b>Спешка.</b> За три минуты до отсечки подпись сверяют «на глаз».</li></ol>
+</section>
+
+<section class="sec">
+<h2>Как это звучит в разных подразделениях</h2>
+<div class="scroll"><table class="t">
+<thead><tr><th>Кто</th><th>Вопрос, который стоит задавать себе</th></tr></thead>
+<tbody>
+<tr><td>Операционный блок</td><td>Что перед подтверждением я проверил сам, а что принял на веру?</td></tr>
+<tr><td>Фронт-офис и продажи</td><td>Это клиент сказал или документ подтверждает?</td></tr>
+<tr><td>Кредитный анализ и риски</td><td>Каждый вывод в заключении опирается на цифру и источник? Какие данные говорят против сделки?</td></tr>
+<tr><td>Комплаенс и безопасность</td><td>Построил ли я ленту времени и таблицу, прежде чем делать вывод?</td></tr>
+<tr><td>ИТ и поддержка</td><td>Журнал показывает учётную запись и компьютер. Что подтверждает, кто за ним сидел?</td></tr>
+<tr><td>Руководители</td><td>Какие мои утверждения «пачкой» несут риск? Что я подписываю не глядя?</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="sec">
+<h2>Как оценить результат</h2>
+<div class="scroll"><table class="t">
+<thead><tr><th>Уровень</th><th>Что измеряем</th><th>Чем</th><th>Ориентир</th></tr></thead>
+<tbody>
+<tr><td><b>1. Реакция</b></td><td>Было ли полезно и интересно</td><td>Анкета: 4 оценки и готовность рекомендовать</td><td>Средняя оценка от 4,5 из 5</td></tr>
+<tr><td><b>2. Усвоение</b></td><td>Отличают ли факт от версии</td><td>Разминка в начале (8 утверждений) и мини-проверка в анкете (6 утверждений). Сравните долю верных ответов</td><td>Доля верных ответов выросла</td></tr>
+<tr><td><b>3. Поведение</b></td><td>Применяют ли в работе</td><td>Карточка «С понедельника я…», письмо через 14 дней, вопрос руководителям через месяц</td><td>Не меньше половины участников приводят конкретный пример</td></tr>
+<tr><td><b>4. Результат для банка</b></td><td>Меняются ли показатели</td><td>Для серии игр: операционные ошибки, итоги проверок паролей и блокировки экранов</td><td>Смотреть поквартально вместе с заказчиком</td></tr>
+</tbody>
+</table></div>
+<p class="small">Ответы мини-проверки в анкете: 1 — Ф, 2 — В, 3 — Ф, 4 — В, 5 — В, 6 — Ф. Одна игра не изменит показатели банка. Уровни 1–3 покажут, стоит ли проводить её дальше.</p>
+</section>
+
+<section class="sec">
+<h2>После игры</h2>
+<ol class="steps">
+<li><b>В тот же день.</b> Сведите анкеты, сфотографируйте заключения, запишите три наблюдения.</li>
+<li><b>На следующий день.</b> Отправьте заказчику короткий итог: кто участвовал, оценки из анкет, три наблюдения, ваше предложение.</li>
+<li><b>Через 14 дней.</b> Отправьте участникам письмо. Текст ниже.</li>
+<li><b>Через месяц.</b> Спросите руководителей участников: «Что изменилось в работе сотрудника после игры?»</li>
+</ol>
+<div class="copybox" id="cp-follow"><p class="copy-t">Письмо участникам через 14 дней</p><pre>Тема: «Шерлок»: две недели спустя
+
+Коллеги, добрый день!
+
+Прошло две недели после игры «Шерлок». Ответьте, пожалуйста, одной-двумя фразами:
+
+1. Что из своей карточки «С понедельника я…» вы попробовали?
+2. Где вам пригодилось правило «факт или версия»?
+
+Самые интересные примеры я соберу и разошлю всем участникам. Спасибо!</pre></div>
+</section>
+
+<section class="sec">
+<h2>Как адаптировать игру</h2>
+<div class="scroll"><table class="t">
+<thead><tr><th>Ситуация</th><th>Что изменить</th></tr></thead>
+<tbody>
+<tr><td>Есть только 2 часа</td><td>Уберите разминку. Раунды 20, 20 и 25 минут. Вердикты по 30 секунд. В финале только карточка. Дебриф не короче 15 минут.</td></tr>
+<tr><td>Участников больше 25</td><td>Два ведущих и до восьми команд либо два потока. Заключения проверяют сами команды, обменявшись листами.</td></tr>
+<tr><td>Участников 4–7</td><td>Одна или две команды. Вместо соревнования — цель: набрать 80 баллов.</td></tr>
+<tr><td>Онлайн</td><td>Конверты отправляйте файлами в сессионные залы, команды ведут общую доску. Добавьте 15 минут.</td></tr>
+<tr><td>Под ваш банк</td><td>Названия должностей и систем можно заменить на принятые у вас. Время, номера и фамилии не меняйте: на них держится логика. В дебриф добавьте вопрос «Чем наш регламент отличается от регламента „Чинор Банка“?»</td></tr>
+</tbody>
+</table></div>
+</section>
+</section>
+
+</main>
+<script>
+(function () {
+  var TABS = ['overview', 'prep', 'script', 'screen', 'case', 'key', 'debrief'];
+  var current = 'overview';
+  var store = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) { /* хранилище недоступно — страница работает без него */ } }
+  };
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return [].slice.call((r || document).querySelectorAll(s)); }
+
+  /* ---------- Вкладки ---------- */
+  function show(name, scroll) {
+    if (TABS.indexOf(name) < 0) name = 'overview';
+    TABS.forEach(function (t) {
+      $('#v-' + t).hidden = t !== name;
+      var b = $('[data-tab="' + t + '"]');
+      b.setAttribute('aria-selected', t === name ? 'true' : 'false');
+      b.tabIndex = t === name ? 0 : -1;
+    });
+    current = name;
+    if (scroll) window.scrollTo(0, 0);
+    var active = $('[data-tab="' + name + '"]');
+    if (active && active.scrollIntoView) active.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }
+  function route() { show((location.hash || '').replace('#', '') || 'overview', false); }
+  $$('[data-tab]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var name = b.getAttribute('data-tab');
+      show(name, true);
+      try { if (location.hash !== '#' + name) location.hash = name; } catch (e) { /* без адресной строки тоже работает */ }
+    });
+  });
+  $$('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () { $('[data-tab="' + b.getAttribute('data-go') + '"]').click(); });
+  });
+  window.addEventListener('hashchange', route);
+  route();
+
+  /* ---------- Чек-листы ---------- */
+  var ticks = {};
+  try { ticks = JSON.parse(store.get('sherlock-checks') || '{}') || {}; } catch (e) { ticks = {}; }
+  $$('ul.check').forEach(function (ul) {
+    var key = ul.getAttribute('data-key');
+    ul.classList.add('live');
+    $$('li', ul).forEach(function (li, i) {
+      var id = 'ck-' + key + '-' + i;
+      var label = document.createElement('label');
+      var input = document.createElement('input');
+      var span = document.createElement('span');
+      input.type = 'checkbox'; input.id = id; input.checked = !!ticks[id];
+      span.innerHTML = li.innerHTML;
+      label.appendChild(input); label.appendChild(span);
+      li.innerHTML = ''; li.appendChild(label);
+      input.addEventListener('change', function () {
+        if (input.checked) ticks[id] = 1; else delete ticks[id];
+        store.set('sherlock-checks', JSON.stringify(ticks));
+      });
+    });
+  });
+
+  /* ---------- Копирование текстов ---------- */
+  $$('.copybox').forEach(function (box) {
+    var pre = $('pre', box);
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'btn'; btn.textContent = 'Скопировать текст';
+    box.appendChild(btn);
+    function selectText() {
+      var range = document.createRange(); range.selectNodeContents(pre);
+      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      btn.textContent = 'Текст выделен — скопируйте';
+    }
+    btn.addEventListener('click', function () {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pre.textContent).then(function () {
+          btn.textContent = 'Скопировано';
+          setTimeout(function () { btn.textContent = 'Скопировать текст'; }, 1800);
+        }, selectText);
+      } else { selectText(); }
+    });
+  });
+
+  /* ---------- Разгадка под замком ---------- */
+  var gate = $('#gate'), keyBody = $('#key-body');
+  $('#gate-open').addEventListener('click', function () { gate.hidden = true; keyBody.hidden = false; });
+
+  /* ---------- Фильтр конвертов ---------- */
+  var fbtns = $$('[data-env-filter]');
+  fbtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var env = b.getAttribute('data-env-filter');
+      fbtns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      $$('#docs .sheet').forEach(function (s) { s.hidden = env !== '0' && s.getAttribute('data-env') !== env; });
+    });
+  });
+
+  /* ---------- Экран: слайды и таймер ---------- */
+  var stage = $('#stage');
+  var slides = $$('.slide', stage);
+  var idx = 0, timers = {}, audio = null;
+  var count = $('#s-count'), jump = $('#s-jump'), tctl = $('#t-ctl'), tval = $('#t-val'), go = $('#t-go'), full = $('#s-full');
+
+  function fmt(s) { var m = Math.floor(s / 60), x = s % 60; return (m < 10 ? '0' : '') + m + ':' + (x < 10 ? '0' : '') + x; }
+  function tstate(i) {
+    if (!timers[i]) { var total = (+slides[i].getAttribute('data-timer') || 0) * 60; timers[i] = { total: total, left: total, end: 0, run: false, beeped: false }; }
+    return timers[i];
+  }
+  function leftOf(t) { return t.run ? Math.max(0, Math.ceil((t.end - Date.now()) / 1000)) : t.left; }
+  function beep() {
+    if (!audio) return;
+    try {
+      [0, 0.35, 0.7].forEach(function (d) {
+        var o = audio.createOscillator(), g = audio.createGain();
+        o.frequency.value = 880; o.connect(g); g.connect(audio.destination);
+        g.gain.setValueAtTime(0.0001, audio.currentTime + d);
+        g.gain.exponentialRampToValueAtTime(0.3, audio.currentTime + d + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d + 0.25);
+        o.start(audio.currentTime + d); o.stop(audio.currentTime + d + 0.27);
+      });
+    } catch (e) { /* звук не обязателен */ }
+  }
+  function settle(t) {
+    if (t.run && leftOf(t) === 0) { t.run = false; t.left = 0; if (!t.beeped) { t.beeped = true; beep(); } }
+  }
+  function paintTimer() {
+    var t = tstate(idx); settle(t);
+    var l = leftOf(t), el = $('.s-timer', slides[idx]);
+    el.textContent = fmt(l); tval.textContent = fmt(l);
+    el.classList.toggle('warn', l > 0 && l <= Math.min(300, t.total / 3));
+    el.classList.toggle('over', l === 0);
+    go.textContent = t.run ? 'Пауза' : 'Старт';
+  }
+  function paint() {
+    slides.forEach(function (s, i) { s.hidden = i !== idx; });
+    count.textContent = (idx + 1) + ' / ' + slides.length;
+    jump.value = String(idx);
+    var has = slides[idx].hasAttribute('data-timer');
+    tctl.hidden = !has;
+    if (has) paintTimer();
+  }
+  function move(d) { idx = Math.max(0, Math.min(slides.length - 1, idx + d)); paint(); }
+  function toggleTimer() {
+    if (!slides[idx].hasAttribute('data-timer')) return;
+    var t = tstate(idx);
+    if (t.run) { t.left = leftOf(t); t.run = false; }
+    else {
+      if (t.left === 0) t.left = t.total;
+      t.end = Date.now() + t.left * 1000; t.run = true; t.beeped = false;
+      try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); if (audio.state === 'suspended') audio.resume(); } catch (e) { audio = null; }
+      try { if (navigator.wakeLock) navigator.wakeLock.request('screen').catch(function () {}); } catch (e) { /* не страшно */ }
+    }
+    paintTimer();
+  }
+  $('#s-prev').addEventListener('click', function () { move(-1); });
+  $('#s-next').addEventListener('click', function () { move(1); });
+  jump.addEventListener('change', function () { idx = +jump.value; paint(); });
+  go.addEventListener('click', toggleTimer);
+  $('#t-reset').addEventListener('click', function () { var t = tstate(idx); t.run = false; t.left = t.total; t.beeped = false; paintTimer(); });
+  $('#t-plus').addEventListener('click', function () { var t = tstate(idx); if (t.run) t.end += 60000; else t.left += 60; paintTimer(); });
+  full.addEventListener('click', function () {
+    try {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (stage.requestFullscreen) { var p = stage.requestFullscreen(); if (p && p.catch) p.catch(function () {}); }
+    } catch (e) { /* полноэкранный режим доступен не везде */ }
+  });
+  document.addEventListener('fullscreenchange', function () { full.textContent = document.fullscreenElement ? 'Свернуть' : 'На весь экран'; });
+  document.addEventListener('keydown', function (e) {
+    if (current !== 'screen') return;
+    var tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'select' || tag === 'input' || tag === 'textarea') return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { move(1); e.preventDefault(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { move(-1); e.preventDefault(); }
+    else if (e.key === ' ' && tag !== 'button') { toggleTimer(); e.preventDefault(); }
+  });
+  setInterval(function () {
+    Object.keys(timers).forEach(function (i) { settle(timers[i]); });
+    if (slides[idx].hasAttribute('data-timer')) paintTimer();
+  }, 250);
+  paint();
+})();
+
+</script>

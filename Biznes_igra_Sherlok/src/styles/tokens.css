@@ -1,0 +1,30 @@
+/* Layout: рабочий стол ведущего — узкая колонка для чтения, документы дела лежат листами бумаги; слайды — отдельный тёмный «экран». */
+:root {
+  --paper: #EDF0F5;
+  --surface: #FFFFFF;
+  --ink: #131C2E;
+  --muted: #566076;
+  --line: #D2D8E2;
+  --wash: #E2E7EF;
+  --stamp: #BF3528;
+  --blue: #23468F;
+  --say: #E7EDFA;
+  --say-line: #23468F;
+  --hit: #FBE6E2;
+  --doc-bg: #FFFFFF;
+  --doc-ink: #131C2E;
+  --doc-muted: #566076;
+  --doc-line: #B9C1CE;
+  --doc-fill: #EFF2F6;
+  --s-bg: #0F1930;
+  --s-panel: #1A2644;
+  --s-ink: #F3F5F9;
+  --s-muted: #A9B4C8;
+  --s-accent: #F2594E;
+  --s-line: #2F3C5E;
+  --s-ok: #5CC98F;
+  --s-warn: #F2B84B;
+  --f-display: "Oswald", "Roboto Condensed", "Arial Narrow", sans-serif;
+  --f-body: "Golos Text", "Inter", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", "DejaVu Sans Mono", ui-monospace, monospace;
+}
