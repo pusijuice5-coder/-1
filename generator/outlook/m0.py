@@ -10,8 +10,8 @@ OPENERS = ["m1-open", "m2-open", "m3-open", "m4-open", "m5-open", "fin-cheat"]
 def build(k):
     k.mod = None
     # ------------------------------------------------------------------ cover
-    s = k.slide("cover", title=COURSE, glow="hero", nav=False, crumb=False, logo=False, show_title=False, trans="fade",
-                notes="Здравствуйте! Это курс «Outlook: почта и календарь». За полчаса вы разберётесь, как устроена программа, "
+    s = k.slide("cover", title=COURSE, glow="hero", nav=False, crumb=False, logo=False, show_title=False, own_title=True, trans="fade",
+                notes="Здравствуйте! Это курс «Outlook: почта и календарь». Примерно за сорок минут вы разберётесь, как устроена программа, "
                       "как писать понятные письма, держать почту в порядке и назначать встречи. Нажмите «Начать курс».")
     s.pic(A("logo") + ".png", MX, 0.55, w=1.75, name="!!logo")
     s.pic(obj("i_calendar"), 10.35, 0.5, h=2.5, name="!!hero-cal", rot=8, anim=500)
@@ -26,7 +26,7 @@ def build(k):
     s.text(MX + 3.0, 5.6, 3.6, 0.64, "5 модулей  ·  ≈ 40 минут  ·  тест", sz=13, color=MUTED, anchor="ctr", name="cover-meta", anim=450)
 
     # ------------------------------------------------------------------ how to take the course
-    s = k.slide("howto", title="Как проходить курс", sub="Четыре простых правила — и можно начинать", glow="a",
+    s = k.slide("howto", title="Как проходить курс", glow="a",
                 notes="Листайте слайды кнопками в правом нижнем углу или стрелками на клавиатуре. В конце каждого модуля будет короткая "
                       "проверка: нажмите на вариант ответа и увидите разбор. Проходите курс в удобном темпе, а лучше всего — откройте "
                       "Outlook рядом и сразу повторяйте каждое действие.")
@@ -36,8 +36,8 @@ def build(k):
         dict(icon="timer", title="Идите в своём темпе", body="Курс занимает около 40 минут. К любому слайду можно вернуться."),
         dict(icon="monitor", title="Повторяйте в Outlook", body="Откройте Outlook рядом и пробуйте каждое действие сразу — так запоминается лучше."),
     ]
-    h, used = grid(s, items, y=2.25, cols=4, gap=0.26)
-    note(s, MX, 2.25 + used + 0.3, CW,
+    h, used, gy = grid(s, items, y=1.92, cols=2, gap=0.24, after=0.98, inline=True, tsz=17.5, bsz=14, pad=0.28)
+    note(s, MX, gy + used + 0.26, CW,
          "В курсе показан классический Outlook для Windows на русском языке. В новой и в веб-версии кнопки называются так же, но могут выглядеть немного иначе.",
          icon="info", anim=650)
 
@@ -66,9 +66,9 @@ def program(k, key, fan):
                       "наводить порядок в почте, работать с календарём и защищаться от опасных писем." if fan else
                       "Каждая карточка — отдельный модуль. Нажмите на карточку, чтобы перейти к модулю, или просто листайте дальше.")
     # big glowing panel under the cards (rounded picture, like on the reference 'Products' slides)
-    s.pic("glow1.jpg", 0.72, 2.42, 11.9, 6.2, geom="roundRect", radius=0.9, name="!!prog-panel", rot=180)
-    s.rrect(0.72, 2.42, 11.9, 6.2, r=0.9, fill=None, line="glass", name="!!prog-panel-line")
-    cw, ch = 3.55, 1.92
+    s.pic("glow1.jpg", 0.72, 2.36, 11.9, 6.2, geom="roundRect", radius=0.9, name="!!prog-panel", rot=180)
+    s.rrect(0.72, 2.36, 11.9, 6.2, r=0.9, fill=None, line="glass", name="!!prog-panel-line")
+    cw, ch = 3.55, 1.8
     for i, (num, title, desc) in enumerate(PROGRAM):
         if fan:
             x = SW / 2 - cw / 2 + (i - 2.5) * 0.5
@@ -77,15 +77,16 @@ def program(k, key, fan):
         else:
             r, c = divmod(i, 3)
             x = 1.06 + c * (cw + 0.28)
-            y = 2.78 + r * (ch + 0.26)
+            y = 2.72 + r * (ch + 0.24)
             rot = 0
         s.begin("!!prog-card-%d" % i)
-        s.rrect(x, y, cw, ch, r=0.26, fill="glass", line="glass", link=("slide", OPENERS[i]), tip=title)
+        s.rrect(x, y, cw, ch, r=0.26, fill="glass", line="glass")
         s.oval(x + 0.3, y + 0.34, 0.09, 0.09, fill=A("ACC"))
         s.text(x + 0.48, y + 0.22, 1.8, 0.32, ("Модуль %s" % num) if i < 5 else "Финал", sz=11.5, color=TEXT, anchor="ctr")
         s.text(x + cw - 1.3, y + 0.22, 1.02, 0.32, TIMES[i], sz=11, color=MUTED, anchor="ctr", align="r")
         s.text(x + 0.3, y + 0.62, cw - 0.6, 0.42, title, sz=17, color=WHITE, font=FONT_SB, anchor="ctr")
-        s.line(x + 0.3, y + 1.12, x + cw - 0.3, y + 1.12, color=(WHITE, 22))
-        s.text(x + 0.3, y + 1.24, cw - 0.6, 0.5, desc, sz=13, color=TEXT, lnsp=1.0)
+        s.line(x + 0.3, y + 1.1, x + cw - 0.3, y + 1.1, color=(WHITE, 22))
+        s.text(x + 0.3, y + 1.2, cw - 0.6, 0.5, desc, sz=13, color=TEXT, lnsp=1.0)
+        s.rrect(x, y, cw, ch, r=0.26, fill="hit", link=("slide", OPENERS[i]), tip=title)     # whole card is clickable
         s.end(rot=rot)
     return s

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Build the Outlook course.
-usage: python3 build.py OUT.pptx [--theme magenta|green] [--only m0,m1]
+usage: python3 build.py OUT.pptx [--only m0,m1]
 """
 import sys, os, shutil, importlib, tempfile, zipfile, argparse
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -46,7 +46,7 @@ def build(out, theme="magenta", only=None, workdir=None):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("out")
-    ap.add_argument("--theme", default="magenta")
+    ap.add_argument("--theme", default="magenta", choices=["magenta"])   # a green palette is prepared in lib.THEMES, its pictures are not rendered yet
     ap.add_argument("--only")
     ap.add_argument("--workdir")
     a = ap.parse_args()

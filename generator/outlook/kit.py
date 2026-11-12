@@ -47,7 +47,7 @@ class Kit:
 
     # ---------------------------------------------------------------- frame
     def slide(self, key, title="", sub=None, notes="", glow=None, nav=True, crumb=True, logo=True, trans="morph",
-              dur=1000, adv_click=True, title_w=None, title_sz=30, title_y=0.95, center=False, show_title=True):
+              dur=1000, adv_click=True, title_w=None, title_sz=30, title_y=0.95, center=False, show_title=True, own_title=False):
         d = self.d
         s = d.new(key, title=title, notes=notes, trans=trans, dur=dur, adv_click=adv_click)
         no = len(d.slides)
@@ -75,9 +75,9 @@ class Kit:
             else:
                 s.shape(MX, title_y, tw, 0.66, text=title, sz=title_sz, color=WHITE, font=FONT, anchor="t", inset=(0, 0, 0, 0),
                         ph="title", name="!!title", lnsp=0.95)
-        elif title:
+        elif title and not own_title:
             # keep a real (off-slide) title so the slide has a name in outlines and players
-            s.shape(MX, -1.2, 8, 0.6, text=title, sz=20, color=WHITE, inset=(0, 0, 0, 0), ph="title", name="!!title", check=False)
+            s.shape(MX, -1.2, 8, 0.6, text=title, sz=20, color=WHITE, inset=(0, 0, 0, 0), ph="title", name="title-hidden", check=False)
         if sub:
             if center:
                 s.text((SW - 8.6) / 2, title_y + 0.72, 8.6, 0.62, sub, sz=15, color=TEXT, font=FONT_L, align="ctr", name="!!sub", lnsp=1.0)
@@ -207,10 +207,15 @@ def card_h(title, body, w, tsz=17, bsz=14, pad=0.3, icon=False, num=False, tag=F
     return h + pad * 0.85
 
 
-def grid(s, items, x=MX, y=TOP, w=CW, cols=3, gap=0.28, h=None, anim0=150, step=110, name="c", **kw):
-    """Lay cards on a grid. items: dicts passed to card()."""
+def grid(s, items, x=MX, y=TOP, w=CW, cols=3, gap=0.28, h=None, anim0=150, step=110, name="c", bottom=None, after=0.0, **kw):
+    """Lay cards on a grid. items: dicts passed to card().
+    One-row grids get larger type; the block is centred in the free height (bottom = lowest allowed y, after = space kept below for a note).
+    Returns (card height, used height, top y)."""
     cw = (w - gap * (cols - 1)) / cols
     rows = (len(items) + cols - 1) // cols
+    if rows == 1 and "tsz" not in kw:
+        kw["tsz"], kw["bsz"] = (19, 15) if cols <= 3 else (17.5, 14)
+        kw.setdefault("pad", 0.34 if cols <= 3 else 0.3)
     if h is None:
         hs = []
         for it in items:
@@ -218,13 +223,19 @@ def grid(s, items, x=MX, y=TOP, w=CW, cols=3, gap=0.28, h=None, anim0=150, step=
                              icon=bool(it.get("icon")), num=it.get("num") is not None, tag=bool(it.get("tag")), bullet=kw.get("bullet", False),
                              img_h=kw.get("img_h", 0.62) if it.get("img") else 0, inline=kw.get("inline", False)))
         h = max(hs)
+    used = rows * h + (rows - 1) * gap
+    free = (bottom or BOT) - y - used - after
+    if free < -0.02:
+        lib.WARN.append("%s: card grid is %.2f in too tall" % (s.key, -free))
+    if free > 0.3:
+        y += min(free * 0.42, 0.55)
     for i, it in enumerate(items):
         r, c = divmod(i, cols)
         opts = dict(kw)
         opts.update(it)
         opts.setdefault("name", "%s%d" % (name, i))
         card(s, x + c * (cw + gap), y + r * (h + gap), cw, h, anim=(anim0 + i * step) if anim0 is not None else None, **opts)
-    return h, rows * h + (rows - 1) * gap
+    return h, used, y
 
 
 def bullets(s, x, y, w, items, sz=15, gap=9, name=None, anim=None, color=TEXT, h=None):
@@ -323,12 +334,15 @@ def quiz(k, key, question, options, correct, explain, tag="Проверьте с
     ow = 7.35
     fx, fw = MX + ow + 0.35, CW - ow - 0.35
     tw = ow - 1.5
-    hs = [max(0.74, text_height(o, tw, 15, FONT, lnsp=1.0) + 0.34) for o in options]
-    gap = 0.16
+    gap = 0.18
     avail = BOT - y
+    osz = 16
+    base = min(0.92, (avail - gap * (len(options) - 1)) / len(options))
+    hs = [max(base, text_height(o, tw, osz, FONT, lnsp=1.0) + 0.34) for o in options]
     tot = sum(hs) + gap * (len(hs) - 1)
-    if tot > avail:
+    if tot > avail + 0.02:
         lib.WARN.append("%s: quiz options do not fit (%.2f > %.2f)" % (key, tot, avail))
+    y += min(0.3, max(0, (avail - tot) * 0.3))
     oy = y
     rects = []
     for i, (o, oh) in enumerate(zip(options, hs)):
@@ -336,7 +350,7 @@ def quiz(k, key, question, options, correct, explain, tag="Проверьте с
         s.rrect(MX, oy, ow, oh, r=min(0.22, oh / 2), fill="glass", line="glass")
         s.oval(MX + 0.2, oy + oh / 2 - 0.2, 0.4, 0.4, fill=(WHITE, 8), line="glass2", text=LETTERS[i], sz=13, color=WHITE, font=FONT_SB,
                align="ctr", anchor="ctr", inset=(0, 0, 0, 0.01))
-        s.text(MX + 0.82, oy, tw, oh, o, sz=15, color=WHITE, anchor="ctr", lnsp=1.0)
+        s.text(MX + 0.82, oy, tw, oh, o, sz=osz, color=WHITE, anchor="ctr", lnsp=1.0)
         s.end(anim=200 + i * 90)
         rects.append((oy, oh))
         oy += oh + gap
@@ -359,7 +373,7 @@ def quiz(k, key, question, options, correct, explain, tag="Проверьте с
         s.pic("ic_circle-check_ok.png" if good else "ic_circle-x_bad.png", fx + 0.3, y + 0.3, w=0.5)
         s.text(fx + 0.95, y + 0.3, fw - 1.2, 0.5, "Верно!" if good else "Не совсем", sz=20, color=col, font=FONT_SB, anchor="ctr")
         body = explain if good else wrong
-        s.text(fx + 0.3, y + 1.02, fw - 0.6, ph - 1.2, body, sz=14, color=TEXT, lnsp=1.02, spc_after=6)
+        s.text(fx + 0.3, y + 1.02, fw - 0.6, ph - 1.2, body, sz=14.5, color=TEXT, lnsp=1.02, spc_after=6)
         fbs.append(s.end())
     # transparent click areas on top
     for i, (ry, rh) in enumerate(rects):
@@ -410,7 +424,7 @@ def side_steps(s, x, y, w, header, items, cur, title=None, body=None, tip=None, 
 
 def opener(k, key, num, title, lead, points, visual, minutes, notes="", tile=False):
     """Module title slide: one big glass card (the 'Quick Start' card of the reference) with a 3D object."""
-    s = k.slide(key, title="Модуль %s. %s" % (num, title), glow="hero", notes=notes, crumb=False, show_title=False, dur=1250)
+    s = k.slide(key, title="Модуль %s. %s" % (num, title), glow="hero", notes=notes, crumb=False, show_title=False, own_title=True, dur=1250)
     x, y, w, h = MX, 1.25, CW, 5.25
     s.rrect(x, y, w, h, r=0.36, fill="glass", line="glass", name="!!open-card")
     th = text_height(title, 6.2, 38, FONT, lnsp=0.92)
@@ -454,6 +468,12 @@ def tour(k, key, title, mock_fn, zone, header, items, cur, dtitle, dbody, tip=No
 
 
 # ---------------------------------------------------------------- comparison / process / rows
+def vshift(y, used, after=0.0, bottom=None, k=0.42, cap=0.55):
+    """Push a short block down a little so it sits in the optical centre of the free area."""
+    free = (bottom or BOT) - y - used - after
+    return y + (min(free * k, cap) if free > 0.3 else 0)
+
+
 def compare(s, y, bad, good, h=None, bad_title="Так не стоит", good_title="Так лучше", x=MX, w=CW, sz=15, gap=0.3, anim0=150, mono=False):
     """Two glass cards side by side: what to avoid (red mark) and what to do (green mark)."""
     cw = (w - gap) / 2
@@ -465,6 +485,7 @@ def compare(s, y, bad, good, h=None, bad_title="Так не стоит", good_ti
             hh += max(0.5, text_height(t, cw - 1.3, sz, font, lnsp=1.0) + 0.2) + 0.1
         hs.append(hh + 0.2)
     h = h or max(hs)
+    y = vshift(y, h)
     for side, (items, title, col, icon) in enumerate(((bad, bad_title, BAD, "ic_circle-x_bad.png"), (good, good_title, OK, "ic_circle-check_ok.png"))):
         cx = x + side * (cw + gap)
         s.begin("cmp%d" % side)
@@ -482,15 +503,17 @@ def compare(s, y, bad, good, h=None, bad_title="Так не стоит", good_ti
     return h
 
 
-def process(s, y, items, x=MX, w=CW, anim0=150, d=0.74, tsz=17, bsz=14, card_h=None):
-    """Numbered steps on a line (process templates): big number circles joined by a line, a card under each."""
+def process(s, y, items, x=MX, w=CW, anim0=150, d=0.8, tsz=18, bsz=14.5, card_h=None, after=1.0):
+    """Numbered steps on a line (process templates): big number circles joined by a line, a card under each.
+    Returns (used height, top y)."""
     n = len(items)
     gap = 0.26
     cw = (w - gap * (n - 1)) / n
-    cy = y + d / 2
-    s.line(x + cw / 2, cy, x + w - cw / 2, cy, color=(WHITE, 26), lw=1.25, dash="sysDash", name="proc-line", anim=anim0)
     hs = [card_h_(t, b, cw, tsz, bsz) for t, b in items]
     ch = card_h or max(hs)
+    y = vshift(y, d + 0.24 + ch, after=after)
+    cy = y + d / 2
+    s.line(x + cw / 2, cy, x + w - cw / 2, cy, color=(WHITE, 26), lw=1.25, dash="sysDash", name="proc-line", anim=anim0)
     for i, (t, b) in enumerate(items):
         cx = x + i * (cw + gap)
         s.begin("proc%d" % i)
@@ -498,7 +521,7 @@ def process(s, y, items, x=MX, w=CW, anim0=150, d=0.74, tsz=17, bsz=14, card_h=N
                text=str(i + 1), sz=22, color=WHITE, font=FONT_L, align="ctr", anchor="ctr", inset=(0, 0, 0, 0.02))
         card(s, cx, y + d + 0.24, cw, ch, title=t, body=b, tsz=tsz, bsz=bsz, name="proc-card%d" % i, center=False)
         s.end(anim=anim0 + 120 + i * 130)
-    return d + 0.24 + ch
+    return d + 0.24 + ch, y
 
 
 def card_h_(title, body, w, tsz, bsz):
@@ -507,6 +530,8 @@ def card_h_(title, body, w, tsz, bsz):
 
 def rows(s, x, y, w, items, rh=0.62, name="rows", anim0=150, tsz=15, bsz=13.5, tw=3.0, icon_white=False, step=70):
     """List of rows: [icon] title | text. Each row is its own strip, so rows can appear one after another."""
+    y = vshift(y, len(items) * (rh + 0.1) - 0.1)
+    s.rows_y = y
     for i, it in enumerate(items):
         icon, title, text = it
         ry = y + i * (rh + 0.1)

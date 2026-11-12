@@ -42,7 +42,7 @@ def build(k):
     rows(s, MX, 2.2, CW, data, rh=0.72, tw=1.9, bsz=14, tsz=16)
 
     # ------------------------------------------------------------------ final test intro
-    s = k.slide("fin-test", title="Итоговый тест", glow="hero", crumb=False, show_title=False, dur=1250,
+    s = k.slide("fin-test", title="Итоговый тест", glow="hero", crumb=False, show_title=False, own_title=True, dur=1250,
                 notes="Осталось проверить себя. В итоговом тесте пять вопросов по всему курсу. Нажимайте на вариант ответа — и сразу увидите разбор.")
     x, y, w, h = MX, 1.25, CW, 5.25
     s.rrect(x, y, w, h, r=0.36, fill="glass", line="glass", name="!!open-card")
@@ -78,17 +78,17 @@ def build(k):
          tag="Итоговый тест · вопрос 5 из 5")
 
     # ------------------------------------------------------------------ completion
-    s = k.slide("fin-end", title="Курс пройден!", glow="hero", crumb=False, show_title=False, dur=1250,
+    s = k.slide("fin-end", title="Курс пройден!", glow="hero", crumb=False, show_title=False, own_title=True, dur=1250,
                 notes="Поздравляем, курс пройден! Чтобы знания закрепились, сделайте три вещи прямо сегодня: настройте подпись, создайте "
                       "одно правило для рассылок и внесите в календарь регулярные встречи. Спасибо за внимание!")
     x, y, w, h = MX, 1.25, CW, 5.25
     s.rrect(x, y, w, h, r=0.36, fill="glass", line="glass", name="!!open-card")
-    pill(s, x + 0.5, y + 0.5, "Outlook: почта и календарь", sz=12.5, h=0.42, name="open-pill", dot=True, anim=100)
-    s.shape(x + 0.5, y + 1.15, 6.2, 0.7, text="Курс пройден!", sz=38, color=WHITE, font=FONT, lnsp=0.92, inset=(0, 0, 0, 0), ph="title", name="!!title")
-    s.text(x + 0.5, y + 1.92, 6.0, 0.62, "Сделайте три вещи уже сегодня — и знания останутся с вами:", sz=16, color=TEXT, font=FONT_L, name="open-lead", anim=200, lnsp=1.0)
-    num_list(s, x + 0.5, y + 2.78, 6.0, [("Настройте подпись", None), ("Создайте одно правило для рассылок", None), ("Внесите в календарь регулярные встречи", None)],
+    pill(s, x + 0.5, y + 0.45, "Outlook: почта и календарь", sz=12.5, h=0.42, name="open-pill", dot=True, anim=100)
+    s.shape(x + 0.5, y + 1.05, 6.2, 0.7, text="Курс пройден!", sz=38, color=WHITE, font=FONT, lnsp=0.92, inset=(0, 0, 0, 0), ph="title", name="!!title")
+    s.text(x + 0.5, y + 1.8, 6.0, 0.62, "Сделайте три вещи уже сегодня — и знания останутся с вами:", sz=16, color=TEXT, font=FONT_L, name="open-lead", anim=200, lnsp=1.0)
+    num_list(s, x + 0.5, y + 2.66, 6.0, [("Настройте подпись", None), ("Создайте одно правило для рассылок", None), ("Внесите в календарь регулярные встречи", None)],
              sz=14.5, gap=0.2, anim0=300)
-    button(s, x + 0.5, y + 4.3, 2.5, 0.58, "К программе курса", link=("slide", "program-b"), name="end-btn1", sz=14, anim=650, primary=False)
-    button(s, x + 3.2, y + 4.3, 2.5, 0.58, "Пройти ещё раз", link="first", name="end-btn2", sz=14, anim=700, primary=False)
+    button(s, x + 0.5, y + 4.36, 2.5, 0.58, "К программе курса", link=("slide", "program-b"), name="end-btn1", sz=14, anim=650, primary=False)
+    button(s, x + 3.2, y + 4.36, 2.5, 0.58, "Пройти ещё раз", link="first", name="end-btn2", sz=14, anim=700, primary=False)
     vx, vw = x + 7.25, w - 7.25 - 0.42
     tile3d(s, vx, y + 0.42, vw, h - 0.84, "t_star.jpg", name="!!open-vis")

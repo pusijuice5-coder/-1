@@ -306,7 +306,7 @@ def compose_window(s, x, y, k=1.0, name="!!mock-compose", fill=7, cc=True, attac
         "sig_btn": m.zone(x_sig, ry + 0.02, 0.68, 0.76),
         "attach": m.zone(fx0 - 0.03, ay - 0.04, 2.6, 0.38),
         "body": m.zone(0.13, ty - 0.03, W - 0.26, H - ty - 0.1),
-        "text": m.zone(0.24, ty + 0.06, W - 0.48, 0.84),
+        "text": m.zone(0.24, ty + 0.05, W - 0.48, 0.7),
         "sig": m.zone(0.24, ty + 0.9, 3.2, 0.66),
         "win": m.zone(0, 0, W, H),
     }
