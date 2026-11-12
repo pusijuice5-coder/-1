@@ -160,6 +160,7 @@ class Slide:
         self.deck = deck
         self.key = key
         self.items = []
+        self.tail = []         # drawn above everything else (footer navigation)
         self.stack = []
         self.rels = {}
         self.nid = 2
@@ -554,7 +555,7 @@ class Slide:
                 'xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"><p:cSld><p:bg><p:bgPr><a:solidFill><a:srgbClr val="000000"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>'
                 '<p:spTree><p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr>'
                 '<p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/><a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr>%s</p:spTree></p:cSld>'
-                '<p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr>%s%s</p:sld>') % ("".join(self.items), self._transition(), self._timing())
+                '<p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr>%s%s</p:sld>') % ("".join(self.items + self.tail), self._transition(), self._timing())
 
 
 class Deck:
@@ -605,7 +606,11 @@ class Deck:
             rels = dict(s.rels)
             xml = s.xml()
             for ph, key in s.links:
-                tgt = "slide%d.xml" % self.index(key)
+                try:
+                    tgt = "slide%d.xml" % self.index(key)
+                except KeyError:
+                    WARN.append("%s: link target '%s' is not built" % (s.key, key))
+                    tgt = "slide1.xml"
                 rid = "rId%d" % (len(rels) + 1)
                 rels["link" + ph] = (rid, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide", tgt)
                 xml = xml.replace(ph, rid)

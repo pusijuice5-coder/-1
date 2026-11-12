@@ -22,8 +22,8 @@ GLOWS = {   # name -> (file, x, y, w, h, rot, alpha)
     "hero2": ("glow1.jpg", -1.2, -0.8, SW + 2.4, SH + 1.6, 180, 40),
     "a": ("glow2.jpg", 0, 0, SW, SH, 180, 20),
     "b": ("glow2.jpg", -2.2, -1.4, SW + 3.2, SH + 2.4, 180, 20),
-    "c": ("glow2.jpg", -1.0, -0.4, SW + 3.4, SH + 2.0, 172, 20),
-    "d": ("glow2.jpg", -2.6, -2.0, SW + 4.0, SH + 2.6, 188, 20),
+    "c": ("glow2.jpg", -1.6, -0.6, SW + 2.2, SH + 1.8, 180, 20),
+    "d": ("glow2.jpg", -0.6, -2.0, SW + 3.0, SH + 2.6, 180, 20),
 }
 
 
@@ -84,7 +84,10 @@ class Kit:
             else:
                 s.text(MX, title_y + 0.68, title_w or 8.6, 0.36, sub, sz=15, color=TEXT, font=FONT_L, name="!!sub")
         if nav:
+            mark = len(s.items)
             self.footer(s, no)
+            s.tail = s.items[mark:]
+            del s.items[mark:]
         return s
 
     def footer(self, s, no):
@@ -130,7 +133,8 @@ def button(s, x, y, w, h, text, link="next", name=None, sz=15, anim=None, primar
 
 
 def card(s, x, y, w, h, title=None, body=None, icon=None, num=None, tag=None, name=None, anim=None, style="glass",
-         tsz=17, bsz=14, pad=0.3, img=None, img_h=0.62, divider=True, r=0.24, bullet=False, center=False, body_color=TEXT, link=None):
+         tsz=17, bsz=14, pad=0.3, img=None, img_h=0.62, divider=True, r=0.24, bullet=False, center=False, body_color=TEXT, link=None,
+         inline=False):
     """Glass card: [icon | number] + title + thin divider + body text."""
     s.begin(name or "card")
     line = "glass" if style in ("glass", "glass2") else None
@@ -141,6 +145,18 @@ def card(s, x, y, w, h, title=None, body=None, icon=None, num=None, tag=None, na
         iw = img_h * img_size(img)[0] / img_size(img)[1]
         s.pic(img, x + (w - iw) / 2 if center else x + pad - 0.04, cy - 0.04, h=img_h)
         cy += img_h + 0.1
+    elif icon and inline:
+        isz = 0.4
+        th = text_height(title, w - 2 * pad - isz - 0.16, tsz, FONT_SB, lnsp=0.98)
+        rh = max(isz, th)
+        s.pic(ic(icon, white=(style == "accent")), x + pad - 0.03, cy + (rh - isz) / 2, w=isz)
+        s.text(x + pad + isz + 0.13, cy, w - 2 * pad - isz - 0.13, rh, title, sz=tsz, color=WHITE, font=FONT_SB, lnsp=0.98, anchor="ctr")
+        cy += rh + 0.16
+        title = None
+        if body and divider:
+            s.line(x + pad, cy, x + w - pad, cy, color=(WHITE, 20))
+            cy += 0.16
+            divider = False
     elif icon:
         isz = 0.46
         s.pic(ic(icon, white=(style == "accent")), x + (w - isz) / 2 if center else x + pad - 0.03, cy, w=isz)
@@ -165,11 +181,18 @@ def card(s, x, y, w, h, title=None, body=None, icon=None, num=None, tag=None, na
     return s.end(anim=anim)
 
 
-def card_h(title, body, w, tsz=17, bsz=14, pad=0.3, icon=False, num=False, tag=False, bullet=False, divider=True):
+def card_h(title, body, w, tsz=17, bsz=14, pad=0.3, icon=False, num=False, tag=False, bullet=False, divider=True, img_h=0, inline=False):
     """Height a card needs for its content."""
     tw = w - 2 * pad
     h = pad
-    if icon:
+    if inline and icon:
+        h += max(0.4, text_height(title, tw - 0.56, tsz, FONT_SB, lnsp=0.98)) + 0.16
+        if body:
+            h += 0.16 + text_height(body, tw, bsz, FONT, lnsp=1.0, spc_after=5, bullet=bullet)
+        return h + pad * 0.85
+    if img_h:
+        h += img_h + 0.1
+    elif icon:
         h += 0.62
     if num:
         h += 0.5
@@ -192,7 +215,8 @@ def grid(s, items, x=MX, y=TOP, w=CW, cols=3, gap=0.28, h=None, anim0=150, step=
         hs = []
         for it in items:
             hs.append(card_h(it.get("title"), it.get("body"), cw, tsz=kw.get("tsz", 17), bsz=kw.get("bsz", 14), pad=kw.get("pad", 0.3),
-                             icon=bool(it.get("icon")), num=it.get("num") is not None, tag=bool(it.get("tag")), bullet=kw.get("bullet", False)))
+                             icon=bool(it.get("icon")), num=it.get("num") is not None, tag=bool(it.get("tag")), bullet=kw.get("bullet", False),
+                             img_h=kw.get("img_h", 0.62) if it.get("img") else 0, inline=kw.get("inline", False)))
         h = max(hs)
     for i, it in enumerate(items):
         r, c = divmod(i, cols)
@@ -342,3 +366,248 @@ def quiz(k, key, question, options, correct, explain, tag="Проверьте с
         hit = s.rrect(MX, ry, ow, rh, r=min(0.22, rh / 2), fill="hit", name="hit%d" % i, tip="Вариант %s" % LETTERS[i])
         s.trigger(hit, show=[fbs[i]], hide=[hint] + [f for j, f in enumerate(fbs) if j != i])
     return s
+
+
+# ---------------------------------------------------------------- side panel with steps (the 'Categories' menu of the reference)
+def side_steps(s, x, y, w, header, items, cur, title=None, body=None, tip=None, name="side", h_total=None, numbered=True, key=None):
+    """Right-hand menu: header + items (current one highlighted) + description card under it.
+    Shared names make the marker and the texts glide/crossfade between neighbouring slides (Morph)."""
+    pre = "!!%s-" % name
+    s.text(x, y, w, 0.36, header, sz=15, color=WHITE, anchor="ctr", name=pre + "hdr")
+    ly = y + 0.47
+    s.line(x, ly, x + w, ly, color=(WHITE, 30), name=pre + "ln")
+    n = len(items)
+    seg = w / n
+    s.rrect(x + seg * max(cur, 0), ly - 0.025, seg, 0.05, r=0.025, fill=A("ACC"), name=pre + "mark")
+    iy = ly + 0.2
+    ih = 0.36
+    for i, it in enumerate(items):
+        on = i == cur
+        s.oval(x + 0.02, iy + ih / 2 - 0.04, 0.08, 0.08, fill=A("ACC") if on else TEXT, name=pre + "dot%d" % i)
+        s.text(x + 0.26, iy, w - 0.7, ih, it, sz=13.5, color=A("ACC") if on else TEXT, font=FONT_SB if on else FONT, anchor="ctr",
+               name=pre + "it%d" % i, check=False)
+        if numbered:
+            s.text(x + w - 0.4, iy, 0.4, ih, str(i + 1), sz=13.5, color=A("ACC") if on else TEXT, align="r", anchor="ctr", name=pre + "n%d" % i)
+        iy += ih
+    cy = iy + 0.18
+    if title or body:
+        ch = (h_total - (cy - y)) if h_total else 2.0
+        s.rrect(x - 0.12, cy, w + 0.24, ch, r=0.22, fill="glass", line="glass", name=pre + "card")
+        ty = cy + 0.22
+        uid = key or s.key
+        if title:
+            th = text_height(title, w - 0.2, 16, FONT_SB, lnsp=0.98)
+            s.text(x + 0.1, ty, w - 0.2, th + 0.04, title, sz=16, color=WHITE, font=FONT_SB, lnsp=0.98, name="side-t")
+            ty += th + 0.12
+        if body:
+            bh = cy + ch - ty - (0.62 if tip else 0.18)
+            s.text(x + 0.1, ty, w - 0.2, bh, body, sz=13, color=TEXT, lnsp=1.0, spc_after=5, name="side-b")
+        if tip:
+            s.pic(ic("keyboard"), x + 0.1, cy + ch - 0.5, w=0.3, name="side-ki")
+            s.text(x + 0.5, cy + ch - 0.56, w - 0.5, 0.42, tip, sz=12.5, color=WHITE, font=FONT_SB, anchor="ctr", name="side-k", check=False)
+    return cy
+
+
+def opener(k, key, num, title, lead, points, visual, minutes, notes="", tile=False):
+    """Module title slide: one big glass card (the 'Quick Start' card of the reference) with a 3D object."""
+    s = k.slide(key, title="Модуль %s. %s" % (num, title), glow="hero", notes=notes, crumb=False, show_title=False, dur=1250)
+    x, y, w, h = MX, 1.25, CW, 5.25
+    s.rrect(x, y, w, h, r=0.36, fill="glass", line="glass", name="!!open-card")
+    th = text_height(title, 6.2, 38, FONT, lnsp=0.92)
+    lh = text_height(lead, 6.0, 16, FONT_L, lnsp=1.0)
+    ph_ = text_height([{"t": t, "spcAft": 5} for t in points], 6.0, 14.5, FONT, lnsp=1.0, spc_after=5, bullet=True)
+    total = 0.42 + 0.3 + th + 0.18 + lh + 0.34 + 0.36 + ph_
+    cy = y + (h - total) / 2
+    pill(s, x + 0.5, cy, "Модуль %s из 05  ·  %s" % (num, minutes), sz=12.5, h=0.42, name="open-pill", dot=True, anim=100)
+    cy += 0.42 + 0.3
+    s.shape(x + 0.5, cy, 6.2, th + 0.1, text=title, sz=38, color=WHITE, font=FONT, lnsp=0.92, inset=(0, 0, 0, 0), ph="title",
+            name="!!title", anchor="t")
+    cy += th + 0.18
+    s.text(x + 0.5, cy, 6.0, lh + 0.05, lead, sz=16, color=TEXT, font=FONT_L, lnsp=1.0, name="open-lead", anim=200)
+    cy += lh + 0.34
+    s.text(x + 0.5, cy, 3, 0.3, "Вы узнаете", sz=12, color=A("ACC_SOFT"), font=FONT_SB, name="open-h", anim=300)
+    bullets(s, x + 0.5, cy + 0.36, 6.0, points, sz=14.5, gap=5, name="open-pts", anim=380)
+    vx, vw = x + 7.25, w - 7.25 - 0.42
+    if tile:
+        tile3d(s, vx, y + 0.42, vw, h - 0.84, visual, name="!!open-vis", anim=None)
+    else:
+        s.rrect(vx, y + 0.42, vw, h - 0.84, r=0.26, fill=PANEL, name="!!open-panel")
+        pw, ph = img_size(visual)
+        ih = min(h - 1.7, (vw - 0.7) * ph / pw)
+        iw = ih * pw / ph
+        s.pic(visual, vx + (vw - iw) / 2, y + (h - ih) / 2, iw, ih, name="!!open-obj", anim=250)
+    return s
+
+
+def tour(k, key, title, mock_fn, zone, header, items, cur, dtitle, dbody, tip=None, notes="", sub=None, side_name="tour", mock_kw=None,
+         hl=True, mx=MX, my=1.78, mk=0.925, glow=None, side_x=None, hl_pad=0.05):
+    """Window mock on the left + step menu on the right; the highlight frame morphs from zone to zone."""
+    import mock
+    s = k.slide(key, title=title, notes=notes, glow=glow, dur=900)
+    z = mock_fn(s, mx, my, k=mk, **(mock_kw or {}))
+    if hl and zone and z.get(zone):
+        mock.highlight(s, z[zone], pad=hl_pad)
+    wx, wy, ww, wh = z["win"]
+    sx = side_x or (wx + ww + 0.48)
+    side_steps(s, sx, my - 0.02, SW - MX - sx, header, items, cur, dtitle, dbody, tip=tip, name=side_name, h_total=wh + 0.04)
+    return s, z
+
+
+# ---------------------------------------------------------------- comparison / process / rows
+def compare(s, y, bad, good, h=None, bad_title="Так не стоит", good_title="Так лучше", x=MX, w=CW, sz=15, gap=0.3, anim0=150, mono=False):
+    """Two glass cards side by side: what to avoid (red mark) and what to do (green mark)."""
+    cw = (w - gap) / 2
+    font = FONT
+    hs = []
+    for items in (bad, good):
+        hh = 0.95
+        for t in items:
+            hh += max(0.5, text_height(t, cw - 1.3, sz, font, lnsp=1.0) + 0.2) + 0.1
+        hs.append(hh + 0.2)
+    h = h or max(hs)
+    for side, (items, title, col, icon) in enumerate(((bad, bad_title, BAD, "ic_circle-x_bad.png"), (good, good_title, OK, "ic_circle-check_ok.png"))):
+        cx = x + side * (cw + gap)
+        s.begin("cmp%d" % side)
+        s.rrect(cx, y, cw, h, r=0.26, fill="glass", line="glass")
+        s.rrect(cx + 0.3, y + 0.3, text_width(title, 12.5, FONT_SB) + 0.5, 0.4, r=0.2, fill=(col, 14), line=(col, 70), text=title, sz=12.5,
+                color=col, font=FONT_SB, align="ctr", anchor="ctr", inset=(0.05, 0, 0.05, 0.01))
+        ry = y + 0.92
+        for t in items:
+            rh = max(0.5, text_height(t, cw - 1.3, sz, font, lnsp=1.0) + 0.2)
+            s.rrect(cx + 0.3, ry, cw - 0.6, rh, r=0.12, fill=(WHITE, 5), line="glass2")
+            s.pic(icon, cx + 0.44, ry + rh / 2 - 0.15, w=0.3)
+            s.text(cx + 0.9, ry, cw - 1.3, rh, t, sz=sz, color=WHITE if side else TEXT, anchor="ctr", lnsp=1.0)
+            ry += rh + 0.1
+        s.end(anim=anim0 + side * 160)
+    return h
+
+
+def process(s, y, items, x=MX, w=CW, anim0=150, d=0.74, tsz=17, bsz=14, card_h=None):
+    """Numbered steps on a line (process templates): big number circles joined by a line, a card under each."""
+    n = len(items)
+    gap = 0.26
+    cw = (w - gap * (n - 1)) / n
+    cy = y + d / 2
+    s.line(x + cw / 2, cy, x + w - cw / 2, cy, color=(WHITE, 26), lw=1.25, dash="sysDash", name="proc-line", anim=anim0)
+    hs = [card_h_(t, b, cw, tsz, bsz) for t, b in items]
+    ch = card_h or max(hs)
+    for i, (t, b) in enumerate(items):
+        cx = x + i * (cw + gap)
+        s.begin("proc%d" % i)
+        s.oval(cx + cw / 2 - d / 2, y, d, d, fill=("grad", [(0, A("CARD1"), None), (100, "0A0A10", None)], 60), line=A("ACC"), lw=1.5,
+               text=str(i + 1), sz=22, color=WHITE, font=FONT_L, align="ctr", anchor="ctr", inset=(0, 0, 0, 0.02))
+        card(s, cx, y + d + 0.24, cw, ch, title=t, body=b, tsz=tsz, bsz=bsz, name="proc-card%d" % i, center=False)
+        s.end(anim=anim0 + 120 + i * 130)
+    return d + 0.24 + ch
+
+
+def card_h_(title, body, w, tsz, bsz):
+    return card_h(title, body, w, tsz=tsz, bsz=bsz)
+
+
+def rows(s, x, y, w, items, rh=0.62, name="rows", anim0=150, tsz=15, bsz=13.5, tw=3.0, icon_white=False, step=70):
+    """List of rows: [icon] title | text. Each row is its own strip, so rows can appear one after another."""
+    for i, it in enumerate(items):
+        icon, title, text = it
+        ry = y + i * (rh + 0.1)
+        s.begin("%s%d" % (name, i))
+        s.rrect(x, ry, w, rh, r=min(0.18, rh / 2), fill="glass", line="glass2")
+        s.pic(ic(icon, white=icon_white), x + 0.22, ry + rh / 2 - 0.17, w=0.34)
+        s.text(x + 0.74, ry, tw, rh, title, sz=tsz, color=WHITE, font=FONT_SB, anchor="ctr", lnsp=0.98)
+        s.text(x + 0.74 + tw + 0.1, ry, w - tw - 1.1, rh, text, sz=bsz, color=TEXT, anchor="ctr", lnsp=1.0)
+        s.end(anim=(anim0 + i * step) if anim0 is not None else None)
+    return len(items) * (rh + 0.1) - 0.1
+
+
+def letter(s, x, y, w, h, sender, addr, subject, paras, attach=None, name="letter", sz=12.5, anim=None, danger=False, rpad=0.3):
+    """A message drawn as a glass card. Returns anchor points {'from','subject','p0'..,'attach'} -> (x, y) for number badges."""
+    s.begin(name)
+    s.rrect(x, y, w, h, r=0.24, fill="0B0A10", line="glass", fx="shadow")
+    pts = {}
+    s.oval(x + 0.3, y + 0.3, 0.52, 0.52, fill=((BAD if danger else A("ACC2")), 45), text=sender[:1], sz=14, color=WHITE, font=FONT_SB,
+           align="ctr", anchor="ctr", inset=(0, 0, 0, 0.01))
+    s.text(x + 0.98, y + 0.26, w - 1.3, 0.3, sender, sz=13.5, color=WHITE, font=FONT_SB, anchor="ctr")
+    s.text(x + 0.98, y + 0.56, w - 1.3, 0.28, addr, sz=11.5, color=BAD if danger else MUTED, anchor="ctr")
+    pts["from"] = (x + 0.98 + min(w - 1.7, text_width(addr, 11.5) + 0.12), y + 0.52)
+    s.line(x + 0.3, y + 0.98, x + w - 0.3, y + 0.98, color=(WHITE, 16))
+    sh = text_height(subject, w - 0.3 - rpad, 15, FONT_SB, lnsp=0.98)
+    s.text(x + 0.3, y + 1.1, w - 0.3 - rpad, sh + 0.04, subject, sz=15, color=WHITE, font=FONT_SB, lnsp=0.98)
+    pts["subject"] = (x + 0.3 + min(w - 1.0, text_width(subject, 15, FONT_SB) + 0.12), y + 1.08)
+    cy = y + 1.1 + sh + 0.16
+    for i, p in enumerate(paras):
+        ph = text_height(p, w - 0.3 - rpad, sz, FONT, lnsp=1.0)
+        s.text(x + 0.3, cy, w - 0.3 - rpad, ph + 0.03, p, sz=sz, color=TEXT, lnsp=1.0)
+        pts["p%d" % i] = (x + w - 0.56, cy + ph / 2 - 0.16)
+        pts["p%dy" % i] = (cy, ph)
+        cy += ph + 0.13
+    if attach:
+        aw = text_width(attach, 11.5) + 0.95
+        s.rrect(x + 0.3, cy + 0.02, aw, 0.4, r=0.1, fill=(WHITE, 6), line="glass2")
+        s.pic(ic("paperclip"), x + 0.4, cy + 0.11, w=0.22)
+        s.text(x + 0.7, cy + 0.02, aw - 0.75, 0.4, attach, sz=11.5, color=TEXT, anchor="ctr")
+        pts["attach"] = (x + 0.3 + aw + 0.1, cy + 0.04)
+        cy += 0.5
+    pts["end"] = (x, cy)
+    s.end(anim=anim)
+    return pts
+
+
+def num_badge(s, x, y, n, d=0.34, name=None, anim=None, color=None):
+    s.oval(x, y, d, d, fill="accent" if not color else color, text=str(n), sz=11.5 * d / 0.34, color=WHITE, font=FONT_SB, align="ctr",
+           anchor="ctr", inset=(0, 0, 0, 0.01), name=name, anim=anim, fx="glow_s")
+
+
+def num_list(s, x, y, w, items, sz=14, gap=0.14, name="nl", anim0=200, d=0.34, tsz=None, title_color=WHITE):
+    """Numbered explanations: (title, text) with accent number badges. Returns used height."""
+    cy = y
+    for i, it in enumerate(items):
+        title, text = it if isinstance(it, tuple) else (it, None)
+        paras = [{"t": title, "font": FONT_SB, "color": title_color, "sz": tsz or sz + 1}]
+        if text:
+            paras.append({"t": text, "spcBef": 2})
+        hh = text_height(paras, w - d - 0.2, sz, FONT, lnsp=1.0)
+        s.begin("%s%d" % (name, i))
+        num_badge(s, x, cy + 0.02, i + 1, d=d)
+        s.text(x + d + 0.2, cy, w - d - 0.2, hh + 0.04, paras, sz=sz, color=TEXT, lnsp=1.0)
+        s.end(anim=(anim0 + i * 100) if anim0 is not None else None)
+        cy += max(hh, d) + gap
+    return cy - y - gap
+
+
+def side_stepper(s, x, y, w, items, cur, title, body, tip=None, name="stp", h_total=4.4, tsz=20, bsz=14.5):
+    """Right-hand panel for step-by-step tours: 'Шаг N из M', a row of numbered dots (current one glows) and a description card."""
+    pre = "!!%s-" % name
+    n = len(items)
+    s.text(x, y, w, 0.34, "Шаг %d из %d" % (cur + 1, n), sz=13, color=A("ACC_SOFT"), font=FONT_SB, anchor="ctr", name=pre + "hdr")
+    d = 0.42
+    cy = y + 0.5
+    stepw = (w - d) / (n - 1)
+    s.line(x + d / 2, cy + d / 2, x + w - d / 2, cy + d / 2, color=(WHITE, 22), lw=1.0, name=pre + "ln")
+    if cur > 0:
+        s.line(x + d / 2, cy + d / 2, x + d / 2 + stepw * cur, cy + d / 2, color=A("ACC"), lw=1.5, name=pre + "ln2")
+    for i in range(n):
+        cx = x + i * stepw
+        if i == cur:
+            s.oval(cx - 0.04, cy - 0.04, d + 0.08, d + 0.08, fill="accent", text=str(i + 1), sz=14, color=WHITE, font=FONT_SB, align="ctr",
+                   anchor="ctr", inset=(0, 0, 0, 0.01), name=pre + "c%d" % i, fx="glow_s")
+        elif i < cur:
+            s.oval(cx, cy, d, d, fill=A("TINT"), line=A("ACC"), lw=1.25, text=str(i + 1), sz=12.5, color=WHITE, font=FONT_SB, align="ctr",
+                   anchor="ctr", inset=(0, 0, 0, 0.01), name=pre + "c%d" % i)
+        else:
+            s.oval(cx, cy, d, d, fill="16141C", line="glass", text=str(i + 1), sz=12.5, color=MUTED, font=FONT_SB, align="ctr",
+                   anchor="ctr", inset=(0, 0, 0, 0.01), name=pre + "c%d" % i)
+    ky = cy + d + 0.36
+    ch = y + h_total - ky
+    s.rrect(x, ky, w, ch, r=0.26, fill="glass", line="glass", name=pre + "card")
+    ty = ky + 0.32
+    th = text_height(title, w - 0.7, tsz, FONT_SB, lnsp=0.98)
+    s.text(x + 0.35, ty, w - 0.7, th + 0.05, title, sz=tsz, color=WHITE, font=FONT_SB, lnsp=0.98, name="stp-t")
+    ty += th + 0.14
+    s.line(x + 0.35, ty, x + w - 0.35, ty, color=(WHITE, 20), name=pre + "cl")
+    ty += 0.18
+    bh = ky + ch - ty - (0.78 if tip else 0.2)
+    s.text(x + 0.35, ty, w - 0.7, bh, body, sz=bsz, color=TEXT, lnsp=1.02, spc_after=6, name="stp-b")
+    if tip:
+        s.text(x + 0.35, ky + ch - 0.74, 1.6, 0.44, "Быстрее с клавиатуры:", sz=11.5, color=MUTED, anchor="ctr", name="stp-kl", check=False, lnsp=0.95)
+        keys(s, x + 2.0, ky + ch - 0.74, tip.replace(" ", ""))
+    return ky

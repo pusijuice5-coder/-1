@@ -13,7 +13,7 @@ const ICONS = ['mail', 'mail-open', 'mail-plus', 'mail-check', 'mail-warning', '
   'book-open', 'share-2', 'plus', 'monitor', 'laptop', 'building-2', 'briefcase', 'handshake', 'pin', 'bookmark', 'upload', 'download', 'grid-2x2', 'plane', 'smile',
   'clipboard-list', 'clipboard-check', 'text', 'type', 'heading', 'align-left', 'hourglass', 'alarm-clock', 'coffee', 'palmtree', 'plane-takeoff', 'log-out', 'home',
   'circle-user', 'contact', 'users-round', 'notebook-pen', 'sticky-note', 'file-check', 'file-warning', 'file-lock', 'file-x', 'route', 'milestone', 'play', 'menu', 'ellipsis'];
-const STATUS = ['circle-check', 'circle-x', 'check', 'x', 'triangle-alert', 'thumbs-up', 'ban', 'shield-check', 'shield-alert', 'circle-alert'];
+const STATUS = ['circle-check', 'circle-x', 'check', 'x', 'triangle-alert', 'thumbs-up', 'ban', 'shield-check', 'shield-alert', 'circle-alert', 'circle-help', 'flag'];
 const SCOLORS = { '_ok': '#3DDC84', '_bad': '#FF5C7A', '_warn': '#FFC53D' };
 const COLORS = { '': '#FF00DB', '_w': '#FFFFFF', '_g': '#3DEB6C' };
 (async () => {
