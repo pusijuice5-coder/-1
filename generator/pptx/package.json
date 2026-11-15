@@ -1,0 +1,1 @@
+{ "name": "course-pptx", "private": true, "description": "PPTX generator for the courses", "dependencies": { "pptxgenjs": "^3.12.0", "sharp": "^0.33.5" } }

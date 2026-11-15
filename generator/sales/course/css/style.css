@@ -363,6 +363,9 @@ ul.dot li::before{content:"";position:absolute;left:2px;top:13px;width:6px;heigh
 #menu .mi[disabled]{opacity:.38;cursor:not-allowed}
 #menu .mi.cur{background:rgba(16,185,129,.18);color:#fff}
 #menu .mi i{flex:none;width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);display:grid;place-items:center;font-style:normal;font-size:10px;color:transparent}
+#menu a.mi{text-decoration:none;box-sizing:border-box;color:var(--e300);font-weight:600}
+#menu a.mi i{border-color:var(--e400);color:var(--e300)}
+#menu a.mi:hover{background:var(--panel2)}
 #menu .mi.done i{background:var(--e400);border-color:var(--e400);color:#02130d}
 
 /* ===== Адаптив ===== */

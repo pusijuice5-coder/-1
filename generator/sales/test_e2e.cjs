@@ -1,9 +1,11 @@
 /* Сквозная проверка курса в заглушке LMS (SCORM 1.2).
    1) cd generator/sales && python3 -m http.server 8766
-   2) node test_e2e.cjs [папка_для_скриншотов] */
+   2) node test_e2e.cjs [папка_для_скриншотов|-] [2004] [базовый URL] */
 const { chromium } = require('playwright');
 (async () => {
-  const shots = process.argv[2];
+  const shots = process.argv[2] && process.argv[2] !== '-' ? process.argv[2] : null;
+  const v2004 = process.argv[3] === '2004';
+  const base = process.argv[4] || 'http://localhost:8766/';
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1366, height: 768 } });
   const errs = [];
@@ -12,7 +14,7 @@ const { chromium } = require('playwright');
   // предзагрузка видео прерывается при перелистывании — это не ошибка
   p.on('requestfailed', r => { if (!/\.mp4$/.test(r.url())) errs.push('REQFAIL ' + r.url()); });
   p.on('response', r => { if (r.status() >= 400) errs.push(r.status() + ' ' + r.url()); });
-  await p.goto('http://localhost:8766/test_lms.html');
+  await p.goto(base + (v2004 ? 'test_lms2004.html' : 'test_lms.html'));
   const f = p.frames().find(x => x.url().includes('course/index.html'));
   await f.waitForSelector('#next');
   const total = await f.evaluate(() => window.__course.screens.length);
@@ -62,9 +64,11 @@ const { chromium } = require('playwright');
   }
   const res = await p.evaluate(() => ({ data: window.DATA, log: window.LOG.length, fin: window.LOG.filter(x => x === 'Finish').length, init: window.LOG.filter(x => x === 'Initialize').length }));
   console.log('экранов пройдено:', total, '| заблокированных заданий проверено:', gatedChecked);
-  console.log('lesson_status:', res.data['cmi.core.lesson_status'], '| score.raw:', res.data['cmi.core.score.raw'], '| location:', res.data['cmi.core.lesson_location']);
+  const status = v2004 ? res.data['cmi.success_status'] : res.data['cmi.core.lesson_status'];
+  if (v2004) console.log('success_status:', status, '| completion_status:', res.data['cmi.completion_status'], '| score.raw:', res.data['cmi.score.raw'], '| score.scaled:', res.data['cmi.score.scaled'], '| location:', res.data['cmi.location']);
+  else console.log('lesson_status:', status, '| score.raw:', res.data['cmi.core.score.raw'], '| location:', res.data['cmi.core.lesson_location']);
   console.log('suspend_data (' + res.data['cmi.suspend_data'].length + ' симв.):', res.data['cmi.suspend_data']);
-  console.log('session_time:', res.data['cmi.core.session_time'], '| Initialize:', res.init, '| Finish:', res.fin);
+  console.log('session_time:', res.data[v2004 ? 'cmi.session_time' : 'cmi.core.session_time'], '| Initialize:', res.init, '| Finish:', res.fin);
   // возобновление: перезагрузка фрейма должна вернуть на последний экран
   await p.evaluate(() => { document.getElementById('f').src = 'course/index.html?r=1'; });
   await p.waitForTimeout(1200);
@@ -72,5 +76,5 @@ const { chromium } = require('playwright');
   console.log('после повторного входа открыт экран:', await f2.evaluate(() => window.__course.state.i));
   console.log('ошибки:', errs.length ? '\n' + errs.join('\n') : 'нет');
   await b.close();
-  if (res.data['cmi.core.lesson_status'] !== 'passed' || errs.length) process.exit(1);
+  if (status !== 'passed' || errs.length) process.exit(1);
 })().catch(e => { console.error('FAIL', e.message); process.exit(1); });

@@ -495,8 +495,9 @@
         h += '<button class="mi' + (s.idx === st.i ? ' cur' : '') + (ok ? ' done' : '') + '" data-i="' + s.idx + '"' + (s.idx > r ? ' disabled' : '') + '><i>✓</i><span>' + (s.menu || String(s.title || m.title).replace(/\*/g, '')) + '</span></button>';
       });
     });
+    if (CFG.PRESENTATION) h += '<div class="mh">Материалы</div><a class="mi dl" href="' + CFG.PRESENTATION + '" download target="_blank" rel="noopener"><i>↓</i><span>Скачать презентацию курса (PowerPoint)</span></a>';
     var l = $('#menu .list'); l.innerHTML = h;
-    $$('.mi', l).forEach(function (b) { b.onclick = function () { menu(false); go(+b.dataset.i); }; });
+    $$('button.mi', l).forEach(function (b) { b.onclick = function () { menu(false); go(+b.dataset.i); }; });
     var cur = $('.mi.cur', l); if (cur) cur.scrollIntoView({ block: 'center' });
   }
 
