@@ -3,6 +3,7 @@
   'use strict';
   var C = window.COURSE, CFG = window.COURSE_CONFIG || {};
   var PASS = CFG.PASS_SCORE || 80;
+  var MODW = CFG.MODULE_WORD || 'Модуль';
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
@@ -82,7 +83,7 @@
   function head(s, big) {
     var m = s.mod, k = '';
     if (s.kicker !== false) {
-      k = '<div class="kicker rv">' + (s.kicker || ((m.num ? 'Модуль ' + m.num + ' · ' : '') + m.title)) +
+      k = '<div class="kicker rv">' + (s.kicker || ((m.num ? MODW + ' ' + m.num + ' · ' : '') + m.title)) +
         (m.track ? ' <span class="tag">' + m.track + '</span>' : '') + '</div>';
     }
     return k + (s.title ? '<' + (big ? 'h1' : 'h2') + ' class="t rv" style="--i:1">' + hl(s.title) + '</' + (big ? 'h1' : 'h2') + '>' : '') +
@@ -112,15 +113,41 @@
     };
   };
 
+  /* обложка с полноэкранной иллюстрацией */
+  R.cover = function (s) {
+    return {
+      html: '<div class="cover"><div class="kicker rv">' + s.kicker + '</div>' +
+        '<h1 class="t rv" style="--i:1">' + hl(s.title) + '</h1>' +
+        '<p class="lead rv" style="--i:2">' + s.lead + '</p>' +
+        '<div class="chips rv" style="--i:3">' + s.chips.map(function (c) { return '<span class="chip">' + c + '</span>'; }).join('') + '</div>' +
+        '<div class="hero-cta rv" style="--i:4"><button class="btn primary" data-next>' + (st.v[1] ? 'Продолжить' : (s.cta || 'Начать курс')) + ARROW_R + '</button>' +
+        '<span class="src">Листайте кнопками внизу или стрелками ← → на клавиатуре</span></div></div>',
+      mount: function (el) {
+        el.style.backgroundImage = 'linear-gradient(90deg,rgba(2,13,9,.92) 0%,rgba(2,13,9,.72) 42%,rgba(2,13,9,.12) 100%),url(' + s.img + ')';
+        el.classList.add('coverbg');
+        $('[data-next]', el).onclick = function () { go(st.i + 1); };
+      }
+    };
+  };
+
+  /* карта маршрута: остановки курса */
+  R.route = function (s) {
+    return {
+      html: head(s) + '<div class="route rv" style="--i:3">' + s.items.map(function (c, i) {
+        return '<div class="stop rv" style="--i:' + (4 + i) + '"><span class="dot">' + c.n + '</span><h3>' + c.h + '</h3><p>' + c.t + '</p></div>';
+      }).join('') + '</div>' + say(s)
+    };
+  };
+
   R.module = function (s) {
     var m = s.mod;
     return {
       html: '<div class="mod"><div class="n rv">' + m.num + '</div><div style="display:grid;gap:18px">' +
-        '<div class="modtop rv" style="--i:1"><div class="kicker">Модуль ' + m.num + (m.track ? ' <span class="tag">' + m.track + '</span>' : '') + '</div>' +
+        '<div class="modtop rv" style="--i:1"><div class="kicker">' + MODW + ' ' + m.num + (m.track ? ' <span class="tag">' + m.track + '</span>' : '') + '</div>' +
         '<div class="chips">' + (s.meta || []).map(function (c) { return '<span class="chip">' + c + '</span>'; }).join('') + '</div></div>' +
         '<h1 class="t rv" style="--i:2;font-size:clamp(26px,3.8vw,50px)">' + hl(s.title || m.title) + '</h1>' +
         (s.lead ? '<p class="lead rv" style="--i:3">' + s.lead + '</p>' : '') +
-        '<div class="card rv" style="--i:4"><h3>После модуля вы сможете</h3>' + list(s.goals) + '</div>' +
+        '<div class="card rv" style="--i:4"><h3>' + (CFG.GOALS_TITLE || 'После модуля вы сможете') + '</h3>' + list(s.goals) + '</div>' +
         '</div></div>' + say(s)
     };
   };
@@ -145,7 +172,7 @@
     return {
       html: head(s) + '<div class="grid g' + cols + '">' + s.items.map(function (c, i) {
         return '<div class="card ' + (c.cls || s.variant || '') + ' rv" style="--i:' + (3 + i) + '">' +
-          (c.ico ? '<div class="ico">' + ico(c.ico) + '</div>' : '') + (c.num ? '<span class="num">' + c.num + '</span>' : '') +
+          (c.ava ? '<div class="ava sm">' + c.ava + '</div>' : '') + (c.ico ? '<div class="ico">' + ico(c.ico) + '</div>' : '') + (c.num ? '<span class="num">' + c.num + '</span>' : '') +
           (c.big ? '<div class="bignum">' + c.big + '</div>' : '') +
           '<h3>' + c.h + '</h3>' + (c.t ? '<p>' + c.t + '</p>' : '') + (c.list ? list(c.list, 'dot') : '') +
           (c.ex ? '<span class="ex">' + c.ex + '</span>' : '') + '</div>';
@@ -392,7 +419,7 @@
         function intro() {
           var prev = st.e >= 0 ? '<p class="p">Ваш лучший результат: <b>' + st.e + '%</b>' + (st.p ? ' — тест сдан.' : '') + '</p>' : '';
           host.innerHTML = '<div class="grid g3">' +
-            '<div class="card"><div class="bignum">' + n + '</div><h3>вопросов</h3><p>По всем модулям курса: общая часть, розница и корпоративный бизнес.</p></div>' +
+            '<div class="card"><div class="bignum">' + n + '</div><h3>вопросов</h3><p>' + (s.note || 'По всем разделам курса.') + '</p></div>' +
             '<div class="card"><div class="bignum">' + PASS + '%</div><h3>проходной балл</h3><p>Нужно ответить верно минимум на ' + Math.ceil(n * PASS / 100) + ' ' + plural(Math.ceil(n * PASS / 100), 'вопрос', 'вопроса', 'вопросов') + '.</p></div>' +
             '<div class="card"><div class="bignum">∞</div><h3>попыток</h3><p>Если не получилось — вернитесь к модулям через меню и попробуйте снова.</p></div></div>' + prev +
             '<div class="row" style="margin-top:6px"><button class="btn primary" data-go>' + (st.e >= 0 ? 'Пройти тест заново' : 'Начать тест') + ARROW_R + '</button></div>';
@@ -521,8 +548,8 @@
     if (st.v[i] === 0) st.v[i] = 1;
     var r = (R[s.type] || R.text)(s);
     stage.innerHTML = '<section class="screen" tabindex="-1"><div class="wrap' + (s.top || /quiz|exam|dialog|classify|sort|accordion|tabs|steps/.test(s.type) ? ' topalign' : '') + '">' + r.html + '</div></section>';
-    document.body.classList.toggle('calm', !/hero|module|finish/.test(s.type));
-    crumbB.textContent = C.title; crumbS.textContent = (s.mod.num ? 'Модуль ' + s.mod.num + ' · ' : '') + s.mod.title;
+    document.body.classList.toggle('calm', !/hero|cover|module|finish/.test(s.type));
+    crumbB.textContent = C.title; crumbS.textContent = (s.mod.num ? MODW + ' ' + s.mod.num + ' · ' : '') + s.mod.title;
     if (r.mount) r.mount($('.screen', stage));
     nav(); save();
   }

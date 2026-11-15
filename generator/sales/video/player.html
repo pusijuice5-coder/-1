@@ -22,6 +22,12 @@
     border-left:1px solid rgba(110,231,183,.05);animation:bar var(--d) ease-in-out var(--dl) infinite alternate}
   .shade{position:absolute;inset:0;background:radial-gradient(90% 75% at 50% 42%,transparent 35%,rgba(1,8,6,.78) 100%)}
   .lg{position:absolute;right:56px;top:40px;height:40px}
+  .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+  .bgshade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,13,9,.9) 0%,rgba(2,13,9,.6) 45%,rgba(2,13,9,.05) 100%)}
+  .big.yr{font-size:170px;top:230px;letter-spacing:-.04em}
+  .stat{display:flex;gap:26px;margin-top:40px}
+  .stat .tile .n{font-size:84px;margin-bottom:6px}
+  .stat .tile b{font-size:28px;font-weight:500;color:#cfe3da}
   .sc{position:absolute;inset:0;padding:48px 64px 0;display:none}
   .kk{font-family:var(--head);font-weight:600;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--e300);display:flex;align-items:center;gap:12px}
   .kk::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--lime);box-shadow:0 0 14px var(--lime)}
@@ -88,8 +94,12 @@
   <div id="scenes"></div>
   <div id="cap"></div><div id="bar"></div>
 </div>
-<script src="scenes.js"></script>
-<script src="timings.js"></script>
+<script>
+/* ?v=v1&dir=<папка со scenes.js и timings.js>&css=<доп. стили через запятую> */
+var Q = new URLSearchParams(location.search), DIR = Q.get('dir') || '.';
+if (Q.get('css')) Q.get('css').split(',').forEach(function (c) { document.write('<link rel="stylesheet" href="' + c + '">'); });
+document.write('<script src="lib.js"><\/script><script src="' + DIR + '/scenes.js"><\/script><script src="' + DIR + '/timings.js"><\/script>');
+</script>
 <script>
 (function () {
   var id = new URLSearchParams(location.search).get('v') || 'v1';

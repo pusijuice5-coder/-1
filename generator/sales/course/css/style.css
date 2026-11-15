@@ -164,6 +164,18 @@ ul.dot li::before{content:"";position:absolute;left:2px;top:13px;width:6px;heigh
 .hero .char{justify-self:center;width:min(100%,400px)}
 .hero-cta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:6px}
 
+/* ===== Обложка с иллюстрацией и карта маршрута ===== */
+.screen.coverbg{background-size:cover;background-position:right center}
+.cover{display:grid;gap:22px;max-width:760px}
+.cover h1{font-size:clamp(34px,5.4vw,76px)}
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;position:relative;padding-top:26px}
+.route::before{content:"";position:absolute;left:3%;right:3%;top:48px;border-top:2px dashed rgba(110,231,183,.45)}
+.stop{position:relative;padding:0 6px}
+.stop .dot{position:relative;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;margin-bottom:14px;font-family:var(--head);font-weight:700;font-size:15px;color:#02130d;
+  background:linear-gradient(160deg,var(--lime),var(--e400));box-shadow:0 0 0 6px rgba(2,13,9,.9),0 0 26px rgba(52,211,153,.5)}
+.stop h3{font-family:var(--head);font-weight:600;font-size:clamp(16px,1.4vw,20px);margin-bottom:6px}
+.stop p{font-size:14.5px;color:#c4d9cf;line-height:1.45}
+.ava.sm{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;margin-bottom:12px;font-family:var(--head);font-weight:700;font-size:17px;color:#02130d;background:linear-gradient(160deg,var(--e300),var(--e600))}
 /* ===== Обложка модуля ===== */
 .mod{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,56px);align-items:center}
 .mod .n{font-family:var(--head);font-weight:600;font-size:clamp(110px,19vw,270px);line-height:.8;letter-spacing:-.06em;
@@ -379,6 +391,11 @@ ul.dot li::before{content:"";position:absolute;left:2px;top:13px;width:6px;heigh
   body{font-size:16px}
   :root{--topH:56px;--navH:64px}
   .g2,.g3,.g4,.cmp,.sort{grid-template-columns:1fr}
+  .route{grid-template-columns:1fr;padding-top:0}
+  .route::before{display:none}
+  .stop{display:grid;grid-template-columns:46px 1fr;column-gap:14px}
+  .stop .dot{grid-row:span 2}
+  .screen.coverbg{background-position:70% center}
   .mod{grid-template-columns:1fr}.mod .n{font-size:120px}
   .crumb span{display:none}
   .crumb b{font-size:12.5px}

@@ -1,0 +1,18 @@
+/* Палитра курса «Шёлковый путь»: ночной изумруд, бирюза и тёплое золото (шёлк и песок) */
+:root{
+  --lime:#e8b960;          /* золото — точечные акценты */
+  --gold2:#f6dc9c;
+  --teal:#0e7490;
+}
+.b2{background:var(--teal);opacity:.34}
+.b4{background:var(--lime);opacity:.10}
+.bars i{background:linear-gradient(to top,rgba(232,185,96,.40) 0%,rgba(16,185,129,.30) 30%,rgba(6,78,59,.12) 62%,transparent 100%)}
+.hl{background:linear-gradient(90deg,var(--e300),var(--e400) 45%,var(--lime))}
+.hl,.hl2{-webkit-background-clip:text;background-clip:text;color:transparent}
+.card .num{background:linear-gradient(160deg,var(--gold2),var(--lime))}
+.bignum{background:linear-gradient(180deg,var(--gold2),var(--lime) 45%,var(--e500));-webkit-background-clip:text;background-clip:text;color:transparent}
+.mod .n{background:linear-gradient(180deg,var(--gold2) 0%,var(--e400) 48%,rgba(6,78,59,.15) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.step .sn{font-size:22px}
+.prog .bar i{background:linear-gradient(90deg,var(--e600),var(--e300) 70%,var(--lime))}
+.chip b{color:var(--gold2)}
+.ava.sm{background:linear-gradient(160deg,var(--gold2),var(--lime))}

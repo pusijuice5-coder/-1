@@ -1,0 +1,2 @@
+{ "ids": ["v1", "v2", "v3", "v4"], "skip": {}, "poster_scene": { "v1": 0, "v2": 0, "v3": 1, "v4": 5 },
+  "css": ["../course/css/theme.css", "video.css"] }

@@ -2,7 +2,7 @@
    Если LMS не найдена (курс открыт просто в браузере) — прогресс хранится в localStorage. */
 (function (g) {
   var api = null, v2004 = false, ready = false, done = false, t0 = Date.now();
-  var LS = 'iyb_sales_course_v1';
+  var LS = (g.COURSE_CONFIG && g.COURSE_CONFIG.ID) ? 'iyb_course_' + g.COURSE_CONFIG.ID : 'iyb_sales_course_v1';
 
   function scan(w) {
     var n = 0;

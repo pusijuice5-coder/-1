@@ -21,12 +21,15 @@ MASTERY = 80
 
 def collect(course):
     files = {}
-    for src in course['src']:
+    for k, src in enumerate(course['src']):
         for d, _, fs in os.walk(src):
             for f in sorted(fs):
                 if f.startswith('.'): continue
                 full = os.path.join(d, f)
-                files[os.path.relpath(full, src).replace(os.sep, '/')] = full
+                rel = os.path.relpath(full, src).replace(os.sep, '/')
+                # из базовой папки (общий плеер) можно исключить файлы другого курса
+                if k == 0 and any(rel == e or rel.startswith(e) for e in course.get('exclude', [])): continue
+                files[rel] = full
     for rel, full in course.get('extra', {}).items():
         assert os.path.exists(full), 'нет файла: %s' % full
         files[rel] = full

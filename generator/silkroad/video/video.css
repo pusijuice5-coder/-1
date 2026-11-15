@@ -1,0 +1,11 @@
+/* Золотые акценты в роликах курса «Шёлковый путь» */
+.tile .n,.big{background:linear-gradient(180deg,#f6dc9c 0%,#e8b960 40%,#34d399 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chipsv span{border-color:rgba(232,185,96,.45)}
+.g2{background:radial-gradient(closest-side,rgba(14,116,144,.34),transparent)}
+.note{position:absolute;left:64px;bottom:118px;font-size:16px;color:#9bb5aa}
+.big.yr + .stepbox h1{font-size:52px}
+.big.yr + .stepbox li{font-size:25px}
+.stat.s3{gap:16px}
+.stat.s3 .tile{padding:20px 22px;min-width:0}
+.stat.s3 .tile .n{font-size:60px}
+.stat.s3 .tile b{font-size:24px}

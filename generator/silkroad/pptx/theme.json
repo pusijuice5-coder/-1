@@ -1,0 +1,6 @@
+{
+  "name": "Silk Road Course",
+  "headFontFace": "Arial", "bodyFontFace": "Arial",
+  "colors": { "dk1": "020D09", "lt1": "FFFFFF", "dk2": "0B2A20", "lt2": "CFE3DA", "accent1": "10B981", "accent2": "E8B960", "accent3": "6EE7B7", "accent4": "047857", "accent5": "F1F8F4", "accent6": "FBBF24", "hlink": "6EE7B7", "folHlink": "A7F3D0" },
+  "bgTitle": "bg_title.jpg", "bgContent": "bg_content.jpg"
+}

@@ -191,6 +191,19 @@ R.hero = async s => {
   await charImg(sl, s.pose || 'explain', 8.3, 1.55, 5.0);
 };
 
+/* обложка с иллюстрацией */
+R.cover = async s => {
+  const sl = pres.addSlide({ masterName: 'TITLE', sectionTitle: SECTION });
+  const img = path.join(JS, '..', s.img);
+  if (fs.existsSync(img)) { sl.addImage({ path: img, x: 0, y: 0, w: W, h: 7.5, altText: 'Иллюстрация: караван на Шёлковом пути' }); sl.addShape(pres.ShapeType.rect, { x: 0, y: 0, w: 8.6, h: 7.5, fill: { color: DARK, transparency: 25 }, line: { color: DARK, width: 0 } }); sl.addImage({ path: LOGO, x: MX, y: 0.45, h: 0.5, w: 0.5 * LOGO_R, altText: 'Логотип Ipak Yuli Bank' }); }
+  sl.addText(strip(s.kicker).toUpperCase(), { x: MX, y: 1.7, w: 7.6, h: 0.3, fontSize: 11, bold: true, color: MINT, charSpacing: 2, margin: 0, isTextBox: true });
+  sl.addText(titleRuns(s.title), { x: MX, y: 2.15, w: 7.6, h: 1.3, fontSize: 54, bold: true, valign: 'top', margin: 0, isTextBox: true, objectName: 'Заголовок' });
+  txt(sl, strip(s.lead), MX, 3.6, 7.0, 1.6, { fontSize: 15 });
+  txt(sl, s.chips.map(strip).join('   ·   '), MX, 5.5, 7.6, 0.4, { fontSize: 12.5, color: MINT, bold: true });
+};
+/* карта маршрута -> ряд карточек */
+R.route = s => R.cards(Object.assign({}, s, { cols: s.items.length, items: s.items.map(c => ({ num: c.n, h: c.h, t: c.t })) }));
+
 R.module = async s => {
   const m = s.mod, sl = pres.addSlide({ masterName: 'DIVIDER', sectionTitle: SECTION });
   sl.addText(m.num, { x: MX, y: 1.15, w: 3.5, h: 2.2, fontSize: 130, bold: true, color: ACC, margin: 0, isTextBox: true, objectName: 'Номер' });
@@ -253,7 +266,7 @@ R.cards = s => fit(async () => {
   const cols = s.cols || Math.min(s.items.length, 3);
   const measure = (c, w) => {
     let h = 0.5; const iw = w - 0.5;
-    if (c.ico || c.num) h += 0.6; if (c.big) h += 0.8;
+    if (c.ico || c.num || c.ava) h += 0.6; if (c.big) h += 0.8;
     h += H(strip(c.h), 15, iw, true) + 0.08;
     if (c.t) h += H(strip(c.t), 13, iw) + 0.08;
     (c.list || []).forEach(l => { h += H(strip(l), 13, iw - 0.25) + 0.07; });
@@ -265,6 +278,7 @@ R.cards = s => fit(async () => {
     card(sl, x, y, w, h, light ? { fill: LIGHT, tr: 0, line: LIGHT } : glow ? { fill: DEEP, tr: 45, line: ACC } : {});
     let cy = y + 0.25; const ix = x + 0.25, iw = w - 0.5;
     if (c.ico) { sl.addShape(pres.ShapeType.roundRect, { x: ix, y: cy, w: 0.48, h: 0.48, rectRadius: 0.08, fill: { color: DEEP, transparency: 30 }, line: { color: ACC, width: 0.5 } }); sl.addImage({ path: await icon(c.ico), x: ix + 0.1, y: cy + 0.1, w: 0.28, h: 0.28, altText: 'Иконка' }); cy += 0.6; }
+    else if (c.ava) { sl.addText(c.ava, { x: ix, y: cy, w: 0.5, h: 0.5, shape: pres.ShapeType.ellipse, fill: { color: ACC }, color: DARK, bold: true, fontSize: 12, align: 'center', valign: 'middle', margin: 0 }); cy += 0.62; }
     else if (c.num) { badge(sl, c.num, ix, cy, 0.36, { w: Math.max(0.36, 0.2 + String(c.num).length * 0.12), fs: 12 }); cy += 0.6; }
     const parts = [];
     if (c.big) parts.push({ text: strip(c.big), options: { fontSize: 40, bold: true, color: ACC, breakLine: true } });
@@ -349,7 +363,7 @@ R.steps = s => fit(async () => {
   const measure = c => Math.max(0.5 + parasH(parse(c.body), 13, bw - 0.2, 0.06), 0.5 + parasH(parse(c.side), 12.5, sw - 0.2, 0.05), 1.05);
   const render = async (sl, c, x, y, w, h) => {
     card(sl, x, y, w, h);
-    sl.addText(String(c.n), { x: x + 0.25, y: y + 0.18, w: 0.9, h: 0.6, fontSize: 30, bold: true, color: ACC, margin: 0, isTextBox: true });
+    sl.addText(String(c.n), { x: x + 0.25, y: y + 0.18, w: 2.3, h: 0.6, fontSize: String(c.n).length > 2 ? 24 : 30, bold: true, color: ACC, margin: 0, isTextBox: true });
     txt(sl, strip(c.full || c.h), x + 0.25, y + 0.78, 2.3, h - 0.9, { fontSize: 13.5, bold: true, color: INK });
     txt(sl, runs(parse(c.body), { fontSize: 13 }), x + 2.75, y + 0.24, bw - 0.2, h - 0.4, { fontSize: 13 });
     sl.addShape(pres.ShapeType.roundRect, { x: x + 2.75 + bw + 0.15, y: y + 0.14, w: sw + 0.2, h: h - 0.28, rectRadius: 0.08, fill: { color: DEEP, transparency: 50 }, line: { color: DEEP, width: 0.5 } });
@@ -472,7 +486,7 @@ R.dialog = async s => {
 
 R.exam = async s => {
   const sl = base(s); const n = s.questions.length, pass = CFG.PASS_SCORE || 80, gap = 0.22, w = (CW - 2 * gap - 3.0) / 3;
-  [[String(n), 'вопросов', 'По всем разделам курса.'], [pass + '%', 'проходной балл', 'Нужно ответить верно минимум на ' + Math.ceil(n * pass / 100) + ' из ' + n + '.'], ['∞', 'попыток', 'В электронном курсе тест можно пройти повторно.']].forEach((c, i) => {
+  [[String(n), 'вопросов', s.note || 'По всем разделам курса.'], [pass + '%', 'проходной балл', 'Нужно ответить верно минимум на ' + Math.ceil(n * pass / 100) + ' из ' + n + '.'], ['∞', 'попыток', 'В электронном курсе тест можно пройти повторно.']].forEach((c, i) => {
     const x = MX + i * (w + gap); card(sl, x, TOP + 0.2, w, 2.6);
     txt(sl, [{ text: c[0], options: { fontSize: 44, bold: true, color: ACC, breakLine: true } }, { text: c[1], options: { fontSize: 15, bold: true, color: INK, breakLine: true, paraSpaceAfter: 5 } }, { text: c[2], options: { fontSize: 13, color: BODY } }], x + 0.3, TOP + 0.45, w - 0.6, 2.2);
   });

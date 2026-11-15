@@ -5,7 +5,8 @@ const { spawn } = require('child_process');
 const path = require('path');
 (async () => {
   const id = process.argv[2];
-  const url = 'file://' + path.join(__dirname, 'player.html') + '?v=' + id;
+  // VIDEO_DIR — папка со scenes.js/timings.js относительно player.html; VIDEO_CSS — доп. стили
+  const url = 'file://' + path.join(__dirname, 'player.html') + '?v=' + id + (process.env.VIDEO_DIR ? '&dir=' + encodeURIComponent(process.env.VIDEO_DIR) : '') + (process.env.VIDEO_CSS ? '&css=' + encodeURIComponent(process.env.VIDEO_CSS) : '');
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 });
   p.on('pageerror', e => console.error('PAGEERR', e.message));
