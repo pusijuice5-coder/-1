@@ -73,7 +73,7 @@ body.calm .bars{opacity:.34}
 body.calm .blob{opacity:.3}
 
 /* ===== Каркас ===== */
-#app{position:relative;z-index:1;height:100%;display:grid;grid-template-rows:var(--topH) 1fr var(--navH)}
+#app{position:relative;z-index:1;height:100%;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:var(--topH) minmax(0,1fr) var(--navH)}
 .top{display:flex;align-items:center;gap:18px;padding:0 clamp(14px,2.4vw,34px);
   border-bottom:1px solid var(--line);background:rgba(2,13,9,.55);backdrop-filter:blur(14px)}
 .top .logo{height:34px;width:auto;display:block}
@@ -344,6 +344,8 @@ ul.dot li::before{content:"";position:absolute;left:2px;top:13px;width:6px;heigh
 .res{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
 .check{display:grid;gap:8px}
 .check label{display:flex;gap:12px;align-items:flex-start;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:15px}
+.fin .check label{padding:8px 12px;font-size:14.5px}
+.fin .lead{font-size:16.5px}
 .check input{accent-color:var(--e500);width:18px;height:18px;margin-top:3px;flex:none}
 
 /* ===== Меню ===== */
@@ -376,6 +378,18 @@ ul.dot li::before{content:"";position:absolute;left:2px;top:13px;width:6px;heigh
   .g2,.g3,.g4,.cmp,.sort{grid-template-columns:1fr}
   .mod{grid-template-columns:1fr}.mod .n{font-size:120px}
   .crumb span{display:none}
+  .crumb b{font-size:12.5px}
+  .top{gap:10px}
+  .prog{width:64px}
+  .prog small{display:none}
+  .kicker{font-size:10.5px;letter-spacing:.1em}
+  .kicker .tag{white-space:nowrap}
+  .step .st{font-size:12px;overflow-wrap:anywhere}
+  .step{padding:10px 9px 12px}
+  .tbl td:first-child{width:auto}
+  .res{gap:16px}
+  .ring{width:140px;height:140px}
+  .ring b{font-size:34px}
   .top .logo{height:26px}
   .btn{padding:0 16px;height:42px}
   .btn .lbl{display:none}

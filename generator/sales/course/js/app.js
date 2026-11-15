@@ -429,8 +429,8 @@
 
   R.finish = function (s) {
     return {
-      html: '<div class="hero"><div style="display:grid;gap:20px"><div class="kicker rv">Курс пройден</div>' +
-        '<h1 class="t rv" style="--i:1;font-size:clamp(30px,4.6vw,62px)">' + hl(s.title) + '</h1>' +
+      html: '<div class="hero fin"><div style="display:grid;gap:14px"><div class="kicker rv">Курс пройден</div>' +
+        '<h1 class="t rv" style="--i:1;font-size:clamp(26px,3.6vw,48px)">' + hl(s.title) + '</h1>' +
         '<p class="lead rv" style="--i:2">' + s.lead + '</p>' +
         '<div class="res rv" style="--i:3"><div class="ring" style="--p:' + Math.max(st.e, 0) + ';width:150px;height:150px"><b style="font-size:36px">' + Math.max(st.e, 0) + '%</b></div>' +
         '<div style="flex:1;min-width:240px"><h3 style="font-family:var(--head);margin-bottom:8px">' + s.planTitle + '</h3><div class="check">' +

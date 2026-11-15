@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>LMS stub</title></head>
+<body style="margin:0">
+<script>
+/* Заглушка LMS для локальной проверки SCORM 1.2: журналирует все вызовы API */
+window.LOG = []; window.DATA = { 'cmi.core.lesson_status': 'not attempted', 'cmi.suspend_data': '', 'cmi.core.lesson_location': '' };
+window.API = {
+  LMSInitialize: function () { LOG.push('Initialize'); return 'true'; },
+  LMSFinish: function () { LOG.push('Finish'); return 'true'; },
+  LMSGetValue: function (k) { return DATA[k] || ''; },
+  LMSSetValue: function (k, v) { DATA[k] = String(v); LOG.push('Set ' + k + '=' + String(v).slice(0, 60)); return 'true'; },
+  LMSCommit: function () { return 'true'; },
+  LMSGetLastError: function () { return '0'; }, LMSGetErrorString: function () { return ''; }, LMSGetDiagnostic: function () { return ''; }
+};
+</script>
+<iframe id="f" src="course/index.html" style="border:0;width:100vw;height:100vh"></iframe>
+</body></html>
