@@ -1,0 +1,497 @@
+<!doctype html><!--wrap-->
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><!--wrap-->
+<title>Конкуренция</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: биржевое табло сверху (тикер компаний), под ним одна рабочая колонка-«пульт» с боковой сводкой. */
+:root{
+  --bg:#eef1f4; --surface:#fbfcfd; --sunken:#e4e9ee; --ink:#14202e; --muted:#566373; --line:#d3dae2;
+  --accent:#17324d; --on-accent:#f4f8fb; --good:#17794a; --bad:#c23434; --warn-bg:#fff1cf; --warn-ink:#6b4a00;
+  --s0:#2a78d6; --s1:#eb6834; --s2:#1baf7a; --s3:#eda100; --s4:#e87ba4; --s5:#008300;
+  --display:"Unbounded","Arial Black",sans-serif; --body:"Golos Text","Segoe UI",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f151c; --surface:#18212b; --sunken:#111a23; --ink:#e9eef3; --muted:#9aa7b5; --line:#2b3744;
+  --accent:#dce7f1; --on-accent:#10202f; --good:#45c486; --bad:#f07777; --warn-bg:#3a2f10; --warn-ink:#f3d58a;
+  --s0:#3987e5; --s1:#d95926; --s2:#199e70; --s3:#c98500; --s4:#d55181; --s5:#0ca30c; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f151c; --surface:#18212b; --sunken:#111a23; --ink:#e9eef3; --muted:#9aa7b5; --line:#2b3744;
+  --accent:#dce7f1; --on-accent:#10202f; --good:#45c486; --bad:#f07777; --warn-bg:#3a2f10; --warn-ink:#f3d58a;
+  --s0:#3987e5; --s1:#d95926; --s2:#199e70; --s3:#c98500; --s4:#d55181; --s5:#0ca30c; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body);margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-block:20px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.15}
+h1{font-size:clamp(28px,6vw,52px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:20px;font-weight:500}
+h3{font-size:14px;font-weight:500}
+p{margin:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)} .small{font-size:13px}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.up{color:var(--good)} .down{color:var(--bad)}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font:700 15px/1 var(--display);letter-spacing:.02em;display:flex;align-items:center;gap:10px}
+.brand i{display:inline-flex;gap:3px}.brand i b{width:6px;border-radius:2px;display:block}
+.top .acts{display:flex;gap:8px;flex-wrap:wrap}
+
+button{font:600 15px/1 var(--body);border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:11px 16px;cursor:pointer}
+button:hover{border-color:var(--muted)}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent);padding:14px 22px;font-size:16px}
+button.primary:hover{opacity:.9}
+button.ghost{background:transparent}
+button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+:focus-visible{outline:2px solid var(--s0);outline-offset:2px}
+
+/* табло */
+.ticker{display:flex;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.tick{flex:1 1 150px;min-width:0;background:var(--surface);padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.tick .nm{display:flex;align-items:center;gap:7px;font-weight:600;font-size:14px;min-width:0}
+.tick .nm span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tick .v{font:600 17px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+.tick .d{font:400 12px/1 var(--mono)}
+.dot{width:10px;height:10px;border-radius:3px;flex:none;display:inline-block}
+.tag{font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 4px;flex:none}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.event{border:1px dashed var(--muted);border-radius:12px;padding:14px 18px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.event b{font-family:var(--display);font-weight:500;font-size:15px}
+.cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:820px){.cols{grid-template-columns:minmax(0,1fr)}}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:12px}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat .k{font-size:12px;color:var(--muted)} .stat .val{font:600 17px/1.2 var(--mono);font-variant-numeric:tabular-nums}
+
+.field{display:flex;flex-direction:column;gap:6px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.field:last-of-type{border-bottom:0;padding-bottom:0}
+.field .hd{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.field label{font-weight:600}
+.field output{font:600 17px/1 var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+input[type=range]{width:100%;accent-color:var(--s0);height:28px;margin:0}
+input[type=text]{font:500 16px/1 var(--body);padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%;min-width:0}
+
+.ledger{display:flex;flex-direction:column;gap:7px;font-size:14px}
+.ledger div{display:flex;justify-content:space-between;gap:12px}
+.ledger div span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ledger .sum{border-top:1px solid var(--line);padding-top:8px;font-weight:600}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border-radius:8px;padding:10px 12px;font-size:14px}
+
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:8px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{font:600 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+td{font-family:var(--mono);font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left;font-family:var(--body);font-weight:600}
+.nmc{display:inline-flex;align-items:center;gap:8px}
+tr:last-child td{border-bottom:0}
+
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{padding:8px 12px;font-size:14px}
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto}
+.chart text{font:11px var(--mono);fill:var(--muted)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5;white-space:nowrap;z-index:5}
+.tip .dot{margin-right:6px}
+.share{display:flex;gap:2px;height:34px}
+.share div{border-radius:4px;min-width:3px;display:flex;align-items:center;justify-content:center;font:600 12px/1 var(--mono);color:#fff;overflow:hidden}
+.share div.dk{color:#0b0b0b}
+
+.setup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.hero{display:flex;flex-direction:column;gap:14px;padding-block:12px}
+.hero p{max-width:62ch;font-size:17px}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.rules div{display:flex;flex-direction:column;gap:6px;font-size:14px}
+.podium{display:flex;flex-direction:column;gap:8px}
+.podium .row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;flex-wrap:wrap}
+.podium .row:first-child{border-color:var(--ink);border-width:2px}
+.podium .pl{font:700 20px/1 var(--display);width:34px}
+.podium .who{flex:1 1 160px;min-width:0;font-weight:600;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;max-width:70ch}
+.center{align-items:center;text-align:center;padding-block:48px}
+.row-btn{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);max-width:min(760px,calc(100vw - 32px));padding:22px}
+dialog::backdrop{background:rgba(8,14,20,.55)}
+@media (prefers-reduced-motion:no-preference){.share div{transition:flex-grow .5s}}
+</style>
+</head><body><!--wrap-->
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><i><b style="height:10px;background:var(--s0)"></b><b style="height:16px;background:var(--s1)"></b><b style="height:13px;background:var(--s2)"></b><b style="height:20px;background:var(--s3)"></b></i>КОНКУРЕНЦИЯ</div>
+    <div class="acts"><button class="ghost" id="btn-rules" type="button">Правила</button><button class="ghost" id="btn-new" type="button" hidden>Новая игра</button></div>
+  </div>
+  <div id="app"></div>
+</div>
+<dialog id="dlg-rules"><div id="rules-body"></div><div class="row-btn" style="margin-top:18px"><button type="button" id="btn-rules-close">Понятно</button></div></dialog>
+<dialog id="dlg-new"><h2>Начать новую игру?</h2><p class="muted" style="margin-top:8px">Текущая партия будет стёрта.</p><div class="row-btn" style="margin-top:18px"><button type="button" class="primary" id="btn-new-yes">Да, начать заново</button><button type="button" id="btn-new-no">Вернуться к игре</button></div></dialog>
+
+<script>
+"use strict";
+/* ================= ДВИЖОК РЫНКА ================= */
+const CFG={P0:500,base:1000,eP:3,eQ:1.4,eB:0.6,growth:1.02,capCost:150,capValue:100,fixed:60000,fixedPerCap:40,storage:20,rate:0.03,maxDebt:500000,penalty:0.08,startCash:450000,startCap:1200};
+const EVENTS={
+  calm:{t:'Спокойный квартал',d:'Рынок без сюрпризов. Спрос растёт своим темпом.'},
+  boom:{t:'Бум спроса',d:'Город открыл новые велодорожки. Рынок в этом квартале больше на 25%.',demand:1.25},
+  slump:{t:'Спад спроса',d:'Дождливый сезон. Рынок в этом квартале меньше на 20%.',demand:0.8},
+  parts:{t:'Подорожали комплектующие',d:'Аккумуляторы выросли в цене. Себестоимость самоката выше на 12%.',cost:1.12},
+  thrift:{t:'Покупатели считают деньги',d:'Клиенты в этом квартале вдвое внимательнее к цене. Дорогим будет трудно.',eP:1.4},
+  quality:{t:'Мода на качество',d:'Вышел громкий обзор надёжности. Качество в этом квартале весит вдвое больше.',eQ:2},
+  noise:{t:'Рекламный шум',d:'Выборы заняли все площадки. Отдача от маркетинга ниже на 40%.',mkt:0.6},
+  cheap:{t:'Дешёвые кредиты',d:'Банки снизили ставку. Проценты по долгу в этом квартале вдвое ниже.',rate:0.5},
+  season:{t:'Высокий сезон',d:'Тёплая погода. Рынок в этом квартале больше на 12%.',demand:1.12}
+};
+const evOf=id=>Object.assign({demand:1,cost:1,eP:1,eQ:1,mkt:1,rate:1},EVENTS[id]);
+const STYLES={disc:{n:'Дискаунтер',p:.95,m:35000,r:15000,about:'низкая цена, минимум вложений'},bal:{n:'Середняк',p:1,m:60000,r:35000,about:'средняя цена, ровные вложения'},prem:{n:'Премиум',p:1.08,m:60000,r:50000,about:'высокая цена, ставка на качество и бренд'}};
+const BOT_NAMES=['Вектор','Молния','Пилигрим'];
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const unitCost=(c,ev)=>(220+10*c.q)*ev.cost;
+const fixedCost=c=>CFG.fixed+CFG.fixedPerCap*c.cap;
+
+function newGame(humanNames,rounds){
+  const n=Math.max(4,humanNames.length), cos=[], styles=['bal','disc','prem'];
+  for(let i=0;i<n;i++){
+    const human=i<humanNames.length, b=i-humanNames.length;
+    cos.push({name:human?humanNames[i]:BOT_NAMES[b%3],human,style:human?null:styles[b%3],ci:i,
+      cash:CFG.startCash,debt:0,cap:CFG.startCap,pendCap:0,inv:0,avgCost:250,q:3,brand:50,botPrice:null,hist:[]});
+  }
+  return {v:1,phase:humanNames.length>1?'handoff':'decide',round:1,rounds,eventId:'calm',cos,turn:0,decs:[],chart:'value'};
+}
+function defaultDec(c){
+  const h=c.hist[c.hist.length-1];
+  if(h) return {price:h.price,prod:Math.min(h.prod,c.cap),mkt:h.mkt,rd:h.rd,newCap:0,loan:0};
+  return {price:500,prod:1000,mkt:50000,rd:30000,newCap:0,loan:0};
+}
+function botDec(c,S){
+  const ev=evOf(S.eventId), st=STYLES[c.style], h=c.hist[c.hist.length-1], uc=unitCost(c,ev);
+  let target=CFG.P0*st.p+ (c.q-3)*18;
+  if(c.botPrice==null) c.botPrice=target;
+  if(h){
+    if(h.lost>20) c.botPrice*=1.04;
+    else if(h.inv>0.25*Math.max(h.sales,1)) c.botPrice*=0.955;
+    c.botPrice+= (target-c.botPrice)*0.15;
+  }
+  c.botPrice=clamp(c.botPrice,uc*1.18,700);
+  const price=Math.round(clamp(c.botPrice*(0.98+Math.random()*0.04),300,700)/5)*5;
+  const expected=(h?h.demand/h.evDemand:CFG.base)*ev.demand*(h&&h.price?Math.pow(price/h.price,-2):1);
+  const poor=c.cash<90000?0.5:1, last=S.round===S.rounds;
+  const prod=clamp(Math.round((expected*1.07-c.inv)/10)*10,0,c.cap);
+  let loan=0;
+  const need=prod*uc+fixedCost(c)+st.m*poor+st.r*poor;
+  if(c.cash<need*0.6&&c.debt<400000) loan=100000;
+  else if(c.cash>380000&&c.debt>0) loan=-Math.min(Math.ceil(c.debt/10000)*10000,100000);
+  const newCap=(!last&&expected>0.9*(c.cap+c.pendCap)&&c.cash>260000)?200:0;
+  return {price,prod,mkt:st.m*poor,rd:last?st.r*0.3:st.r*poor,newCap,loan};
+}
+function playRound(S,decs){
+  const ev=evOf(S.eventId), N=S.cos.length, t=S.round;
+  const R=S.cos.map((c,i)=>{
+    const d=decs[i];
+    const price=clamp(+d.price||500,300,700), prod=clamp(Math.round(+d.prod||0),0,c.cap), mkt=clamp(+d.mkt||0,0,200000), rd=clamp(+d.rd||0,0,150000), newCap=clamp(+d.newCap||0,0,600);
+    let loan=+d.loan||0; loan=loan<0?-Math.min(-loan,c.debt):Math.min(loan,Math.max(0,CFG.maxDebt-c.debt));
+    const uc=unitCost(c,ev), brand=clamp(c.brand*0.75+12.5*Math.sqrt(mkt*ev.mkt/50000),5,100), avail=c.inv+prod;
+    const A=Math.pow(price/CFG.P0,-CFG.eP*ev.eP)*Math.pow(c.q/3,CFG.eQ*ev.eQ)*Math.pow(brand/50,CFG.eB);
+    return {c,price,prod,mkt,rd,newCap,loan,uc,brand,avail,A};
+  });
+  const sumA=R.reduce((s,r)=>s+r.A,0), wP=R.reduce((s,r)=>s+r.A*r.price,0)/sumA, avgB=R.reduce((s,r)=>s+r.brand,0)/N;
+  const D=CFG.base*N*Math.pow(CFG.growth,t-1)*ev.demand*Math.pow(wP/CFG.P0,-0.7)*Math.pow(avgB/50,0.25);
+  R.forEach(r=>{r.demand=Math.round(D*r.A/sumA);r.sales=Math.min(r.demand,r.avail);r.lost=r.demand-r.sales;});
+  // половина неудовлетворённого спроса уходит к тем, у кого остался товар
+  let pool=Math.round(0.5*R.reduce((s,r)=>s+r.lost,0));
+  for(let k=0;k<3&&pool>0;k++){
+    const open=R.filter(r=>r.avail-r.sales>0), sa=open.reduce((s,r)=>s+r.A,0); if(!open.length) break;
+    let given=0; open.forEach(r=>{const g=Math.min(r.avail-r.sales,Math.round(pool*r.A/sa));r.sales+=g;r.extra=(r.extra||0)+g;given+=g;});
+    if(!given) break; pool-=given;
+  }
+  const total=R.reduce((s,r)=>s+r.sales,0)||1;
+  R.forEach(r=>{
+    const c=r.c;
+    c.debt+=r.loan; c.cash+=r.loan;
+    const pooled=c.inv*c.avgCost+r.prod*r.uc, avg=r.avail?pooled/r.avail:r.uc;
+    const revenue=r.sales*r.price, cogs=r.sales*avg, inv=r.avail-r.sales;
+    const fixed=fixedCost(c), storage=CFG.storage*inv, interest=c.debt*CFG.rate*ev.rate;
+    let profit=revenue-cogs-fixed-r.mkt-r.rd-storage-interest;
+    c.cash+=revenue-r.prod*r.uc-fixed-r.mkt-r.rd-storage-interest-r.newCap*CFG.capCost;
+    let emergency=0;
+    if(c.cash<0){emergency=Math.ceil(-c.cash/1000)*1000;const fee=emergency*CFG.penalty;c.debt+=emergency+fee;c.cash+=emergency;profit-=fee;}
+    c.inv=inv; c.avgCost=avg; c.brand=r.brand;
+    c.q=clamp(c.q-0.25+0.5*Math.sqrt(r.rd/50000),1,10);
+    c.cap+=c.pendCap; c.pendCap=r.newCap;
+    const prev=c.hist[c.hist.length-1], avgProfit=prev?(profit+prev.profit)/2:profit;
+    const equity=c.cash-c.debt+(c.cap+c.pendCap)*CFG.capValue+c.inv*c.avgCost*0.5;
+    const value=equity+4*Math.max(0,avgProfit);
+    c.hist.push({price:r.price,prod:r.prod,mkt:r.mkt,rd:r.rd,newCap:r.newCap,loan:r.loan,demand:r.demand,evDemand:ev.demand,sales:r.sales,lost:r.lost,extra:r.extra||0,share:r.sales/total,
+      revenue,cogs,fixed,storage,interest,profit,emergency,cash:c.cash,debt:c.debt,inv,q:c.q,brand:c.brand,cap:c.cap,value,eventId:S.eventId});
+  });
+  S.round++;
+  if(S.round>S.rounds){S.phase='final';}
+  else{ const ids=Object.keys(EVENTS).filter(k=>k!=='calm'&&k!==S.eventId); S.eventId=Math.random()<0.3?'calm':ids[Math.floor(Math.random()*ids.length)]; S.phase='results'; }
+}
+
+/* ================= ИНТЕРФЕЙС ================= */
+const $=s=>document.querySelector(s), app=$('#app');
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const nf=x=>Math.round(x).toLocaleString('ru-RU');
+const money=x=>(x<0?'−':'')+'$'+nf(Math.abs(x)/1000)+' тыс.';
+const pct=x=>(x*100).toFixed(1).replace('.',',')+'%';
+const col=c=>`var(--s${c.ci})`;
+const dot=c=>`<span class="dot" style="background:${col(c)}"></span>`;
+let S=null, setup={humans:1,rounds:8,names:['Команда 1','Команда 2','Команда 3','Команда 4','Команда 5','Команда 6']}, draft=null;
+const KEY='konkurentsiya-v1';
+function save(){try{S?localStorage.setItem(KEY,JSON.stringify(S)):localStorage.removeItem(KEY)}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));return s&&s.v===1?s:null}catch(e){return null}}
+const lastVal=c=>c.hist.length?c.hist[c.hist.length-1].value:c.cash+c.cap*CFG.capValue;
+
+function tickerHTML(){
+  const order=[...S.cos].sort((a,b)=>lastVal(b)-lastVal(a));
+  return `<div class="ticker" aria-label="Табло: стоимость компаний">`+order.map((c,i)=>{
+    const h=c.hist, cur=lastVal(c), prev=h.length>1?h[h.length-2].value:(h.length?c0value():null);
+    const d=prev==null?null:cur-prev;
+    return `<div class="tick"><div class="nm">${dot(c)}<span class="t">${esc(c.name)}</span>${c.human?'':'<span class="tag">бот</span>'}</div>
+      <div class="v">${money(cur)}</div>
+      <div class="d ${d==null?'muted':d>=0?'up':'down'}">${d==null?'старт':(d>=0?'▲ +':'▼ −')+nf(Math.abs(d)/1000)}</div></div>`;}).join('')+`</div>`;
+}
+const c0value=()=>CFG.startCash+CFG.startCap*CFG.capValue;
+const qLabel=()=>`Квартал ${Math.min(S.round,S.rounds)} из ${S.rounds}`;
+function eventHTML(){const e=EVENTS[S.eventId];return `<div class="event"><span class="eyebrow">Новости квартала</span><b>${e.t}</b><span>${e.d}</span></div>`}
+
+function render(){
+  $('#btn-new').hidden=!S;
+  if(!S) return viewSetup();
+  ({handoff:viewHandoff,decide:viewDecide,results:viewResults,final:viewFinal})[S.phase]();
+  window.scrollTo(0,0);
+}
+
+function viewSetup(){
+  const saved=load();
+  app.innerHTML=`<div class="wrap" style="padding:0;gap:20px">
+  <div class="hero"><span class="eyebrow">Бизнес-симулятор · рынок электросамокатов</span>
+    <h1>Четыре компании.<br>Один рынок.</h1>
+    <p>Каждый квартал вы назначаете цену, объём выпуска, бюджет на рекламу и разработки. Покупатели выбирают между вами и конкурентами. Побеждает компания с наибольшей стоимостью в конце игры.</p></div>
+  ${saved?`<div class="event"><span class="eyebrow">Сохранённая партия</span><span>Квартал ${Math.min(saved.round,saved.rounds)} из ${saved.rounds}</span><button type="button" id="btn-continue">Продолжить</button></div>`:''}
+  <div class="panel">
+    <h2>Новая игра</h2>
+    <div><h3 style="margin-bottom:8px">Сколько команд играет</h3>
+      <div class="seg" id="seg-h">${[1,2,3,4,5,6].map(n=>`<button type="button" data-n="${n}" aria-pressed="${setup.humans===n}">${n}</button>`).join('')}</div>
+      <p class="small muted" style="margin-top:8px">${setup.humans===1?'Вы играете против трёх компаний-ботов с разными стратегиями.':setup.humans<4?`Команды вводят решения по очереди на одном экране, соперники не видят чужой ход. Ещё ${4-setup.humans} ${4-setup.humans===1?'место займёт бот':'места займут боты'}.`:'Команды вводят решения по очереди на одном экране, соперники не видят чужой ход.'}</p></div>
+    <div class="setup-grid">${Array.from({length:setup.humans},(_,i)=>`<div><label class="small muted" for="nm${i}">Название ${i+1}</label><input type="text" id="nm${i}" maxlength="18" value="${esc(setup.names[i])}"></div>`).join('')}</div>
+    <div><h3 style="margin-bottom:8px">Длительность</h3>
+      <div class="seg" id="seg-r">${[[6,'6 кварталов · быстро'],[8,'8 кварталов'],[12,'12 кварталов · долго']].map(([n,l])=>`<button type="button" data-n="${n}" aria-pressed="${setup.rounds===n}">${l}</button>`).join('')}</div></div>
+    <div class="row-btn"><button class="primary" type="button" id="btn-start">Начать игру</button></div>
+  </div>
+  <div class="panel">${rulesHTML()}</div></div>`;
+  const grab=()=>{for(let i=0;i<setup.humans;i++){const el=$('#nm'+i);if(el)setup.names[i]=el.value.trim()||('Команда '+(i+1));}};
+  $('#seg-h').onclick=e=>{const n=+e.target.dataset.n;if(n){grab();setup.humans=n;viewSetup();}};
+  $('#seg-r').onclick=e=>{const n=+e.target.dataset.n;if(n){grab();setup.rounds=n;viewSetup();}};
+  $('#btn-start').onclick=()=>{grab();S=newGame(setup.names.slice(0,setup.humans),setup.rounds);draft=null;save();render();};
+  if(saved) $('#btn-continue').onclick=()=>{S=saved;draft=null;render();};
+}
+function rulesHTML(){return `<h2>Как устроен рынок</h2>
+  <div class="rules" style="margin-top:14px">
+  <div><h3>Спрос</h3><span>Покупатель сравнивает цену, качество и известность бренда. Цена влияет сильнее всего: на 10% дешевле среднего даёт примерно на треть больше покупателей.</span></div>
+  <div><h3>Маркетинг</h3><span>Поднимает бренд сразу, в том же квартале. Без рекламы бренд теряет четверть за квартал. $50 тыс. удерживают средний уровень.</span></div>
+  <div><h3>Разработки</h3><span>Поднимают качество со следующего квартала. Без вложений качество устаревает. Качественный самокат дороже в производстве: +$10 за каждый балл.</span></div>
+  <div><h3>Производство и склад</h3><span>Выпуск ограничен мощностью. Непроданное лежит на складе за $20 в квартал. Если товара не хватило, половина ваших покупателей уйдёт к конкурентам.</span></div>
+  <div><h3>Мощности и кредит</h3><span>Новая единица мощности стоит $150 и заработает через квартал. Кредит до $500 тыс. под 3% в квартал. Ушли в минус по кассе: банк выдаст экстренный заём со штрафом 8%.</span></div>
+  <div><h3>Победа</h3><span>Стоимость компании = деньги − долг + мощности + половина склада + четыре средние прибыли за два последних квартала.</span></div>
+  </div>`}
+
+function viewHandoff(){
+  const c=S.cos[S.turn];
+  app.innerHTML=`<div class="panel center"><span class="eyebrow">${qLabel()}</span>
+    <h1 style="display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap"><span class="dot" style="background:${col(c)};width:22px;height:22px;border-radius:6px"></span>${esc(c.name)}</h1>
+    <p class="muted">Ваш ход. Остальные команды не смотрят на экран.</p>
+    <button class="primary" type="button" id="go">Открыть пульт</button></div>`;
+  $('#go').onclick=()=>{S.phase='decide';draft=null;save();render();};
+}
+
+function viewDecide(){
+  const c=S.cos[S.turn], ev=evOf(S.eventId), h=c.hist[c.hist.length-1], uc=unitCost(c,ev);
+  if(!draft) draft=defaultDec(c);
+  draft.prod=Math.min(draft.prod,c.cap);
+  const avgPrice=h?S.cos.reduce((s,x)=>s+x.hist[x.hist.length-1].price,0)/S.cos.length:500;
+  const repay=Math.ceil(c.debt/10000)*10000, room=Math.max(0,Math.floor((CFG.maxDebt-c.debt)/10000)*10000);
+  const F=[
+    {k:'price',l:'Цена самоката',min:300,max:700,step:5,f:v=>'$'+v,hint:h?`Средняя цена рынка в прошлом квартале: $${nf(avgPrice)}`:'Все компании стартуют с рынка, где привычная цена около $500'},
+    {k:'prod',l:'Произвести',min:0,max:c.cap,step:10,f:v=>nf(v)+' шт',hint:`Мощность ${nf(c.cap)} шт · на складе ${nf(c.inv)} шт`+(h?` · в прошлом квартале к вам пришло ${nf(h.demand)} покупателей`:' · на старте на каждую компанию приходится около 1 000 покупателей')},
+    {k:'mkt',l:'Маркетинг',min:0,max:200000,step:5000,f:money,hint:`Бренд сейчас ${nf(c.brand)} из 100`},
+    {k:'rd',l:'Разработки',min:0,max:150000,step:5000,f:money,hint:`Качество сейчас ${c.q.toFixed(1).replace('.',',')} из 10. Эффект со следующего квартала`},
+    {k:'newCap',l:'Купить мощности',min:0,max:600,step:50,f:v=>'+'+v+' шт',hint:`$150 за единицу, заработают со следующего квартала`+(c.pendCap?` · уже строится +${c.pendCap}`:'')},
+    {k:'loan',l:'Кредит',min:-repay,max:room,step:10000,f:v=>v>0?'взять '+money(v):v<0?'погасить '+money(Math.min(-v,c.debt)):'без изменений',hint:`Долг сейчас ${money(c.debt)} · ставка ${(CFG.rate*ev.rate*100).toFixed(1).replace('.',',')}% в квартал`}
+  ];
+  draft.loan=clamp(draft.loan,-repay,room);
+  const multi=S.cos.filter(x=>x.human).length>1;
+  app.innerHTML=`<div class="wrap" style="padding:0;gap:20px">${tickerHTML()}${eventHTML()}
+  <div class="cols">
+    <form class="panel" id="form" autocomplete="off">
+      <div class="top"><h2 style="display:flex;gap:10px;align-items:center">${dot(c)}${esc(c.name)}: решения</h2><span class="eyebrow">${qLabel()}</span></div>
+      ${F.map(f=>`<div class="field"><div class="hd"><label for="f-${f.k}">${f.l}</label><output id="o-${f.k}"></output></div>
+        <input type="range" id="f-${f.k}" min="${f.min}" max="${f.max}" step="${f.step}" value="${draft[f.k]}" ${f.min===f.max?'disabled':''}>
+        <span class="small muted">${f.hint}</span></div>`).join('')}
+      <div class="row-btn"><button class="primary" type="submit">${multi&&nextHuman(S.turn)!==-1?'Подтвердить и передать ход':'Подтвердить решения'}</button></div>
+    </form>
+    <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+      <div class="panel"><h3>Ваша компания</h3>
+        <div class="stats">
+          <div class="stat"><span class="k">Деньги</span><span class="val">${money(c.cash)}</span></div>
+          <div class="stat"><span class="k">Долг</span><span class="val">${money(c.debt)}</span></div>
+          <div class="stat"><span class="k">Склад</span><span class="val">${nf(c.inv)} шт</span></div>
+          <div class="stat"><span class="k">Себестоимость</span><span class="val">$${nf(uc)}</span></div>
+        </div></div>
+      <div class="panel"><h3>План квартала</h3><div class="ledger" id="ledger"></div><div id="warn"></div></div>
+    </div>
+  </div>
+  ${h?`<div class="panel"><h3>Разведка: прошлый квартал</h3>${marketTable(true)}</div>`:''}
+  </div>`;
+  const upd=()=>{
+    F.forEach(f=>{draft[f.k]=+$('#f-'+f.k).value;$('#o-'+f.k).textContent=f.f(draft[f.k]);});
+    const loan=draft.loan<0?-Math.min(-draft.loan,c.debt):draft.loan, debt=c.debt+loan;
+    const prodCost=draft.prod*uc, fixed=fixedCost(c), capex=draft.newCap*CFG.capCost, interest=debt*CFG.rate*ev.rate;
+    const out=prodCost+fixed+draft.mkt+draft.rd+capex+interest, after=c.cash+loan-out, avail=c.inv+draft.prod;
+    const margin=draft.price-uc, be=margin>0?Math.ceil((fixed+draft.mkt+draft.rd+interest)/margin):null;
+    const best=avail*draft.price-(c.inv*c.avgCost+prodCost)-fixed-draft.mkt-draft.rd-interest;
+    $('#ledger').innerHTML=[['Производство',-prodCost],['Постоянные расходы',-fixed],['Маркетинг',-draft.mkt],['Разработки',-draft.rd],['Новые мощности',-capex],['Проценты',-interest],['Кредит',loan]]
+      .filter(r=>r[1]).map(r=>`<div><span>${r[0]}</span><span>${r[1]>0?'+':''}${money(r[1])}</span></div>`).join('')
+      +`<div class="sum"><span>Касса до продаж</span><span class="${after<0?'down':''}">${money(after)}</span></div>
+        <div><span class="muted">К продаже</span><span>${nf(avail)} шт</span></div>
+        <div><span class="muted">Маржа с самоката</span><span>$${nf(margin)}</span></div>
+        <div><span class="muted">Безубыточность</span><span>${be==null?'нет':nf(be)+' шт'}</span></div>
+        <div><span class="muted">Прибыль, если продать всё</span><span class="${best<0?'down':'up'}">${money(best)}</span></div>`;
+    $('#warn').innerHTML=margin<=0?`<div class="warn">Цена ниже себестоимости: каждая продажа приносит убыток.</div>`:after<0?`<div class="warn">Расходы больше денег в кассе. Если выручка не покроет разницу, банк выдаст экстренный заём со штрафом 8%.</div>`:'';
+  };
+  $('#form').oninput=upd; upd();
+  $('#form').onsubmit=e=>{e.preventDefault();upd();S.decs[S.turn]=Object.assign({},draft);draft=null;
+    const nx=nextHuman(S.turn);
+    if(nx!==-1){S.turn=nx;S.phase='handoff';}
+    else{S.cos.forEach((b,i)=>{if(!b.human)S.decs[i]=botDec(b,S);});playRound(S,S.decs);S.decs=[];S.turn=nextHuman(-1);}
+    save();render();};
+}
+function nextHuman(i){for(let k=i+1;k<S.cos.length;k++)if(S.cos[k].human)return k;return -1}
+
+function marketTable(brief){
+  const rows=[...S.cos].sort((a,b)=>lastVal(b)-lastVal(a));
+  const cell=(c)=>{const h=c.hist[c.hist.length-1];
+    return `<tr><td><span class="nmc">${dot(c)}${esc(c.name)}</span></td><td>$${h.price}</td><td>${nf(h.sales)}</td><td>${pct(h.share)}</td><td>${h.q.toFixed(1).replace('.',',')}</td><td>${nf(h.brand)}</td>`+
+    (brief?'':`<td>${money(h.revenue)}</td><td class="${h.profit<0?'down':''}">${money(h.profit)}</td><td>${money(h.cash)}</td>`)+`<td>${money(h.value)}</td></tr>`};
+  return `<div class="tw"><table><thead><tr><th>Компания</th><th>Цена</th><th>Продано</th><th>Доля</th><th>Качество</th><th>Бренд</th>${brief?'':'<th>Выручка</th><th>Прибыль</th><th>Деньги</th>'}<th>Стоимость</th></tr></thead><tbody>${rows.map(cell).join('')}</tbody></table></div>`;
+}
+function legendHTML(){return `<div class="legend">${S.cos.map(c=>`<span>${dot(c)}${esc(c.name)}</span>`).join('')}</div>`}
+function shareHTML(){
+  return `<div class="share" role="img" aria-label="Доли рынка">${S.cos.map(c=>{const h=c.hist[c.hist.length-1];
+    return `<div class="${c.ci===3?'dk':''}" style="flex:${Math.max(h.share,0.001)} 1 0;background:${col(c)}" title="${esc(c.name)}: ${pct(h.share)}">${h.share>0.08?Math.round(h.share*100)+'%':''}</div>`}).join('')}</div>`;
+}
+const CHARTS={value:{l:'Стоимость',g:h=>h.value/1000,f:v=>'$'+nf(v)+' тыс.'},share:{l:'Доля рынка',g:h=>h.share*100,f:v=>v.toFixed(1).replace('.',',')+'%'},price:{l:'Цена',g:h=>h.price,f:v=>'$'+nf(v)},profit:{l:'Прибыль',g:h=>h.profit/1000,f:v=>(v<0?'−':'')+'$'+nf(Math.abs(v))+' тыс.'}};
+function chartBlock(){
+  return `<div class="panel"><div class="top"><h3>Динамика по кварталам</h3><div class="seg" id="seg-c">${Object.entries(CHARTS).map(([k,v])=>`<button type="button" data-k="${k}" aria-pressed="${S.chart===k}">${v.l}</button>`).join('')}</div></div>${legendHTML()}<div class="chart" id="chart"></div></div>`;
+}
+function drawChart(){
+  const box=$('#chart'); if(!box) return;
+  const ch=CHARTS[S.chart], n=S.cos[0].hist.length, W=680,H=260,L=64,Rr=16,T=12,B=28;
+  const series=S.cos.map(c=>({c,v:c.hist.map(ch.g)}));
+  let lo=Math.min(...series.flatMap(s=>s.v)), hi=Math.max(...series.flatMap(s=>s.v));
+  if(S.chart!=='price'&&lo>0) lo=0; if(hi===lo) hi=lo+1;
+  const pad=(hi-lo)*0.08; hi+=pad; if(lo<0||S.chart==='price') lo-=pad;
+  const step=niceStep((hi-lo)/4), y0=Math.floor(lo/step)*step, ticks=[]; for(let v=y0;v<=hi+1e-9;v+=step) if(v>=lo-1e-9) ticks.push(v);
+  const X=i=>n===1?(L+W-Rr)/2:L+(W-L-Rr)*i/(n-1), Y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${ch.l} по кварталам">`;
+  ticks.forEach(v=>{s+=`<line x1="${L}" x2="${W-Rr}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end">${ch.f(v).replace(' тыс.','k')}</text>`});
+  for(let i=0;i<n;i++) if(n<=8||i%2===0||i===n-1) s+=`<text x="${X(i)}" y="${H-8}" text-anchor="middle">К${i+1}</text>`;
+  s+=`<line id="xh" x1="0" x2="0" y1="${T}" y2="${H-B}" stroke="var(--muted)" stroke-width="1" visibility="hidden"/>`;
+  series.forEach(se=>{
+    if(n>1) s+=`<polyline fill="none" stroke="${col(se.c)}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${se.v.map((v,i)=>X(i)+','+Y(v)).join(' ')}"/>`;
+    s+=`<circle cx="${X(n-1)}" cy="${Y(se.v[n-1])}" r="4.5" fill="${col(se.c)}" stroke="var(--surface)" stroke-width="2"/>`;});
+  s+=`<rect x="${L}" y="${T}" width="${W-L-Rr}" height="${H-T-B}" fill="transparent"/></svg><div class="tip" hidden></div>`;
+  box.innerHTML=s;
+  const svg=box.querySelector('svg'), tip=box.querySelector('.tip'), xh=box.querySelector('#xh');
+  const move=e=>{const r=svg.getBoundingClientRect(), px=((e.touches?e.touches[0].clientX:e.clientX)-r.left)/r.width*W;
+    const i=n===1?0:clamp(Math.round((px-L)/(W-L-Rr)*(n-1)),0,n-1);
+    xh.setAttribute('x1',X(i));xh.setAttribute('x2',X(i));xh.setAttribute('visibility','visible');
+    tip.innerHTML=`<b>Квартал ${i+1}</b><br>`+[...series].sort((a,b)=>b.v[i]-a.v[i]).map(se=>`${dot(se.c)}${esc(se.c.name)}: <b>${ch.f(se.v[i])}</b>`).join('<br>');
+    tip.hidden=false; const tx=X(i)/W*r.width; tip.style.top='8px';
+    if(tx>r.width/2){tip.style.left='';tip.style.right=(r.width-tx+10)+'px'}else{tip.style.right='';tip.style.left=(tx+10)+'px'}};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden')};
+  svg.addEventListener('mousemove',move);svg.addEventListener('mouseleave',out);svg.addEventListener('touchstart',move,{passive:true});svg.addEventListener('touchmove',move,{passive:true});
+  $('#seg-c').onclick=e=>{const k=e.target.dataset.k;if(k){S.chart=k;[...$('#seg-c').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));drawChart();}};
+}
+function niceStep(x){const p=Math.pow(10,Math.floor(Math.log10(x))),m=x/p;return (m<=1?1:m<=2?2:m<=5?5:10)*p}
+
+function reportHTML(c){
+  const h=c.hist[c.hist.length-1], notes=[];
+  if(h.lost>0) notes.push(`Товара не хватило: ${nf(h.lost)} покупателей ушли ни с чем или к конкурентам.`);
+  if(h.extra>0) notes.push(`К вам пришли ${nf(h.extra)} покупателей, которым не хватило товара у конкурентов.`);
+  if(h.inv>0) notes.push(`На складе осталось ${nf(h.inv)} шт.`);
+  if(h.emergency>0) notes.push(`Касса ушла в минус. Банк выдал экстренный заём ${money(h.emergency)} со штрафом 8%.`);
+  return `<div class="panel"><div class="top"><h3 style="display:flex;gap:8px;align-items:center">${dot(c)}${esc(c.name)}: отчёт о прибыли</h3><span class="num small muted">спрос ${nf(h.demand)} · продано ${nf(h.sales)}</span></div>
+    <div class="ledger">
+      <div><span>Выручка</span><span>${money(h.revenue)}</span></div>
+      <div><span>Себестоимость проданного</span><span>${money(-h.cogs)}</span></div>
+      <div><span>Постоянные расходы</span><span>${money(-h.fixed)}</span></div>
+      <div><span>Маркетинг</span><span>${money(-h.mkt)}</span></div>
+      <div><span>Разработки</span><span>${money(-h.rd)}</span></div>
+      ${h.storage?`<div><span>Хранение</span><span>${money(-h.storage)}</span></div>`:''}
+      ${h.interest?`<div><span>Проценты</span><span>${money(-h.interest)}</span></div>`:''}
+      ${h.emergency?`<div><span>Штраф банка</span><span>${money(-h.emergency*CFG.penalty)}</span></div>`:''}
+      <div class="sum"><span>Прибыль</span><span class="${h.profit<0?'down':'up'}">${money(h.profit)}</span></div>
+    </div>${notes.length?`<div class="small muted">${notes.join(' ')}</div>`:''}</div>`;
+}
+function viewResults(){
+  const done=S.round-1, e=EVENTS[S.cos[0].hist[done-1].eventId];
+  app.innerHTML=`<div class="wrap" style="padding:0;gap:20px">${tickerHTML()}
+    <div class="top"><div><span class="eyebrow">Итоги квартала ${done} из ${S.rounds} · ${e.t}</span><h2 style="margin-top:6px">Рынок подвёл итоги</h2></div>
+      <button class="primary" type="button" id="next">Квартал ${S.round}: к решениям</button></div>
+    <div class="panel"><h3>Доли рынка</h3>${shareHTML()}${legendHTML()}${marketTable(false)}</div>
+    <div class="cols" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))">${S.cos.filter(c=>c.human).map(reportHTML).join('')}</div>
+    ${chartBlock()}</div>`;
+  drawChart();
+  $('#next').onclick=()=>{S.phase=S.cos.filter(c=>c.human).length>1?'handoff':'decide';draft=null;save();render();};
+}
+function viewFinal(){
+  const order=[...S.cos].sort((a,b)=>lastVal(b)-lastVal(a)), w=order[0];
+  const sum=(c,k)=>c.hist.reduce((s,h)=>s+h[k],0), avg=(c,k)=>sum(c,k)/c.hist.length;
+  const mAvgP=S.cos.reduce((s,c)=>s+avg(c,'price'),0)/S.cos.length;
+  const ins=[];
+  const wp=avg(w,'price');
+  ins.push(`<b>${esc(w.name)}</b> ${w.human?'победила':'(бот) победила'} со средней ценой $${nf(wp)} при средней по рынку $${nf(mAvgP)}: ${wp>mAvgP*1.03?'покупатели платили больше за качество и бренд':wp<mAvgP*0.97?'ставка на низкую цену и объём сработала':'цена была рыночной, результат сделали вложения и точный объём выпуска'}.`);
+  const lostMax=[...S.cos].sort((a,b)=>sum(b,'lost')-sum(a,'lost'))[0];
+  if(sum(lostMax,'lost')>150) ins.push(`<b>${esc(lostMax.name)}</b> недопоставила ${nf(sum(lostMax,'lost'))} самокатов за игру. По средней цене это около ${money(sum(lostMax,'lost')*avg(lostMax,'price'))} упущенной выручки.`);
+  const em=S.cos.filter(c=>sum(c,'emergency')>0);
+  if(em.length) ins.push(`Экстренные займы брали: ${em.map(c=>'<b>'+esc(c.name)+'</b>').join(', ')}. Кассовый разрыв обходится дороже планового кредита почти втрое.`);
+  const inv=[...S.cos].sort((a,b)=>(sum(b,'mkt')+sum(b,'rd'))-(sum(a,'mkt')+sum(a,'rd')))[0];
+  ins.push(`Больше всех в рекламу и разработки вложила <b>${esc(inv.name)}</b>: ${money(sum(inv,'mkt')+sum(inv,'rd'))} за игру, итоговое место ${order.indexOf(inv)+1}.`);
+  app.innerHTML=`<div class="wrap" style="padding:0;gap:20px">
+    <div class="hero"><span class="eyebrow">Игра окончена · ${S.rounds} кварталов</span><h1>Победитель: ${esc(w.name)}</h1></div>
+    <div class="panel"><div class="podium">${order.map((c,i)=>{const tot=sum(c,'profit');return `<div class="row"><span class="pl">${i+1}</span><span class="who">${dot(c)}${esc(c.name)}${c.human?'':`<span class="tag">бот · ${STYLES[c.style].n}</span>`}</span>
+      <span class="num small muted">прибыль за игру ${money(tot)}</span><span class="num" style="font-weight:600;font-size:18px">${money(lastVal(c))}</span></div>`}).join('')}</div>
+      <p class="small muted">Стратегии ботов: ${Object.values(STYLES).map(s=>`${s.n} (${s.about})`).join('; ')}.</p></div>
+    ${chartBlock()}
+    <div class="panel"><h3>Последний квартал</h3>${shareHTML()}${marketTable(false)}</div>
+    <div class="panel"><h2>Разбор игры</h2><ul class="plain">${ins.map(x=>`<li>${x}</li>`).join('')}</ul>
+      <h3 style="margin-top:8px">Вопросы для обсуждения</h3>
+      <ul class="plain"><li>Какую стратегию вы выбрали в начале и в какой момент от неё отступили? Почему?</li>
+      <li>На какие действия конкурентов вы реагировали, а какие пропустили?</li>
+      <li>Что обошлось дороже: лишний товар на складе или покупатели, которым товара не хватило?</li>
+      <li>Какое решение вы бы изменили, если бы сыграли ещё раз?</li>
+      <li>Что из этой игры похоже на рынок, где работает ваша компания?</li></ul>
+      <div class="row-btn"><button class="primary" type="button" id="again">Сыграть ещё раз</button></div></div></div>`;
+  drawChart();
+  $('#again').onclick=()=>{S=null;save();render();};
+}
+
+$('#rules-body').innerHTML=rulesHTML();
+$('#btn-rules').onclick=()=>$('#dlg-rules').showModal();
+$('#btn-rules-close').onclick=()=>$('#dlg-rules').close();
+$('#btn-new').onclick=()=>$('#dlg-new').showModal();
+$('#btn-new-no').onclick=()=>$('#dlg-new').close();
+$('#btn-new-yes').onclick=()=>{$('#dlg-new').close();S=null;draft=null;save();render();};
+
+function start(data){ if(data&&data.S){S=data.S;draft=data.draft||null;} render(); }
+const hot=window.claude&&window.claude.hot;
+if(hot&&hot.snapshot) hot.snapshot(()=>({S,draft}));
+if(hot&&hot.ready) hot.ready(start); else start((hot&&hot.data)||{});
+window.__game={newGame,botDec,playRound,get S(){return S}};
+</script>
+</body></html><!--wrap-->
