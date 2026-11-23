@@ -8,6 +8,7 @@ from lxml import etree
 from PIL import Image
 
 SRC, ASSETS, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
+REF = sys.argv[4] if len(sys.argv) > 4 else None   # reference deck (first version) for media aliases
 
 NS = {
     'a': 'http://schemas.openxmlformats.org/drawingml/2006/main',
@@ -251,6 +252,29 @@ class Rels:
     def save(self):
         self.tree.write(self.path, xml_declaration=True, encoding='UTF-8', standalone=True)
 
+# ---------------- media aliases (same picture, different file name in another course version) ----------------
+import hashlib
+ALIAS = {}
+MD5_MAP = {'60c2cf240773c41c96ec3053d4945e9d': 'sanctions_photo'}   # wall photo with the old logo (sanctions slides)
+def build_alias():
+    if not REF:
+        return
+    def md5s(d):
+        out = {}
+        for f in os.listdir(os.path.join(d, 'ppt', 'media')):
+            out[f] = hashlib.md5(open(os.path.join(d, 'ppt', 'media', f), 'rb').read()).hexdigest()
+        return out
+    ref, cur = md5s(REF), md5s(SRC)
+    by_md5 = {v: k for k, v in ref.items()}
+    for name, h in cur.items():
+        if h in by_md5 and by_md5[h] != name:
+            ALIAS[name] = by_md5[h]
+        elif h not in by_md5 and name in ref:
+            ALIAS[name] = '__new__' + name     # same name, different picture: never map by name
+    for name, h in cur.items():
+        if h in MD5_MAP:
+            ALIAS[name] = MD5_MAP[h]
+
 # ---------------- media analysis ----------------
 SAT = {}
 def media_sat(name):
@@ -363,13 +387,13 @@ def text_of(el):
 
 # ---------------- main per-slide transform ----------------
 LOG = []
-POS_FIX = {
-    60: [('Group 3', 0, -0.95, 0.55), ('TextBox 31', 0, -0.95, 0)],
-    99: [('Group 3', 0, -0.62, 0.32), ('TextBox 31', 0, -0.62, 0)],
-    90: [('Group 3', 4.26, -2.83, 0), ('TextBox 21', 4.26, -2.83, 0)],
-    67: [('Group 3', 0, -0.45, 0), ('TextBox 11', 0, -0.45, 0)],
-    81: [('Group 3', 0, -0.55, 0.15), ('TextBox 14', 0, -0.55, 0)],
-    83: [('Group 3', 0, -0.75, 0.50), ('TextBox 31', 0, -0.75, 0)],
+POS_FIX = {   # applied only if the group still sits at the recorded spot (x, y) of the first version
+    60: ((0.01, 5.76), [('Group 3', 0, -0.95, 0.55), ('TextBox 31', 0, -0.95, 0)]),
+    99: ((0.03, 5.69), [('Group 3', 0, -0.62, 0.32), ('TextBox 31', 0, -0.62, 0)]),
+    90: ((-1.23, 5.75), [('Group 3', 4.26, -2.83, 0), ('TextBox 21', 4.26, -2.83, 0)]),
+    67: ((6.03, 4.68), [('Group 3', 0, -0.45, 0), ('TextBox 11', 0, -0.45, 0)]),
+    81: ((3.17, 5.07), [('Group 3', 0, -0.55, 0.15), ('TextBox 14', 0, -0.55, 0)]),
+    83: ((0.08, 5.02), [('Group 3', 0, -0.75, 0.50), ('TextBox 31', 0, -0.75, 0)]),
 }
 
 def classify_surface(info):
@@ -519,6 +543,7 @@ def process_slide(n, theme_dark):
 
     # ---------- pictures ----------
     contents_group = None
+    sanctions_disc_done = False
     for s in shapes:
         el, tag, b = s['el'], s['tag'], s['bbox']
         if tag != 'pic' or b is None:
@@ -527,7 +552,10 @@ def process_slide(n, theme_dark):
         if blip is None:
             continue
         target = rels.target(blip.get(R + 'embed')) or ''
-        media = target.split('/')[-1]
+        media_raw = target.split('/')[-1]
+        media = ALIAS.get(media_raw, media_raw)
+        if media.startswith('__new__') and media_raw == 'image1.png':
+            media = 'image1.png'          # a different old logo is still the logo
         if media in ISPRING_MEDIA or media == 'image2.png':
             continue
         x, y, w, h = b
@@ -563,9 +591,15 @@ def process_slide(n, theme_dark):
                 rid = rels.add_image('ovz_nav_screen.png')
                 replace_blip(el, rid)
             continue
+        if media == 'sanctions_photo':
+            rid = rels.add_image('ovz_disc_sanctions_corner.jpg')
+            replace_blip(el, rid)
+            set_line(spPr, LG, 38100)
+            sanctions_disc_done = True
+            continue
         # discs
         bw = (b'grayscl' in raw_blip or b'duotone' in raw_blip or b'saturation sat="0"' in raw_blip
-              or media_sat(media) < 0.06)
+              or media_sat(media_raw) < 0.06)
         if w > 6:
             subj = BIG_MAP.get(media)
             if not subj:
@@ -602,7 +636,18 @@ def process_slide(n, theme_dark):
         contents_group.getparent().replace(contents_group, pic)
 
     # ---------- layout fixes (cards that were partly off-slide in the source) ----------
-    for (nm_, dx, dy, dh) in POS_FIX.get(n, []):
+    expect, fixes = POS_FIX.get(n, (None, []))
+    if expect:
+        grp = [e for e in spTree if etree.QName(e).localname == 'grpSp' and name_of(e) == 'Group 3']
+        here = None
+        for g_ in grp:
+            o_ = xfrm_of(g_).find('a:off', NS)
+            gx, gy = int(o_.get('x'))/EMU, int(o_.get('y'))/EMU
+            if abs(gx - expect[0]) < 0.03 and abs(gy - expect[1]) < 0.03:
+                here = True
+        if not here:
+            fixes = []
+    for (nm_, dx, dy, dh) in fixes:
         for el in list(spTree):
             if etree.QName(el).localname in ('sp', 'grpSp') and name_of(el) == nm_:
                 xf = xfrm_of(el)
@@ -631,7 +676,7 @@ def process_slide(n, theme_dark):
         rid = rels.add_image('ovz_residents.png'); iw, ih = img_size('ovz_residents.png')
         nh = 2.15; nw = nh*iw/ih
         insert_decor(new_pic(tree, rid, 'OVZ Резиденты', 9.35, 5.2, nw, nh, 'Иллюстрация: паспорт, глобус и метка на карте'))
-    if n in (48, 49, 97, 98):
+    if n in (48, 49, 97, 98) and not sanctions_disc_done:
         rid = rels.add_image('ovz_sanctions.png'); iw, ih = img_size('ovz_sanctions.png')
         nh = 2.0; nw = nh*iw/ih
         insert_decor(new_pic(tree, rid, 'OVZ Санкционный контроль', 13.333 - 0.25 - nw, 5.28, nw, nh, 'Иллюстрация: щит и контроль операций'))
@@ -789,6 +834,8 @@ if __name__ == '__main__':
     if os.path.exists(OUT):
         shutil.rmtree(OUT)
     shutil.copytree(SRC, OUT)
+    build_alias()
+    if ALIAS: LOG.append('media aliases: %s' % ALIAS)
     ensure_media_and_types()
     patch_theme()
     for n in range(1, 103):
