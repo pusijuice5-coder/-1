@@ -39,14 +39,17 @@ def _popup_bg(name):
 
 NOTES = {
     5: "Факт: Visa и Mastercard Ipak Yuli Bank — пресс-релиз ЦБ от 27.10.2026 и п. 1.3 публичной оферты банка. [Сверить: все ли карточные продукты подключаются.]",
-    6: "[Сверить: что предлагать клиенту без Visa/Mastercard — по процедуре банка.]",
-    7: "Huawei, выпущенные после 2019 года, в большинстве продаются без сервисов Google.",
-    11: "[Сверить: путь внутри Ipak Yuli Mobile. Приложение банка запрещает запись экрана — нужны макеты от команды приложения или фото экрана вторым телефоном.]",
-    12: "[Сверить: название кнопки принятия оферты — в записи экрана её не видно.]",
-    15: "ДОПУЩЕНИЕ: правила — черновик. Согласовать с информационной безопасностью и после этого убрать плашку «Черновик».",
-    18: "[Сверить: где сотрудник смотрит статус карты, лимиты и причину отказа — по процедуре банка.]",
-    22: "Сервис Google: google.com/android/find (в 2025 году переименован в Find Hub — в меню телефона название может отличаться). [Сверить: может ли банк сам отключить карту в телефоне, не блокируя пластик.]",
-    25: "Служебный слайд. Тест собирается в iSpring по таблице GooglePay/GooglePay_test.xlsx.",
+    6: "Со слов банка: Humo платит телефоном по NFC через Ipak Yuli Mobile — «Платежи» → «Оплата NFC»; Uzcard по NFC телефоном не платит. "
+       "[Сверить: точные названия пунктов меню в приложении; нужно ли делать Ipak Yuli Mobile приложением для оплаты по умолчанию "
+       "(на Android по умолчанию бывает только одно платёжное приложение — Кошелёк или приложение банка); работает ли оплата Humo на iPhone.]",
+    7: "Если клиент спросит, когда Humo появится в Google Pay: подключить обещают позже, даты пока нет. [Сверить: что предлагать клиенту только с Uzcard — по процедуре банка.]",
+    8: "Huawei, выпущенные после 2019 года, в большинстве продаются без сервисов Google.",
+    12: "[Сверить: путь внутри Ipak Yuli Mobile. Приложение банка запрещает запись экрана — нужны макеты от команды приложения или фото экрана вторым телефоном.]",
+    13: "[Сверить: название кнопки принятия оферты — в записи экрана её не видно.]",
+    16: "ДОПУЩЕНИЕ: правила — черновик. Согласовать с информационной безопасностью и после этого убрать плашку «Черновик».",
+    19: "[Сверить: где сотрудник смотрит статус карты, лимиты и причину отказа — по процедуре банка.]",
+    23: "Сервис Google: google.com/android/find (в 2025 году переименован в Find Hub — в меню телефона название может отличаться). [Сверить: может ли банк сам отключить карту в телефоне, не блокируя пластик.]",
+    26: "Служебный слайд. Тест собирается в iSpring по таблице GooglePay/GooglePay_test.xlsx.",
 }
 
 prs = Presentation()
@@ -340,6 +343,7 @@ class Anim:
 
 
 def finish(slide, n, anim=None):
+    assert n == len(prs.slides), f"slide number {n} != position {len(prs.slides)}"
     clr = slide._element.find(qn("p:clrMapOvr"))
     trans = etree.fromstring(MORPH)
     clr.addnext(trans)
@@ -603,7 +607,10 @@ def popup_v2(n, cur, bg, client_img, client_h, client_xy, title, sub, b1, b2_lea
     xb = rect(s, "pop_x", MSO_SHAPE.OVAL, 11.92, 1.03, 0.36, 0.36, fill="EEF1EF")
     shape_text(xb, [("✕", F_REG, 10, GREY)])
     kick = text_box(s, "pop_kick", 1.35, 1.2, 5, 0.3, [[("Ситуация в офисе", F_SEMI, 12, ACCENT)]])
-    t = text_box(s, "pop_title", 1.35, 1.55, 5.9, 1.35, [[(title, F_MED, 30, INK)]])
+    t_runs = []
+    for k_, part in enumerate(title.split("\n")):
+        t_runs += (["BR"] if k_ else []) + [(part, F_MED, 30, INK)]
+    t = text_box(s, "pop_title", 1.35, 1.55, 5.9, 1.35, [t_runs])
     sb = text_box(s, "pop_sub", 1.35, 2.95, 6.0, 0.75, [[(sub, F_MED, 16, INK)]])
     p1 = text_box(s, "pop_b1", 1.35, 3.75, 6.0, 0.7, [[(b1, F_REG, 14, INK)]])
     p2 = text_box(s, "pop_b2", 1.35, 4.5, 6.0, 0.95, [[(b2_lead, F_SEMI, 14, ACCENT), (b2, F_REG, 14, INK)]])
@@ -729,7 +736,7 @@ card(gr, "c_right", 6.78, 3.0, 5.95, 3.6, fill=TILE)
 text_box(gr, "c_right_h", 7.13, 3.28, 5.3, 0.45, [[("Новое — на Android", F_SEMI, 17, LIME)]])
 R = []
 for i, txt in enumerate(["Нужен NFC и сервисы Google — подходит не каждый телефон",
-                         "Кошелёк — приложение для оплаты по умолчанию", "Humo и Uzcard пока не подключаются"]):
+                         "Кошелёк — приложение для оплаты по умолчанию", "Humo и Uzcard в Google Pay пока не подключаются"]):
     g = group(s, f"r{i}")
     yy = [3.95, 4.8, 5.45][i]
     d_ = rect(g, f"r{i}_dot", MSO_SHAPE.OVAL, 7.13, yy + 0.03, 0.32, 0.32, fill=LIME)
@@ -768,8 +775,8 @@ for i, (head, line1, line2) in enumerate([
     text_box(g, f"chk{i}_l1", x + 0.3, 5.15, 3.4, 0.62, [[(line1, F_SEMI, 13.5, INK)]])
     text_box(g, f"chk{i}_l2", x + 0.3, 5.8, 3.4, 0.85, [[(line2, F_REG, 12.5, GREY)]])
     if i == 0:
-        picture(g, "chk0_c2", f"{V2}/card_mc_black.png", x + 1.25, 3.68, w=2.15)
-        picture(g, "chk0_c1", f"{V2}/card_visa_lime.png", x + 0.5, 3.95, w=2.15)
+        picture(g, "chk0_c2", f"{V2}/card_mc_black.png", x + 1.35, 3.62, w=1.95)
+        picture(g, "chk0_c1", f"{V2}/card_visa_lime.png", x + 0.5, 3.85, w=1.95)
     elif i == 1:
         ph = rect(g, "chk1_ph", MSO_SHAPE.ROUNDED_RECTANGLE, x + 1.42, 3.62, 0.72, 1.42, fill="121413", adj=0.12)
         scr_ = picture(g, "chk1_scr", f"{SCR}/scr_home.png", x + 1.45, 3.65, w=0.66, h=1.36)
@@ -787,33 +794,107 @@ an.rise(t_, 0.1)
 an.stagger(cards3, start=0.35, step=0.22)
 done(s, 5, an)
 
-popup_v2(6, 0, _popup_bg("bg_popup_v2a.jpg"), f"{A}/client.png", 4.9, (8.85, 1.95), "Humo пока не добавить",
+
+# =============== 6: which card pays by phone ===============
+def mini_card(c, name, x, y, w, label, fill, col, line=None):
+    """Schematic bank card (no brand art): body, chip and a text label."""
+    h = w / 1.688
+    rect(c, f"{name}_b", MSO_SHAPE.ROUNDED_RECTANGLE, x, y, w, h, fill=fill, line=line, line_w=1, adj=0.12, shadow=(0.3, 0.05, 18))
+    rect(c, f"{name}_chip", MSO_SHAPE.ROUNDED_RECTANGLE, x + 0.16, y + h * 0.34, w * 0.16, h * 0.25, fill="D9BC6A", adj=0.22)
+    text_box(c, f"{name}_t", x + 0.1, y + h - 0.34, w - 0.22, 0.26, [[{"align": PP_ALIGN.RIGHT}, (label, F_SEMI, 11, col)]])
+
+
+def route_chip(c, name, x, y, text, fill, col, line=None, size=13):
+    w = text_w(text, size, "Manrope-600.ttf") + 0.5
+    sh = rect(c, name, MSO_SHAPE.ROUNDED_RECTANGLE, x, y, w, 0.42, fill=fill, line=line, line_w=1.25, adj=0.5)
+    shape_text(sh, [(text, F_SEMI, size, col)])
+    return sh, w
+
+
+s, an = content(0)
+t_ = title2(s, "Humo тоже платит телефоном —", "через Ipak Yuli Mobile, Uzcard — нет", size=32, h=1.5)
+RY, RH, RX = [2.72, 4.1, 5.48], 1.22, 5.1
+ROWS6 = [
+    (["Visa и", "Mastercard"], "FFFFFF", INK, ACCENT, "Добавляем в Кошелёк — пять шагов дальше в курсе", GREY),
+    (["Humo"], TILE, "FFFFFF", LIME, "Google Pay Humo пока не принимает — покажите клиенту этот путь", WHITE_T),
+    (["Uzcard"], "FFFFFF", INK, "B4BCB7", "Ни в Google Pay, ни в Ipak Yuli Mobile", GREY),
+]
+rows6, badges6 = [], []
+for i, (nm, fill, ncol, acol, cap, ccol) in enumerate(ROWS6):
+    y = RY[i]
+    g = group(s, f"cardrow{i}")
+    card(g, f"cardrow{i}_bg", 0.6, y, 12.13, RH, fill=fill)
+    if i == 0:
+        picture(g, "cr0_mc", f"{V2}/card_mc_black.png", 1.2, y + 0.14, w=1.3)
+        picture(g, "cr0_visa", f"{V2}/card_visa_lime.png", 0.85, y + 0.33, w=1.3)
+    elif i == 1:
+        mini_card(g, "cr1", 0.9, y + 0.22, 1.35, "Humo", LIME, ACCENT)
+    else:
+        mini_card(g, "cr2", 0.9, y + 0.22, 1.35, "Uzcard", "E3E8E4", GREY)
+    runs = [(nm[0], F_SEMI, 18, ncol)] + ([("BR"), (nm[1], F_SEMI, 18, ncol)] if len(nm) > 1 else [])
+    text_box(g, f"cardrow{i}_n", 2.6, y, 1.85, RH, [runs], anchor=MSO_ANCHOR.MIDDLE)
+    text_box(g, f"cardrow{i}_ar", 4.45, y, 0.5, RH, [[{"align": PP_ALIGN.CENTER}, ("→", F_LIGHT, 26, acol)]], anchor=MSO_ANCHOR.MIDDLE)
+    text_box(g, f"cardrow{i}_cap", RX, y + 0.72, 6.75, 0.34, [[(cap, F_REG, 13.5, ccol)]])
+    if i == 0:
+        route_chip(g, "cr0_gpay", RX, y + 0.2, "Google Pay", ACCENT, "FFFFFF")
+    elif i == 2:
+        route_chip(g, "cr2_no", RX, y + 0.2, "Оплаты телефоном нет", "EEF1EF", GREY)
+    rows6.append(g)
+    ok = i < 2
+    b = rect(s, f"verdict{i}", MSO_SHAPE.OVAL, 12.0, y + (RH - 0.52) / 2, 0.52, 0.52, fill=LIME if ok else "E3E8E4")
+    shape_text(b, [("✓" if ok else "✕", F_SEMI, 17, ACCENT if ok else GREY)])
+    badges6.append(b)
+# Humo: the path inside the bank app, step by step
+path6, px = [], RX
+for j, (txt, fill, col, line) in enumerate([("Ipak Yuli Mobile", None, "FFFFFF", "A8C9B0"), ("Платежи", None, "FFFFFF", "A8C9B0"),
+                                          ("Оплата NFC", LIME, ACCENT, None)]):
+    ch, w = route_chip(s, f"nfc_step{j}", px, RY[1] + 0.2, txt, fill, col, line=line)
+    path6.append(ch)
+    px += w
+    if j < 2:
+        ar = text_box(s, f"nfc_ar{j}", px + 0.04, RY[1] + 0.2, 0.42, 0.42,
+                      [[{"align": PP_ALIGN.CENTER}, ("→", F_MED, 15, LIME)]], anchor=MSO_ANCHOR.MIDDLE)
+        path6.append(ar)
+        px += 0.5
+an.rise(t_, 0.1)
+an.rise(rows6[0], 0.35)
+an.fade(badges6[0], 0.75)
+an.rise(rows6[1], 0.7)
+an.stagger(path6, start=1.05, step=0.14, how="fade")
+an.pulse(path6[-1], 1.85, repeat=1, scale=112)
+an.fade(badges6[1], 2.0)
+an.rise(rows6[2], 2.15)
+an.fade(badges6[2], 2.55)
+an.pulse(badges6[2], 2.85, repeat=1, scale=118)
+done(s, 6, an)
+
+popup_v2(7, 0, _popup_bg("bg_popup_v2a.jpg"), f"{A}/client.png", 4.9, (8.85, 1.95), "Humo — не в Google Pay,\nа в приложении банка",
          "Google Pay сейчас принимает только Visa и Mastercard.",
-         "Humo и Uzcard обещают подключить позже — даты пока нет.",
-         "Что делать: ", "спросите, есть ли у клиента Visa или Mastercard Ипак Йули, — её и добавляем.",
-         ["#проверка 1", "#карта"], "«Почему моя Humo не добавляется?»", "пока — нет!", (4.4, 5.5))
-popup_v2(7, 0, _popup_bg("bg_popup_v2a.jpg"), f"{A}/client2_huawei.png", 4.9, (8.95, 1.95), "Кошелёк не скачался — нет сервисов Google",
+         "Но Humo может платить телефоном — в Ipak Yuli Mobile есть оплата по NFC.",
+         "Что делать: ", "откройте с клиентом «Платежи» → «Оплата NFC». Есть Visa или Mastercard Ипак Йули — её добавим и в Google Pay.",
+         ["#проверка 1", "#карта"], "«Почему моя Humo не добавляется?»", "через приложение!", (4.4, 5.5))
+popup_v2(8, 0, _popup_bg("bg_popup_v2a.jpg"), f"{A}/client2_huawei.png", 4.9, (8.95, 1.95), "Кошелёк не скачался — нет сервисов Google",
          "Так бывает на многих новых Huawei.",
          "Без сервисов Google Кошелёк не установить — и Google Pay не подключить.",
          "Что делать: ", "проверьте, есть ли на телефоне Google Play. Нет — скажите клиенту, что здесь Google Pay не заработает.",
          ["#проверка 2", "#телефон"], "«Кошелёк не скачивается — что не так?»", "нет Google Play —\nнет Google Pay", (4.35, 5.4))
 
 # =============== STAGE 2: connect ===============
-stage_cover(8, 1)
-step_v2(9, 0, "scr_home", "Откройте Кошелёк и нажмите «+»", "Кнопка «+» — внизу экрана, рядом с «Ещё».",
+stage_cover(9, 1)
+step_v2(10, 0, "scr_home", "Откройте Кошелёк и нажмите «+»", "Кнопка «+» — внизу экрана, рядом с «Ещё».",
         [(0.604, 0.944)], (0.5, 0.94), mark=(0.604, 0.944))
-step_v2(10, 1, "scr_addlist", "Выберите «Платежная карта»", "Первая строка в списке «Добавить в Кошелек».",
+step_v2(11, 1, "scr_addlist", "Выберите «Платежная карта»", "Первая строка в списке «Добавить в Кошелек».",
         [(0.16, 0.268)], (0.5, 0.268), mark=(0.16, 0.268))
-step_v2(11, 2, "scr_payopts", "Проще всего — из Ipak Yuli Mobile",
+step_v2(12, 2, "scr_payopts", "Проще всего — из Ipak Yuli Mobile",
         "Кошелёк откроет приложение банка. Нет приложения — «Новая кредитная или дебетовая карта»: данные вводит сам клиент.",
         [(0.135, 0.419), (0.115, 0.858)], (0.5, 0.419), mark=(0.135, 0.419))
-step_v2(12, 3, "scr_confirm", "Подтвердите и примите оферту",
+step_v2(13, 3, "scr_confirm", "Подтвердите и примите оферту",
         "«Добавить в Кошелек» — и Кошелёк покажет публичную оферту банка. Клиент читает её и принимает.",
         [(0.82, 0.855)], (0.5, 0.855), mark=(0.82, 0.855), two="scr_offer")
-step_v2(13, 4, "scr_default", "Нажмите «Сделать основной»",
+step_v2(14, 4, "scr_default", "Нажмите «Сделать основной»",
         "Это третья проверка — настройки: Кошелёк станет приложением для оплаты по умолчанию.",
         [(0.82, 0.855)], (0.5, 0.855), mark=(0.82, 0.855))
-step_v2(14, 5, "scr_done", "Готово — можно платить",
+step_v2(15, 5, "scr_done", "Готово — можно платить",
         "Бесконтактная оплата настроена. В магазине клиент подносит телефон к терминалу.", [], (0.5, 0.205))
 
 s, an = content(1)
@@ -832,10 +913,10 @@ shape_text(draft, [("Черновик: согласовать с ИБ", F_REG, 1
 an.rise(t_, 0.1)
 an.stagger(G, start=0.35, step=0.2)
 an.fade(draft, 1.2)
-done(s, 15, an)
+done(s, 16, an)
 
 # =============== STAGE 3: pay ===============
-stage_cover(16, 2)
+stage_cover(17, 2)
 
 s, an = content(2)
 t_ = title2(s, "Платить просто —", "три движения", size=38, h=1.75)
@@ -851,7 +932,7 @@ for i, txt in enumerate(["Разблокируйте телефон", "Подн�
 an.rise(t_, 0.1)
 an.rise(ic, 0.3, dy=0.03)
 an.stagger(rows, start=0.5, step=0.22)
-done(s, 17, an)
+done(s, 18, an)
 
 s, an = content(2)
 t_ = title2(s, "Терминал молчит — дело в телефоне,", "отказал — дело в карте", size=32, h=1.5)
@@ -879,16 +960,16 @@ an.stagger(L, start=0.5, step=0.15)
 an.rise(gr, 1.0)
 an.stagger(R, start=1.2, step=0.15)
 an.fade(bt, 1.6)
-done(s, 18, an)
+done(s, 19, an)
 
-popup_v2(19, 2, _popup_bg("bg_popup_v2b.jpg"), f"{A}/client3_terminal.png", 4.8, (8.4, 2.0), "Терминал молчит — начните с телефона",
+popup_v2(20, 2, _popup_bg("bg_popup_v2b.jpg"), f"{A}/client3_terminal.png", 4.8, (8.4, 2.0), "Терминал молчит — начните с телефона",
          "Разблокирован ли телефон? Включён ли NFC? Кошелёк — по умолчанию?",
          "Откройте настройки вместе с клиенткой: NFC включён, Кошелёк выбран для оплаты по умолчанию.",
          "Что сказать: ", "«Перед оплатой разблокируйте телефон и поднесите его задней стороной к терминалу».",
          ["#оплата", "#телефон"], "«Подношу телефон — ничего не происходит»", "сначала телефон!", (4.4, 5.55))
 
 # =============== STAGE 4: protect ===============
-stage_cover(20, 3)
+stage_cover(21, 3)
 
 s, an = content(3)
 t_ = title2(s, "В чеке — виртуальный номер карты,", "поэтому цифры другие", size=32, h=1.5)
@@ -912,7 +993,7 @@ an.fade(nq, 0.8)
 an.pulse(nq, 1.1, repeat=1, scale=120)
 an.rise(gt, 0.95)
 an.fade(bt, 1.5)
-done(s, 21, an)
+done(s, 22, an)
 
 s, an = content(3)
 t_ = title2(s, "Потерян телефон — блокируем", "через «Найти устройство»", size=32, h=1.5)
@@ -930,24 +1011,24 @@ for i, (t1, t2) in enumerate([("Откройте «Найти устройств
     G.append(g)
 an.rise(t_, 0.1)
 an.stagger(G, start=0.35, step=0.22)
-done(s, 22, an)
+done(s, 23, an)
 
-popup_v2(23, 3, _popup_bg("bg_popup_v2c.jpg"), f"{A}/client4_worried.png", 4.9, (9.05, 1.95), "Удалили из Кошелька — пластик работает",
+popup_v2(24, 3, _popup_bg("bg_popup_v2c.jpg"), f"{A}/client4_worried.png", 4.9, (9.05, 1.95), "Удалили из Кошелька — пластик работает",
          "Удаление карты из телефона не блокирует карту.",
          "Пластиковой картой можно пользоваться как раньше.",
          "Что сказать: ", "«Захотите снова платить телефоном — просто добавьте карту заново».",
          ["#после подключения"], "«Я удалила карту из Кошелька — она заблокирована?»", "удалить ≠ заблокировать", (4.4, 5.55))
 
-# =============== 24: recap map ===============
+# =============== 25: recap map ===============
 s, an = content(None, bar=False)
 t_ = title2(s, "Четыре шага — и клиент уходит", "с работающим Google Pay", size=34, h=1.6)
 tiles(s, an, recap=True)
 hn, _, _ = hand(s, "hand", "сфотографируйте этот экран!", 12.75, 1.55, size=24, rot=3, anchor="right")
 an.rise(t_, 0.1)
 an.fade(hn, 1.9)
-done(s, 24, an)
+done(s, 25, an)
 
-# =============== 25: test intro ===============
+# =============== 26: test intro ===============
 s, an = content(4, bar=False)
 t_ = text_box(s, "!!title", 0.6, 1.6, 8.0, 2.8, [[("Проверьте себя:", F_MED, 48, INK), "BR", ("шесть ситуаций", F_MED, 48, ACCENT), "BR", ("из офиса", F_MED, 48, ACCENT)]])
 s_ = text_box(s, "!!sub", 0.62, 4.65, 6.0, 0.4, [[("Выберите, что вы сделаете в каждой ситуации.", F_REG, 15, INK)]])
@@ -959,9 +1040,9 @@ an.rise(t_, 0.3)
 an.rise(s_, 0.6)
 an.rise(b, 0.8)
 an.pulse(b, 1.4, repeat=2, scale=106)
-done(s, 25, an)
+done(s, 26, an)
 
-# =============== 26: end (dark) ===============
+# =============== 27: end (dark) ===============
 s = new_slide()
 an = AnimV2(s)
 picture(s, "end_bg", os.path.join(V2, "scene_cover.jpg"), 0, 0, w=SW, h=SH)
@@ -974,7 +1055,7 @@ shape_text(b, [("Завершить", F_SEMI, 14, ACCENT)])
 an.rise(t_, 0.2)
 an.rise(s_, 0.45)
 an.rise(b, 0.7)
-done(s, 26, an)
+done(s, 27, an)
 
 prs.save(OUT)
 print("saved", OUT, "slides:", len(prs.slides))
